@@ -32,10 +32,7 @@ onMounted(() => {
   if (mapRef.value) {
     // initialize map
     const markers = L.markerClusterGroup({
-      chunkedLoading: true,
-      disableClusteringAtZoom: 16,
-      spiderfyOnMaxZoom: false,
-      maxClusterRadius: 10
+      chunkedLoading: true
     })
 
     const map = L.map(mapRef.value, {
