@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import L from 'leaflet'
 import 'leaflet.markercluster'
 
@@ -45,6 +45,16 @@ onMounted(() => {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
 
     fibermapStore.isMapLoaded = true
+
+    // fix map has blank space on the right side
+    watch(
+      () => fibermapStore.isSidebarCollapsed,
+      () => {
+        setTimeout(() => {
+          map.invalidateSize()
+        }, 400)
+      }
+    )
   }
 })
 </script>
