@@ -33,7 +33,7 @@
 
         <div
           v-show="!fibermapStore.isSidebarCollapsed"
-          style="padding: 10px; margin-top: 50px; display: flex; flex-direction: column; gap: 10px"
+          style="padding: 10px; display: flex; flex-direction: column; gap: 10px"
         >
           <!-- Search layer -->
           <a-input placeholder="Search layer">
