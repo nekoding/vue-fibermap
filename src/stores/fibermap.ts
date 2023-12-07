@@ -48,7 +48,13 @@ const useFiberMapStore = defineStore('fibermap', () => {
     }
   ])
 
-  const toggleLayerVisibility = (layer: Layer) => {
+  const toggleLayerVisibility = (layer: Layer, parentLayer?: Layer) => {
+    if (parentLayer) {
+      if (!parentLayer.isVisible) {
+        return
+      }
+    }
+
     layer.isVisible = !layer.isVisible
 
     if (layer.children) {

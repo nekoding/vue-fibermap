@@ -69,7 +69,7 @@
                 :icon-src="item.icon"
                 :show-arrow="Boolean(item?.children?.length) || false"
                 :is-layer-visible="item.isVisible"
-                @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(item)"
+                @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(item, layer)"
                 collapsible="icon"
               >
                 <layer-group
@@ -78,7 +78,7 @@
                   :header-title="child.name"
                   :icon-src="child.icon"
                   :is-layer-visible="child.isVisible"
-                  @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(child)"
+                  @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(child, item)"
                   collapsible="icon"
                 />
               </layer-group>
