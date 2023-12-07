@@ -2,7 +2,11 @@
   <a-spin size="large" tip="Load Fibermap..." :spinning="!fibermapStore.isMapLoaded">
     <div id="overlay-map" v-show="fibermapStore.isMapLoaded">
       <div class="top-left">
-        <MapToolset />
+        <MapToolset
+          :zoom-in-action="zoomInMap"
+          :zoom-out-action="zoomOutMap"
+          :fit-map-action="fitToBoundMap"
+        />
       </div>
       <div class="top-center">
         <MapSearchBar />
@@ -27,6 +31,9 @@ import { useFiberMapStore } from '../stores/fibermap'
 
 const fibermapStore = useFiberMapStore()
 const mapRef = ref<HTMLElement>()
+const zoomInMap = ref<Function>(() => {})
+const zoomOutMap = ref<Function>(() => {})
+const fitToBoundMap = ref<Function>(() => {})
 
 onMounted(() => {
   if (mapRef.value) {
@@ -57,6 +64,21 @@ onMounted(() => {
           .map((marker) => marker.marker)
       )
     })
+
+    // set zoom in/out action
+    zoomInMap.value = () => {
+      map.zoomIn()
+    }
+
+    zoomOutMap.value = () => {
+      map.zoomOut()
+    }
+
+    fitToBoundMap.value = () => {
+      map.fitBounds(
+        L.latLngBounds(fibermapStore.markerList.map((marker) => marker.marker.getLatLng()))
+      )
+    }
 
     // fix map has blank space on the right side
     watch(
