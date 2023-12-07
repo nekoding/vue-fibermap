@@ -33,9 +33,9 @@ onMounted(() => {
     // initialize map
     const markers = L.markerClusterGroup({
       chunkedLoading: true,
-      disableClusteringAtZoom: 12,
-      spiderfyOnMaxZoom: true,
-      maxClusterRadius: 50
+      disableClusteringAtZoom: 16,
+      spiderfyOnMaxZoom: false,
+      maxClusterRadius: 10
     })
 
     const map = L.map(mapRef.value, {
@@ -45,6 +45,21 @@ onMounted(() => {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
 
     fibermapStore.isMapLoaded = true
+
+    // add markers
+    markers.addLayers(fibermapStore.markerList.map((marker) => marker.marker))
+    map.addLayer(markers)
+
+    // subscribe to store
+    fibermapStore.$subscribe(() => {
+      // update marker visible when state changed
+      markers.clearLayers()
+      markers.addLayers(
+        fibermapStore.markerList
+          .filter((marker) => marker.layer.isVisible)
+          .map((marker) => marker.marker)
+      )
+    })
 
     // fix map has blank space on the right side
     watch(

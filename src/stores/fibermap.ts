@@ -1,9 +1,14 @@
 'use strict'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { fiberMapData } from '@/data/data'
 import L from 'leaflet'
 import type { Layer } from '@/data/data'
+
+interface FiberMapMarker {
+  layer: Layer
+  marker: L.Marker
+}
 
 const useFiberMapStore = defineStore('fibermap', () => {
   const sidebarExpandedSize = ref<number>(300)
@@ -64,6 +69,38 @@ const useFiberMapStore = defineStore('fibermap', () => {
     }
   }
 
+  const markerList = computed<FiberMapMarker[]>(() => {
+    const markers: FiberMapMarker[] = []
+
+    const addMarker = (layer: Layer, memo: FiberMapMarker[]) => {
+      if (layer.latlng) {
+        const marker = L.marker(layer.latlng, {
+          icon: L.icon({
+            iconUrl: layer.icon!,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32]
+          })
+        })
+
+        marker.bindPopup(layer.name || '')
+        memo.push({
+          layer,
+          marker
+        })
+      }
+
+      for (const child of layer.children || []) {
+        addMarker(child, memo)
+      }
+    }
+
+    for (const layer of data.value) {
+      addMarker(layer, markers)
+    }
+
+    return markers
+  })
+
   return {
     sidebarExpandedSize,
     sidebarCollapsedSize,
@@ -73,6 +110,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
     mapZoomLevel,
     mapCenter,
     data,
+    markerList,
     toggleLayerVisibility
   }
 })
