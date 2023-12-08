@@ -1,13 +1,18 @@
 'use strict'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { fiberMapData } from '@/data/data'
+import { LayerType, fiberMapData } from '@/data/data'
 import L from 'leaflet'
-import type { Layer } from '@/data/data'
+import type { Layer, Marker, PolyLine } from '@/data/data'
 
 interface FiberMapMarker {
-  layer: Layer
+  layer: Marker
   marker: L.Marker
+}
+
+interface FiberMapPolyLine {
+  layer: PolyLine
+  marker: L.Polyline
 }
 
 const useFiberMapStore = defineStore('fibermap', () => {
@@ -72,8 +77,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
   const markerList = computed<FiberMapMarker[]>(() => {
     const markers: FiberMapMarker[] = []
 
-    const addMarker = (layer: Layer, memo: FiberMapMarker[]) => {
-      if (layer.latlng) {
+    const addMarker = (layer: Marker, memo: FiberMapMarker[]) => {
+      if (layer.latlng && layer.type == LayerType.Marker) {
         const marker = L.marker(layer.latlng, {
           icon: L.icon({
             iconUrl: layer.icon!,
@@ -101,6 +106,12 @@ const useFiberMapStore = defineStore('fibermap', () => {
     return markers
   })
 
+  const polyLineList = computed<FiberMapPolyLine[]>(() => {
+    const polyLines: FiberMapPolyLine[] = []
+
+    return polyLines
+  })
+
   return {
     sidebarExpandedSize,
     sidebarCollapsedSize,
@@ -111,6 +122,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
     mapCenter,
     data,
     markerList,
+    polyLineList,
     toggleLayerVisibility
   }
 })
