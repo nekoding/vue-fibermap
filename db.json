@@ -1,0 +1,1031 @@
+{
+  "sitepoints": {
+    "message": "Action succesfull",
+    "result": {
+      "data": [
+        {
+          "id": 466,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 466, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 467,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 467, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 482,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 482, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 490,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 490, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 491,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 491, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 474,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 474, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 475,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 475, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 458,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 458, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 459,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 459, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 483,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 483, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 498,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 498, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 499,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 499, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 518,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 518, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 517,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 517, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 552,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 552, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 560,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 560, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 506,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 506, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 507,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 507, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 538,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 538, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 539,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 539, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 553,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 553, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 561,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 561, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 568,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 568, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 569,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 569, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 576,
+          "name": "Site Point G",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 576, \"name\" : \"Site Point G\"}}"
+        },
+        {
+          "id": 577,
+          "name": "Site Point H",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.826380771,-6.248099546]}, \"properties\" : {\"id\" : 577, \"name\" : \"Site Point H\"}}"
+        },
+        {
+          "id": 1096,
+          "name": "SLINTAS-JKS-KBUSAN-001",
+          "village_id": 224432,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.807386861,-6.223305347]}, \"properties\" : {\"id\" : 1096, \"name\" : \"SLINTAS-JKS-KBUSAN-001\"}}"
+        },
+        {
+          "id": 1097,
+          "name": "SLINTAS-JKS-KBUSAN-002",
+          "village_id": 224432,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.812709549,-6.226922356]}, \"properties\" : {\"id\" : 1097, \"name\" : \"SLINTAS-JKS-KBUSAN-002\"}}"
+        },
+        {
+          "id": 545,
+          "name": "attainment",
+          "village_id": 247779,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.325151598,-7.802016786]}, \"properties\" : {\"id\" : 545, \"name\" : \"attainment\"}}"
+        },
+        {
+          "id": 524,
+          "name": "igloo",
+          "village_id": 247779,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.325181852,-7.802011001]}, \"properties\" : {\"id\" : 524, \"name\" : \"igloo\"}}"
+        },
+        {
+          "id": 525,
+          "name": "chorus",
+          "village_id": 247779,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.325185167,-7.803137831]}, \"properties\" : {\"id\" : 525, \"name\" : \"chorus\"}}"
+        },
+        {
+          "id": 520,
+          "name": "teller",
+          "village_id": 247779,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.325181852,-7.804127274]}, \"properties\" : {\"id\" : 520, \"name\" : \"teller\"}}"
+        },
+        {
+          "id": 541,
+          "name": "user",
+          "village_id": 247779,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.325110111,-7.80408867]}, \"properties\" : {\"id\" : 541, \"name\" : \"user\"}}"
+        },
+        {
+          "id": 519,
+          "name": "immigrant",
+          "village_id": 247779,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.325181852,-7.800472961]}, \"properties\" : {\"id\" : 519, \"name\" : \"immigrant\"}}"
+        },
+        {
+          "id": 540,
+          "name": "wrapping",
+          "village_id": 247779,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.325181852,-7.800472961]}, \"properties\" : {\"id\" : 540, \"name\" : \"wrapping\"}}"
+        },
+        {
+          "id": 527,
+          "name": "dreamer",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.32442685,-7.811292058]}, \"properties\" : {\"id\" : 527, \"name\" : \"dreamer\"}}"
+        },
+        {
+          "id": 526,
+          "name": "airport",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.324551585,-7.809476429]}, \"properties\" : {\"id\" : 526, \"name\" : \"airport\"}}"
+        },
+        {
+          "id": 521,
+          "name": "grant",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.324685427,-7.807528244]}, \"properties\" : {\"id\" : 521, \"name\" : \"grant\"}}"
+        },
+        {
+          "id": 542,
+          "name": "lock",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.324685516,-7.807526944]}, \"properties\" : {\"id\" : 542, \"name\" : \"lock\"}}"
+        },
+        {
+          "id": 530,
+          "name": "opportunity",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.323777872,-7.821093799]}, \"properties\" : {\"id\" : 530, \"name\" : \"opportunity\"}}"
+        },
+        {
+          "id": 531,
+          "name": "authenticity",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.324407761,-7.822107846]}, \"properties\" : {\"id\" : 531, \"name\" : \"authenticity\"}}"
+        },
+        {
+          "id": 523,
+          "name": "beancurd",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.32888934,-7.822350021]}, \"properties\" : {\"id\" : 523, \"name\" : \"beancurd\"}}"
+        },
+        {
+          "id": 544,
+          "name": "watchmaker",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.32888934,-7.822350021]}, \"properties\" : {\"id\" : 544, \"name\" : \"watchmaker\"}}"
+        },
+        {
+          "id": 528,
+          "name": "painter",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.324060373,-7.81662646]}, \"properties\" : {\"id\" : 528, \"name\" : \"painter\"}}"
+        },
+        {
+          "id": 529,
+          "name": "visor",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.323905239,-7.818884581]}, \"properties\" : {\"id\" : 529, \"name\" : \"visor\"}}"
+        },
+        {
+          "id": 543,
+          "name": "fiber",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.324215974,-7.814361547]}, \"properties\" : {\"id\" : 543, \"name\" : \"fiber\"}}"
+        },
+        {
+          "id": 522,
+          "name": "grace",
+          "village_id": 247704,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.324215957,-7.8143618]}, \"properties\" : {\"id\" : 522, \"name\" : \"grace\"}}"
+        },
+        {
+          "id": 509,
+          "name": "planula",
+          "village_id": 232948,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[109.984657772,-7.831909338]}, \"properties\" : {\"id\" : 509, \"name\" : \"planula\"}}"
+        },
+        {
+          "id": 508,
+          "name": "grasp",
+          "village_id": 233092,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[109.944267185,-7.534860078]}, \"properties\" : {\"id\" : 508, \"name\" : \"grasp\"}}"
+        },
+        {
+          "id": 510,
+          "name": "pliers",
+          "village_id": 237266,
+          "site_category_id": 10,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[110.063313126,-7.65918254]}, \"properties\" : {\"id\" : 510, \"name\" : \"pliers\"}}"
+        },
+        {
+          "id": 465,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 465, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 481,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 481, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 489,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 489, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 473,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 473, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 457,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 457, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 505,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 505, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 497,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 497, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 516,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 516, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 551,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 551, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 559,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 559, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 537,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 537, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 567,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 567, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 575,
+          "name": "Site Point F",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83206151,-6.252055448]}, \"properties\" : {\"id\" : 575, \"name\" : \"Site Point F\"}}"
+        },
+        {
+          "id": 454,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 454, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 470,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 470, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 486,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 486, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 478,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 478, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 494,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 494, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 462,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 462, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 502,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 502, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 534,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 534, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 548,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 548, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 556,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 556, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 513,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 513, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 564,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 564, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 572,
+          "name": "Site Point C",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828289427,-6.252328978]}, \"properties\" : {\"id\" : 572, \"name\" : \"Site Point C\"}}"
+        },
+        {
+          "id": 455,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 455, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 471,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 471, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 463,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 463, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 464,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 464, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 480,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 480, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 487,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 487, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 488,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 488, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 472,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 472, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 479,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 479, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 495,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 495, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 456,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 456, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 496,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 496, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 503,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 503, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 504,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 504, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 535,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 535, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 549,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 549, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 550,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 550, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 557,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 557, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 558,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 558, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 514,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 514, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 515,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 515, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 565,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 565, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 566,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 566, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 573,
+          "name": "Site Point D",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.83044309,-6.252172807]}, \"properties\" : {\"id\" : 573, \"name\" : \"Site Point D\"}}"
+        },
+        {
+          "id": 536,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 536, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 574,
+          "name": "Site Point E",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.832000753,-6.251270309]}, \"properties\" : {\"id\" : 574, \"name\" : \"Site Point E\"}}"
+        },
+        {
+          "id": 452,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 452, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 453,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 453, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 468,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 468, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 469,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 469, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 476,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 476, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 477,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 477, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 492,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 492, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 493,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 493, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 460,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 460, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 461,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 461, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 484,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 484, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 485,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 485, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 500,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 500, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 501,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 501, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 532,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 532, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 533,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 533, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 546,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 546, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 547,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 547, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 511,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 511, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 512,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 512, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 562,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 562, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 563,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 563, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 570,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 570, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 571,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 571, \"name\" : \"Site Point B\"}}"
+        },
+        {
+          "id": 554,
+          "name": "Site Point A",
+          "village_id": 224564,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.827869307,-6.255815037]}, \"properties\" : {\"id\" : 554, \"name\" : \"Site Point A\"}}"
+        },
+        {
+          "id": 555,
+          "name": "Site Point B",
+          "village_id": 224546,
+          "site_category_id": 1,
+          "geojson": "{\"type\" : \"Feature\", \"geometry\" : {\"type\":\"Point\",\"coordinates\":[106.828149873,-6.251570997]}, \"properties\" : {\"id\" : 555, \"name\" : \"Site Point B\"}}"
+        }
+      ],
+      "links": {
+        "first": "http://localhost:8000/api/site-points/geojson?page=1",
+        "last": "http://localhost:8000/api/site-points/geojson?page=1",
+        "prev": null,
+        "next": null
+      },
+      "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://localhost:8000/api/site-points/geojson",
+        "per_page": 128,
+        "to": 128,
+        "total": 128
+      }
+    },
+    "errors": null
+  },
+  "assetgroups": [
+    {
+      "id": 1,
+      "name": "OLT 4",
+      "description": "OLT 4 description",
+      "asset": [
+        {
+          "id": 1,
+          "name": "Asset 1",
+          "description": "lorem ipsum",
+          "site_point": {
+            "id": 1,
+            "name": "Sitepoint 1",
+            "description": "Sitepoint 1 description",
+            "geojson": {
+              "type": "Point",
+              "coordinates": [],
+              "properties": {}
+            },
+            "asset_category": {
+              "id": 1,
+              "name": "Sitepoint General",
+              "icon": "/icons/site.png"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "OLT 2",
+      "description": "OLT 2 description",
+      "asset": [
+        {
+          "id": 1,
+          "name": "Asset 1",
+          "description": "lorem ipsum",
+          "site_point": {
+            "id": 1,
+            "name": "Sitepoint 1",
+            "description": "Sitepoint 1 description",
+            "geojson": {
+              "type": "Point",
+              "coordinates": [],
+              "properties": {}
+            },
+            "asset_category": {
+              "id": 1,
+              "name": "Sitepoint General",
+              "icon": "/icons/site.png"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": 1,
+      "name": "Route 1",
+      "geojson": {
+        "type": "LineString",
+        "coordinates": [],
+        "properties": {}
+      }
+    },
+    {
+      "id": 2,
+      "name": "Route 2",
+      "geojson": {
+        "type": "LineString",
+        "coordinates": [],
+        "properties": {}
+      }
+    }
+  ],
+  "cablegroups": [
+    {
+      "id": 1,
+      "name": "Kabel FO 4/2",
+      "description": "Kabel FO 4/2 description",
+      "cable_category": {
+        "id": 1,
+        "name": "Kabel FO",
+        "description": "Kabel FO description"
+      },
+      "cables": [
+        {
+          "id": 1,
+          "name": "Cable A1",
+          "geojson": {
+            "type": "LineString",
+            "coordinates": [],
+            "properties": {}
+          }
+        }
+      ]
+    }
+  ],
+  "segments": [
+    {
+      "id": 1,
+      "name": "Segment 1",
+      "geojson": {
+        "type": "LineString",
+        "coordinates": [],
+        "properties": {}
+      }
+    }
+  ]
+}

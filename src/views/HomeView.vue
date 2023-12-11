@@ -22,6 +22,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import L from 'leaflet'
+import { useQuery } from '@tanstack/vue-query'
 import 'leaflet.markercluster'
 
 import MapToolset from '../components/MapToolset.vue'
@@ -34,6 +35,41 @@ const mapRef = ref<HTMLElement>()
 const zoomInMap = ref<Function>(() => {})
 const zoomOutMap = ref<Function>(() => {})
 const fitToBoundMap = ref<Function>(() => {})
+const mapBound = ref<L.LatLngBounds>(
+  L.latLngBounds(fibermapStore.mapCenter, fibermapStore.mapCenter)
+)
+
+// fetch api
+const sitepointsQuery = useQuery({
+  queryKey: ['sitepoints', mapBound],
+  queryFn: () => fibermapStore.getSitePoints(mapBound)
+})
+
+// const assetsQuery = useQuery({
+//   queryKey: ['assets', mapBound],
+//   queryFn: () => fibermapStore.getAssets(mapBound)
+// })
+
+// const routesQuery = useQuery({
+//   queryKey: ['routes', mapBound],
+//   queryFn: () => fibermapStore.getRoutes(mapBound)
+// })
+
+// const cablesQuery = useQuery({
+//   queryKey: ['cables', mapBound],
+//   queryFn: () => fibermapStore.getCables(mapBound)
+// })
+
+// const segmentsQuery = useQuery({
+//   queryKey: ['segments', mapBound],
+//   queryFn: () => fibermapStore.getSegments(mapBound)
+// })
+
+watch(sitepointsQuery.data, (newData) => {
+  if (newData) {
+    fibermapStore.setSitePointLayer(newData.result.data)
+  }
+})
 
 onMounted(() => {
   if (mapRef.value) {
@@ -48,10 +84,7 @@ onMounted(() => {
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
 
-    fibermapStore.isMapLoaded = true
-
-    // add markers
-    markers.addLayers(fibermapStore.markerList.map((marker) => marker.marker))
+    // add markers to map
     map.addLayer(markers)
 
     // subscribe to store
@@ -59,26 +92,36 @@ onMounted(() => {
       // update marker visible when state changed
       markers.clearLayers()
       markers.addLayers(
-        fibermapStore.markerList
+        fibermapStore.sitePointMarkers
           .filter((marker) => marker.layer.isVisible)
           .map((marker) => marker.marker)
       )
     })
 
-    // set zoom in/out action
-    zoomInMap.value = () => {
-      map.zoomIn()
-    }
-
-    zoomOutMap.value = () => {
-      map.zoomOut()
-    }
-
+    // set map action
+    zoomInMap.value = () => map.zoomIn
+    zoomOutMap.value = () => map.zoomOut
     fitToBoundMap.value = () => {
       map.fitBounds(
-        L.latLngBounds(fibermapStore.markerList.map((marker) => marker.marker.getLatLng()))
+        L.latLngBounds(fibermapStore.sitePointMarkers.map((marker) => marker.marker.getLatLng()))
       )
     }
+
+    // Listen to map events
+    map.on('zoomend', () => {
+      fibermapStore.mapZoomLevel = map.getZoom()
+      fibermapStore.mapCenter = map.getCenter()
+    })
+
+    map.on('moveend', () => {
+      fibermapStore.mapCenter = map.getCenter()
+      mapBound.value = map.getBounds()
+    })
+
+    // set map loaded
+    setTimeout(() => {
+      fibermapStore.isMapLoaded = true
+    }, 1000)
 
     // fix map has blank space on the right side
     watch(

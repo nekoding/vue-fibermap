@@ -1,64 +1,58 @@
 'use strict'
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
-import { LayerType, fiberMapData } from '@/data/data'
+import { computed, ref, type Ref } from 'vue'
 import L from 'leaflet'
-import type { Layer, Marker, PolyLine } from '@/data/data'
-
-interface FiberMapMarker {
-  layer: Marker
-  marker: L.Marker
+declare global {
+  interface Window {
+    BASE_URL?: string
+  }
 }
 
-interface FiberMapPolyLine {
-  layer: PolyLine
-  marker: L.Polyline
-}
+const BASE_URL = window.BASE_URL || 'http://localhost:8000/api'
 
 const useFiberMapStore = defineStore('fibermap', () => {
   const sidebarExpandedSize = ref<number>(300)
   const sidebarCollapsedSize = ref<number>(60)
   const isSidebarCollapsed = ref<boolean>(false)
 
-  const map = ref<L.Map>()
   const isMapLoaded = ref<boolean>(false)
   const mapZoomLevel = ref<number>(10)
   const mapCenter = ref<L.LatLngExpression>([-7.5487803, 111.6615726])
 
-  const data = ref<Layer[]>([
+  const layers = ref<LayerGroup[]>([
     {
-      name: 'Patroli',
-      isVisible: true,
-      children: fiberMapData.patrolis
-    },
-    {
-      name: 'Building Point',
-      isVisible: true,
-      children: fiberMapData.buildings
-    },
-    {
+      id: 'sitepoints',
       name: 'Site Point',
       isVisible: true,
-      children: fiberMapData.sites
+      children: []
     },
     {
+      id: 'assets',
+      name: 'Asset',
+      isVisible: true,
+      children: []
+    },
+    {
+      id: 'routes',
       name: 'Route',
       isVisible: true,
-      children: fiberMapData.routes
+      children: []
     },
     {
-      name: 'Asset Group',
+      id: 'cables',
+      name: 'Cable',
       isVisible: true,
-      children: fiberMapData.assetGroups
+      children: []
     },
     {
-      name: 'Customer',
+      id: 'segments',
+      name: 'Segment',
       isVisible: true,
-      children: fiberMapData.customers
+      children: []
     }
   ])
 
-  const toggleLayerVisibility = (layer: Layer, parentLayer?: Layer) => {
+  const toggleLayerVisibility = (layer: LayerGroup, parentLayer?: LayerGroup) => {
     if (parentLayer) {
       if (!parentLayer.isVisible) {
         return
@@ -74,56 +68,97 @@ const useFiberMapStore = defineStore('fibermap', () => {
     }
   }
 
-  const markerList = computed<FiberMapMarker[]>(() => {
-    const markers: FiberMapMarker[] = []
+  const updateSitePointLayer = (sitePoints: SitePoint[]) => {
+    const sitePointLayer = layers.value.find((layer) => layer.id === 'sitepoints')
 
-    const addMarker = (layer: Marker, memo: FiberMapMarker[]) => {
-      if (layer.latlng && layer.type == LayerType.Marker) {
-        const marker = L.marker(layer.latlng, {
-          icon: L.icon({
-            iconUrl: layer.icon!,
-            iconSize: [32, 32],
-            iconAnchor: [16, 32]
-          })
-        })
-
-        marker.bindPopup(layer.name || '')
-        memo.push({
-          layer,
-          marker
-        })
-      }
-
-      for (const child of layer.children || []) {
-        addMarker(child, memo)
-      }
+    if (sitePointLayer) {
+      sitePointLayer.children = sitePoints.map((sitePoint) => {
+        return {
+          id: sitePoint.id,
+          name: sitePoint.name,
+          isVisible: true
+        }
+      })
     }
+  }
 
-    for (const layer of data.value) {
-      addMarker(layer, markers)
+  const getSitePoints = async (mapBound: Ref<L.LatLngBounds>) => {
+    const ne = mapBound.value.getNorthEast()
+    const sw = mapBound.value.getSouthWest()
+
+    const response = await fetch(
+      `${BASE_URL}/sitepoints/geojson?sw_lng=${sw.lng}&sw_lat=${sw.lat}&ne_lng=${ne.lng}&ne_lat=${ne.lat}`
+    )
+
+    return await response.json()
+  }
+
+  const setSitePointLayer = (sitePoints: SitePoint[]) => {
+    const sitePointLayer = layers.value.find((layer) => layer.id === 'sitepoints')
+
+    if (sitePointLayer) {
+      // flush the children
+      sitePointLayer.children = []
+
+      sitePointLayer.children = sitePoints.map((sitePoint) => {
+        return {
+          id: sitePoint.id,
+          icon: '/icons/sitepoint.png',
+          name: sitePoint.name,
+          isVisible: true,
+          geojson: JSON.parse(sitePoint.geojson)
+        }
+      })
+    }
+  }
+
+  const sitePointMarkers = computed<FiberMapSitePoint[]>(() => {
+    const markers: FiberMapSitePoint[] = []
+
+    const sitePointLayer = layers.value.find((layer) => layer.id === 'sitepoints')
+    if (sitePointLayer && sitePointLayer.children) {
+      for (const sitePoint of sitePointLayer.children) {
+        if (sitePoint.geojson) {
+          const marker = L.marker(
+            L.latLng(
+              sitePoint.geojson.geometry.coordinates[1],
+              sitePoint.geojson.geometry.coordinates[0]
+            ),
+            {
+              icon: L.icon({
+                iconUrl: sitePoint.icon ?? '',
+                iconSize: [32, 32],
+                iconAnchor: [16, 32]
+              })
+            }
+          )
+
+          marker.bindPopup(sitePoint.name)
+
+          markers.push({
+            layer: sitePoint,
+            marker
+          })
+        }
+      }
     }
 
     return markers
-  })
-
-  const polyLineList = computed<FiberMapPolyLine[]>(() => {
-    const polyLines: FiberMapPolyLine[] = []
-
-    return polyLines
   })
 
   return {
     sidebarExpandedSize,
     sidebarCollapsedSize,
     isSidebarCollapsed,
-    map,
     isMapLoaded,
     mapZoomLevel,
     mapCenter,
-    data,
-    markerList,
-    polyLineList,
-    toggleLayerVisibility
+    layers,
+    sitePointMarkers,
+    toggleLayerVisibility,
+    updateSitePointLayer,
+    getSitePoints,
+    setSitePointLayer
   }
 })
 

@@ -45,9 +45,9 @@
           <!-- Legend layer setting -->
           <a-button block>Legend Layer Setting</a-button>
 
-          <!-- Layer Group -->
+          <!-- Layer Map -->
           <a-collapse :bordered="false" expandIconPosition="end" collapsible="icon">
-            <a-collapse-panel v-for="(layer, index) in fibermapStore.data" :key="index">
+            <a-collapse-panel v-for="layer in fibermapStore.layers" :key="layer.id">
               <template #header>
                 <strong>{{ layer.name }}</strong>
               </template>
@@ -61,27 +61,30 @@
                   @click="fibermapStore.toggleLayerVisibility(layer)"
                 />
               </template>
-
-              <layer-group
-                v-for="item in layer.children"
-                :key="item.name"
-                :header-title="item.name"
-                :icon-src="item.icon"
-                :show-arrow="Boolean(item?.children?.length) || false"
-                :is-layer-visible="item.isVisible"
-                @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(item, layer)"
-                collapsible="icon"
-              >
+              <a-skeleton :loading="isLoading" active block />
+              <div>
+                <a-empty v-if="!isLoading && !layer.children?.length" :image="simpleImage" />
                 <layer-group
-                  v-for="child in item.children"
-                  :key="child.name"
+                  v-for="child in layer.children"
+                  :key="child.id"
                   :header-title="child.name"
                   :icon-src="child.icon"
+                  :show-arrow="Boolean(child?.children?.length) || false"
                   :is-layer-visible="child.isVisible"
-                  @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(child, item)"
+                  @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(child, layer)"
                   collapsible="icon"
-                />
-              </layer-group>
+                >
+                  <layer-group
+                    v-for="subchild in child.children"
+                    :key="subchild.id"
+                    :header-title="subchild.name"
+                    :icon-src="subchild.icon"
+                    :is-layer-visible="subchild.isVisible"
+                    @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(child, subchild)"
+                    collapsible="icon"
+                  />
+                </layer-group>
+              </div>
             </a-collapse-panel>
           </a-collapse>
         </div>
@@ -106,8 +109,12 @@ import {
 import { RouterView } from 'vue-router'
 import { useFiberMapStore } from './stores/fibermap'
 import LayerGroup from './components/LayerGroup.vue'
+import { Empty } from 'ant-design-vue'
+import { ref } from 'vue'
 
+const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE
 const fibermapStore = useFiberMapStore()
+const isLoading = ref<boolean>(false)
 
 const toggleSidebar = () => {
   fibermapStore.isSidebarCollapsed = !fibermapStore.isSidebarCollapsed
