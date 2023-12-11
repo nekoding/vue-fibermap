@@ -45,10 +45,10 @@ const sitepointsQuery = useQuery({
   queryFn: () => fibermapStore.getFibermapSitepoints(mapBound)
 })
 
-// const assetsQuery = useQuery({
-//   queryKey: ['assets', mapBound],
-//   queryFn: () => fibermapStore.getAssets(mapBound)
-// })
+const assetsQuery = useQuery({
+  queryKey: ['assets', mapBound],
+  queryFn: () => fibermapStore.getFibermapAssetGroups(mapBound)
+})
 
 // const routesQuery = useQuery({
 //   queryKey: ['routes', mapBound],
@@ -68,6 +68,12 @@ const sitepointsQuery = useQuery({
 watch(sitepointsQuery.data, (newData) => {
   if (newData) {
     fibermapStore.setSitePointLayer(newData.result.data)
+  }
+})
+
+watch(assetsQuery.data, (newData) => {
+  if (newData) {
+    fibermapStore.setAssetGroupLayer(newData.result.data)
   }
 })
 
@@ -93,6 +99,12 @@ onMounted(() => {
       markers.clearLayers()
       markers.addLayers(
         fibermapStore.sitePointMarkers
+          .filter((marker) => marker.layer.isVisible)
+          .map((marker) => marker.marker)
+      )
+
+      markers.addLayers(
+        fibermapStore.assetMarkers
           .filter((marker) => marker.layer.isVisible)
           .map((marker) => marker.marker)
       )

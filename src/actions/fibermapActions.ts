@@ -21,12 +21,12 @@ export const getFibermapSitepoints = async (mapBound: Ref<L.LatLngBounds>) => {
   return await response.json()
 }
 
-export const getFibermapAssets = async (mapBound: Ref<L.LatLngBounds>) => {
+export const getFibermapAssetGroups = async (mapBound: Ref<L.LatLngBounds>) => {
   const ne = mapBound.value.getNorthEast()
   const sw = mapBound.value.getSouthWest()
 
   const response = await fetch(
-    `${API_BASE_URL}/sitepoints/geojson?sw_lng=${sw.lng}&sw_lat=${sw.lat}&ne_lng=${ne.lng}&ne_lat=${ne.lat}`
+    `${API_BASE_URL}/asset-groups/geojson?sw_lng=${sw.lng}&sw_lat=${sw.lat}&ne_lng=${ne.lng}&ne_lat=${ne.lat}`
   )
 
   return await response.json()
