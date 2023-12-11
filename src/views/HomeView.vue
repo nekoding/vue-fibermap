@@ -11,6 +11,7 @@
       <div class="top-center">
         <MapSearchBar />
       </div>
+      <div class="top-right"></div>
       <div class="right-bottom">
         <MapLegend />
       </div>
@@ -29,6 +30,7 @@ import MapToolset from '../components/MapToolset.vue'
 import MapLegend from '../components/MapLegend.vue'
 import MapSearchBar from '../components/MapSearchBar.vue'
 import { useFiberMapStore } from '../stores/fibermap'
+import { notification } from 'ant-design-vue'
 
 const fibermapStore = useFiberMapStore()
 const mapRef = ref<HTMLElement>()
@@ -40,40 +42,41 @@ const mapBound = ref<L.LatLngBounds>(
 )
 
 // fetch api
-const sitepointsQuery = useQuery({
+const { data: dataSitepoint } = useQuery({
   queryKey: ['sitepoints', mapBound],
   queryFn: () => fibermapStore.getFibermapSitepoints(mapBound)
 })
 
-const assetsQuery = useQuery({
+const { data: dataAsset } = useQuery({
   queryKey: ['assets', mapBound],
   queryFn: () => fibermapStore.getFibermapAssetGroups(mapBound)
 })
 
-// const routesQuery = useQuery({
-//   queryKey: ['routes', mapBound],
-//   queryFn: () => fibermapStore.getRoutes(mapBound)
-// })
-
-// const cablesQuery = useQuery({
-//   queryKey: ['cables', mapBound],
-//   queryFn: () => fibermapStore.getCables(mapBound)
-// })
-
-// const segmentsQuery = useQuery({
-//   queryKey: ['segments', mapBound],
-//   queryFn: () => fibermapStore.getSegments(mapBound)
-// })
-
-watch(sitepointsQuery.data, (newData) => {
+watch(dataSitepoint, (newData) => {
   if (newData) {
-    fibermapStore.setSitePointLayer(newData.result.data)
+    if (newData.statusCode !== 200) {
+      notification.error({
+        message: newData.data.message,
+        duration: 1
+      })
+      return
+    }
+
+    fibermapStore.setSitePointLayer(newData.data?.result?.data ?? [])
   }
 })
 
-watch(assetsQuery.data, (newData) => {
+watch(dataAsset, (newData) => {
   if (newData) {
-    fibermapStore.setAssetGroupLayer(newData.result.data)
+    if (newData.statusCode !== 200) {
+      notification.error({
+        message: newData.data.message,
+        duration: 1
+      })
+      return
+    }
+
+    fibermapStore.setAssetGroupLayer(newData.data?.result?.data ?? [])
   }
 })
 
@@ -160,7 +163,8 @@ onMounted(() => {
 
 .right-bottom,
 .top-left,
-.top-center {
+.top-center,
+.top-right {
   display: flex;
   flex-direction: column;
   position: absolute !important;
@@ -181,5 +185,10 @@ onMounted(() => {
   left: 50%;
   transform: translate(-50%);
   z-index: 999;
+}
+
+.top-right {
+  top: 20px;
+  right: 30px;
 }
 </style>

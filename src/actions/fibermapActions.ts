@@ -10,15 +10,26 @@ declare global {
 const API_BASE_URL =
   window.API_BASE_URL || localStorage.getItem('API_BASE_URL') || 'http://localhost:8000/api'
 
+const AUTH_TOKEN = localStorage.getItem('app_token')
+
 export const getFibermapSitepoints = async (mapBound: Ref<L.LatLngBounds>) => {
   const ne = mapBound.value.getNorthEast()
   const sw = mapBound.value.getSouthWest()
 
   const response = await fetch(
-    `${API_BASE_URL}/sitepoints/geojson?sw_lng=${sw.lng}&sw_lat=${sw.lat}&ne_lng=${ne.lng}&ne_lat=${ne.lat}`
+    `${API_BASE_URL}/sitepoints/geojson?sw_lng=${sw.lng}&sw_lat=${sw.lat}&ne_lng=${ne.lng}&ne_lat=${ne.lat}`,
+    {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`,
+        Accept: 'application/json'
+      }
+    }
   )
 
-  return await response.json()
+  return {
+    statusCode: response.status,
+    data: await response.json()
+  }
 }
 
 export const getFibermapAssetGroups = async (mapBound: Ref<L.LatLngBounds>) => {
@@ -26,8 +37,17 @@ export const getFibermapAssetGroups = async (mapBound: Ref<L.LatLngBounds>) => {
   const sw = mapBound.value.getSouthWest()
 
   const response = await fetch(
-    `${API_BASE_URL}/asset-groups/geojson?sw_lng=${sw.lng}&sw_lat=${sw.lat}&ne_lng=${ne.lng}&ne_lat=${ne.lat}`
+    `${API_BASE_URL}/asset-groups/geojson?sw_lng=${sw.lng}&sw_lat=${sw.lat}&ne_lng=${ne.lng}&ne_lat=${ne.lat}`,
+    {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`,
+        Accept: 'application/json'
+      }
+    }
   )
 
-  return await response.json()
+  return {
+    statusCode: response.status,
+    data: await response.json()
+  }
 }
