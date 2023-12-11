@@ -1,19 +1,14 @@
 'use strict'
 import { defineStore } from 'pinia'
-import { computed, ref, type Ref } from 'vue'
+import { computed, ref } from 'vue'
+import { getFibermapSitepoints } from '../actions/fibermapActions'
 import L from 'leaflet'
-declare global {
-  interface Window {
-    BASE_URL?: string
-  }
-}
-
-const BASE_URL = window.BASE_URL || 'http://localhost:8000/api'
 
 const useFiberMapStore = defineStore('fibermap', () => {
   const sidebarExpandedSize = ref<number>(300)
   const sidebarCollapsedSize = ref<number>(60)
   const isSidebarCollapsed = ref<boolean>(false)
+  const isFetchingData = ref<boolean>(false)
 
   const isMapLoaded = ref<boolean>(false)
   const mapZoomLevel = ref<number>(10)
@@ -82,17 +77,6 @@ const useFiberMapStore = defineStore('fibermap', () => {
     }
   }
 
-  const getSitePoints = async (mapBound: Ref<L.LatLngBounds>) => {
-    const ne = mapBound.value.getNorthEast()
-    const sw = mapBound.value.getSouthWest()
-
-    const response = await fetch(
-      `${BASE_URL}/sitepoints/geojson?sw_lng=${sw.lng}&sw_lat=${sw.lat}&ne_lng=${ne.lng}&ne_lat=${ne.lat}`
-    )
-
-    return await response.json()
-  }
-
   const setSitePointLayer = (sitePoints: SitePoint[]) => {
     const sitePointLayer = layers.value.find((layer) => layer.id === 'sitepoints')
 
@@ -157,7 +141,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
     sitePointMarkers,
     toggleLayerVisibility,
     updateSitePointLayer,
-    getSitePoints,
+    getFibermapSitepoints,
     setSitePointLayer
   }
 })

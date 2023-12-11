@@ -3,30 +3,31 @@ import type { Ref } from 'vue'
 
 declare global {
   interface Window {
-    BASE_URL?: string
+    API_BASE_URL?: string
   }
 }
 
-const BASE_URL = window.BASE_URL || 'http://localhost:3000/api'
+const API_BASE_URL =
+  window.API_BASE_URL || localStorage.getItem('API_BASE_URL') || 'http://localhost:8000/api'
 
-const getSitePoints = async (mapBound: Ref<L.LatLngBounds>) => {
-  const minLat = mapBound.value.getSouth()
-  const maxLat = mapBound.value.getNorth()
-  const minLng = mapBound.value.getWest()
-  const maxLng = mapBound.value.getEast()
+export const getFibermapSitepoints = async (mapBound: Ref<L.LatLngBounds>) => {
+  const ne = mapBound.value.getNorthEast()
+  const sw = mapBound.value.getSouthWest()
 
   const response = await fetch(
-    `${BASE_URL}/sitepoints/geojson?min_lat=${minLat}&max_lat=${maxLat}&min_lng=${minLng}&max_lng=${maxLng}`
+    `${API_BASE_URL}/sitepoints/geojson?sw_lng=${sw.lng}&sw_lat=${sw.lat}&ne_lng=${ne.lng}&ne_lat=${ne.lat}`
   )
+
   return await response.json()
 }
 
-const fetchAssets = async () => {}
+export const getFibermapAssets = async (mapBound: Ref<L.LatLngBounds>) => {
+  const ne = mapBound.value.getNorthEast()
+  const sw = mapBound.value.getSouthWest()
 
-const fetchRoutes = async () => {}
+  const response = await fetch(
+    `${API_BASE_URL}/sitepoints/geojson?sw_lng=${sw.lng}&sw_lat=${sw.lat}&ne_lng=${ne.lng}&ne_lat=${ne.lat}`
+  )
 
-const fetchCables = async () => {}
-
-const fetchSegments = async () => {}
-
-export { getSitePoints }
+  return await response.json()
+}

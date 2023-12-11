@@ -42,7 +42,7 @@ const mapBound = ref<L.LatLngBounds>(
 // fetch api
 const sitepointsQuery = useQuery({
   queryKey: ['sitepoints', mapBound],
-  queryFn: () => fibermapStore.getSitePoints(mapBound)
+  queryFn: () => fibermapStore.getFibermapSitepoints(mapBound)
 })
 
 // const assetsQuery = useQuery({
@@ -99,8 +99,12 @@ onMounted(() => {
     })
 
     // set map action
-    zoomInMap.value = () => map.zoomIn
-    zoomOutMap.value = () => map.zoomOut
+    zoomInMap.value = () => {
+      map.zoomIn()
+    }
+    zoomOutMap.value = () => {
+      map.zoomOut()
+    }
     fitToBoundMap.value = () => {
       map.fitBounds(
         L.latLngBounds(fibermapStore.sitePointMarkers.map((marker) => marker.marker.getLatLng()))
