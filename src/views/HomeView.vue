@@ -41,51 +41,28 @@ const mapBound = ref<L.LatLngBounds>(
   L.latLngBounds(fibermapStore.mapCenter, fibermapStore.mapCenter)
 )
 
-const { data: dataSitePoint } = useSitepointQuery(mapBound)
-const { data: dataAsset } = useAssetGroupQuery(mapBound)
-const { data: dataRoute } = useRouteQuery(mapBound)
+const { data: dataSitePoint, error: sitePointError } = useSitepointQuery(mapBound)
+const { data: dataAssetGroup, error: assetGroupError } = useAssetGroupQuery(mapBound)
+const { data: dataRoute, error: routeError } = useRouteQuery(mapBound)
 
-watch(dataSitePoint, (newData) => {
-  if (newData) {
-    if (newData.statusCode !== 200) {
-      notification.error({
-        message: newData.data.message,
-        duration: 1
-      })
-      return
+watch(
+  [dataSitePoint, dataAssetGroup, dataRoute, sitePointError, assetGroupError, routeError],
+  ([sitepoint, assetGroup, route, sitepointError, assetGroupError, routeError]) => {
+    console.log(sitepoint?.status)
+
+    if (sitepoint?.status == 200) {
+      fibermapStore.setSitePointLayer(sitepoint.data?.result?.data)
     }
 
-    fibermapStore.setSitePointLayer(newData.data?.result?.data ?? [])
-  }
-})
-
-watch(dataAsset, (newData) => {
-  if (newData) {
-    if (newData.statusCode !== 200) {
-      notification.error({
-        message: newData.data.message,
-        duration: 1
-      })
-      return
+    if (assetGroup?.status == 200) {
+      fibermapStore.setAssetGroupLayer(assetGroup.data?.result?.data)
     }
 
-    fibermapStore.setAssetGroupLayer(newData.data?.result?.data ?? [])
-  }
-})
-
-watch(dataRoute, (newData) => {
-  if (newData) {
-    if (newData.statusCode !== 200) {
-      notification.error({
-        message: newData.data.message,
-        duration: 1
-      })
-      return
+    if (route?.status == 200) {
+      fibermapStore.setRouteLayer(route.data?.result?.data)
     }
-
-    fibermapStore.setRouteLayer(newData.data?.result?.data ?? [])
   }
-})
+)
 
 onMounted(() => {
   if (mapRef.value) {
@@ -130,9 +107,11 @@ onMounted(() => {
     zoomInMap.value = () => {
       map.zoomIn()
     }
+
     zoomOutMap.value = () => {
       map.zoomOut()
     }
+
     fitToBoundMap.value = () => {
       map.fitBounds(
         L.latLngBounds(fibermapStore.sitePointMarkers.map((marker) => marker.marker.getLatLng()))
@@ -141,13 +120,11 @@ onMounted(() => {
 
     // Listen to map events
     map.on('zoomend', () => {
-      fibermapStore.mapZoomLevel = map.getZoom()
-      fibermapStore.mapCenter = map.getCenter()
+      // mapBound.value = map.getBounds()
     })
 
     map.on('moveend', () => {
-      fibermapStore.mapCenter = map.getCenter()
-      mapBound.value = map.getBounds()
+      // mapBound.value = map.getBounds()
     })
 
     // set map loaded
