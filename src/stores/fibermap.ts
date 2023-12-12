@@ -1,11 +1,6 @@
 'use strict'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import {
-  getFibermapSitepoints,
-  getFibermapAssetGroups,
-  getFibermapRoutes
-} from '../actions/fibermapActions'
 import L from 'leaflet'
 
 const useFiberMapStore = defineStore('fibermap', () => {
@@ -272,9 +267,6 @@ const useFiberMapStore = defineStore('fibermap', () => {
     routePolylines,
     toggleLayerVisibility,
     updateSitePointLayer,
-    getFibermapSitepoints,
-    getFibermapAssetGroups,
-    getFibermapRoutes,
     setSitePointLayer,
     setAssetGroupLayer,
     setRouteLayer

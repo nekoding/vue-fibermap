@@ -23,7 +23,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import L from 'leaflet'
-import { useQuery } from '@tanstack/vue-query'
 import 'leaflet.markercluster'
 
 import MapToolset from '../components/MapToolset.vue'
@@ -31,6 +30,7 @@ import MapLegend from '../components/MapLegend.vue'
 import MapSearchBar from '../components/MapSearchBar.vue'
 import { useFiberMapStore } from '../stores/fibermap'
 import { notification } from 'ant-design-vue'
+import { useSitepointQuery, useAssetGroupQuery, useRouteQuery } from '../hooks/hooks'
 
 const fibermapStore = useFiberMapStore()
 const mapRef = ref<HTMLElement>()
@@ -41,23 +41,11 @@ const mapBound = ref<L.LatLngBounds>(
   L.latLngBounds(fibermapStore.mapCenter, fibermapStore.mapCenter)
 )
 
-// fetch api
-const { data: dataSitepoint } = useQuery({
-  queryKey: ['sitepoints', mapBound],
-  queryFn: () => fibermapStore.getFibermapSitepoints(mapBound)
-})
+const { data: dataSitePoint } = useSitepointQuery(mapBound)
+const { data: dataAsset } = useAssetGroupQuery(mapBound)
+const { data: dataRoute } = useRouteQuery(mapBound)
 
-const { data: dataAsset } = useQuery({
-  queryKey: ['assets', mapBound],
-  queryFn: () => fibermapStore.getFibermapAssetGroups(mapBound)
-})
-
-const { data: dataRoute } = useQuery({
-  queryKey: ['routes', mapBound],
-  queryFn: () => fibermapStore.getFibermapRoutes(mapBound)
-})
-
-watch(dataSitepoint, (newData) => {
+watch(dataSitePoint, (newData) => {
   if (newData) {
     if (newData.statusCode !== 200) {
       notification.error({

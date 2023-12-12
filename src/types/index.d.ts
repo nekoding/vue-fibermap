@@ -20,6 +20,11 @@ interface LayerGroup {
   color?: string
 }
 
+interface ApiResponse {
+  statucCode: number
+  data: object
+}
+
 interface SitePoint {
   id: string | number
   name: string
