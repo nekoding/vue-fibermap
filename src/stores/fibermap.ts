@@ -166,19 +166,14 @@ const useFiberMapStore = defineStore('fibermap', () => {
     if (sitePointLayer && sitePointLayer.children) {
       for (const sitePoint of sitePointLayer.children) {
         if (sitePoint.geojson) {
-          const marker = L.marker(
-            L.latLng(
-              sitePoint.geojson.geometry.coordinates[1],
-              sitePoint.geojson.geometry.coordinates[0]
-            ),
-            {
-              icon: L.icon({
-                iconUrl: sitePoint.icon ?? '',
-                iconSize: [32, 32],
-                iconAnchor: [16, 32]
-              })
-            }
-          )
+          const coordinates = sitePoint.geojson.geometry.coordinates as [number, number]
+          const marker = L.marker(L.latLng(coordinates[1], coordinates[0]), {
+            icon: L.icon({
+              iconUrl: sitePoint.icon ?? '',
+              iconSize: [32, 32],
+              iconAnchor: [16, 32]
+            })
+          })
 
           marker.bindPopup(sitePoint.name)
 
@@ -204,19 +199,14 @@ const useFiberMapStore = defineStore('fibermap', () => {
       }
 
       if (assetGroup.geojson) {
-        const marker = L.marker(
-          L.latLng(
-            assetGroup.geojson.geometry.coordinates[1],
-            assetGroup.geojson.geometry.coordinates[0]
-          ),
-          {
-            icon: L.icon({
-              iconUrl: assetGroup.icon ?? '',
-              iconSize: [32, 32],
-              iconAnchor: [16, 32]
-            })
-          }
-        )
+        const coordinates = assetGroup.geojson.geometry.coordinates as [number, number]
+        const marker = L.marker(L.latLng(coordinates[1], coordinates[0]), {
+          icon: L.icon({
+            iconUrl: assetGroup.icon ?? '',
+            iconSize: [32, 32],
+            iconAnchor: [16, 32]
+          })
+        })
 
         marker.bindPopup(assetGroup.name)
 
