@@ -1,7 +1,11 @@
 'use strict'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { getFibermapSitepoints, getFibermapAssetGroups } from '../actions/fibermapActions'
+import {
+  getFibermapSitepoints,
+  getFibermapAssetGroups,
+  getFibermapRoutes
+} from '../actions/fibermapActions'
 import L from 'leaflet'
 
 const useFiberMapStore = defineStore('fibermap', () => {
@@ -136,6 +140,25 @@ const useFiberMapStore = defineStore('fibermap', () => {
     }
   }
 
+  const setRouteLayer = (routes: Route[]) => {
+    const routeLayer = layers.value.find((layer) => layer.id === 'routes')
+
+    if (routeLayer) {
+      // flush the children
+      routeLayer.children = []
+
+      routeLayer.children = routes.map((route) => {
+        return {
+          id: route.id,
+          name: route.name,
+          isVisible: true,
+          geojson: JSON.parse(route.geojson),
+          color: '#ff0000'
+        }
+      })
+    }
+  }
+
   const sitePointMarkers = computed<FiberMapSitePoint[]>(() => {
     const markers: FiberMapSitePoint[] = []
 
@@ -214,6 +237,38 @@ const useFiberMapStore = defineStore('fibermap', () => {
     return markers
   })
 
+  const routePolylines = computed<FiberMapRoute[]>(() => {
+    const routes: FiberMapRoute[] = []
+
+    const routeLayer = layers.value.find((layer) => layer.id === 'routes')
+    if (routeLayer && routeLayer.children) {
+      for (const route of routeLayer.children) {
+        const geojson = route.geojson
+        if (geojson && geojson.geometry) {
+          // mapping data to be polyline coord
+          const line = geojson.geometry.coordinates.map((coordinate) => {
+            if (Array.isArray(coordinate)) {
+              return coordinate.reverse()
+            }
+          }) as [number, number][]
+
+          const polyline = L.polyline(line, {
+            color: route.color ?? '#ff0000'
+          })
+
+          polyline.bindPopup(route.name)
+
+          routes.push({
+            layer: route,
+            polyline
+          })
+        }
+      }
+    }
+
+    return routes
+  })
+
   return {
     sidebarExpandedSize,
     sidebarCollapsedSize,
@@ -224,12 +279,15 @@ const useFiberMapStore = defineStore('fibermap', () => {
     layers,
     sitePointMarkers,
     assetMarkers,
+    routePolylines,
     toggleLayerVisibility,
     updateSitePointLayer,
     getFibermapSitepoints,
     getFibermapAssetGroups,
+    getFibermapRoutes,
     setSitePointLayer,
-    setAssetGroupLayer
+    setAssetGroupLayer,
+    setRouteLayer
   }
 })
 

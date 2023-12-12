@@ -52,6 +52,11 @@ const { data: dataAsset } = useQuery({
   queryFn: () => fibermapStore.getFibermapAssetGroups(mapBound)
 })
 
+const { data: dataRoute } = useQuery({
+  queryKey: ['routes', mapBound],
+  queryFn: () => fibermapStore.getFibermapRoutes(mapBound)
+})
+
 watch(dataSitepoint, (newData) => {
   if (newData) {
     if (newData.statusCode !== 200) {
@@ -77,6 +82,20 @@ watch(dataAsset, (newData) => {
     }
 
     fibermapStore.setAssetGroupLayer(newData.data?.result?.data ?? [])
+  }
+})
+
+watch(dataRoute, (newData) => {
+  if (newData) {
+    if (newData.statusCode !== 200) {
+      notification.error({
+        message: newData.data.message,
+        duration: 1
+      })
+      return
+    }
+
+    fibermapStore.setRouteLayer(newData.data?.result?.data ?? [])
   }
 })
 
@@ -110,6 +129,12 @@ onMounted(() => {
         fibermapStore.assetMarkers
           .filter((marker) => marker.layer.isVisible)
           .map((marker) => marker.marker)
+      )
+
+      markers.addLayers(
+        fibermapStore.routePolylines
+          .filter((polyline) => polyline.layer.isVisible)
+          .map((polyline) => polyline.polyline)
       )
     })
 
