@@ -14,10 +14,10 @@
           mode="multiple"
           placeholder="Select project group"
           v-model:value="formState.projectGroups"
-          :not-found-content="isFetchingProjectGroup ? undefined : null"
           :options="projectGroupOptions"
           :autoClearSearchValue="true"
           @search="onSearchProjectGroup"
+          @dropdownVisibleChange="onDropdownVisibleProjectGroup"
         >
           <template v-if="isFetchingProjectGroup" #notFoundContent>
             <a-spin size="small" />
@@ -37,11 +37,11 @@
           mode="multiple"
           placeholder="Select project group"
           v-model:value="formState.regions"
-          :not-found-content="isFetchingRegion ? undefined : null"
           :options="regionOptions"
           :autoClearSearchValue="true"
           @search="onSearchRegion"
           @deselect="onDeselectRegion"
+          @dropdownVisibleChange="onDropdownVisibleRegion"
         >
           <template v-if="isFetchingRegion" #notFoundContent>
             <a-spin size="small" />
@@ -57,12 +57,12 @@
           mode="multiple"
           placeholder="Select area"
           v-model:value="formState.areas"
-          :not-found-content="isFetchingArea ? undefined : null"
           :options="areaOptions"
           :autoClearSearchValue="true"
           @search="onSearchArea"
           :disabled="formState.regions.length ? false : true"
           @deselect="onDeselectArea"
+          @dropdownVisibleChange="onDropdownVisibleArea"
         >
           <template v-if="isFetchingArea" #notFoundContent>
             <a-spin size="small" />
@@ -78,12 +78,12 @@
           mode="multiple"
           placeholder="Select city"
           v-model:value="formState.cities"
-          :not-found-content="isFetchingCity ? undefined : null"
           :options="cityOptions"
           :autoClearSearchValue="true"
           @search="onSearchCity"
           :disabled="formState.areas.length ? false : true"
           @deselect="onDeselectCity"
+          @dropdownVisibleChange="onDropdownVisibleCity"
         >
           <template v-if="isFetchingCity" #notFoundContent>
             <a-spin size="small" />
@@ -99,11 +99,11 @@
           mode="multiple"
           placeholder="Select district"
           v-model:value="formState.districts"
-          :not-found-content="isFetchingDistrict ? undefined : null"
           :options="districtOptions"
           :autoClearSearchValue="true"
           @search="onSearchDistrict"
           :disabled="formState.cities.length ? false : true"
+          @dropdownVisibleChange="onDropdownVisibleDistrict"
         >
           <template v-if="isFetchingDistrict" #notFoundContent>
             <a-spin size="small" />
@@ -198,6 +198,42 @@ const onDeselectArea = () => {
 
 const onDeselectCity = () => {
   formState.districts = []
+}
+
+const onDropdownVisibleProjectGroup = (open: boolean) => {
+  if (open) {
+    searchProjectGroups('')
+  }
+}
+
+const onDropdownVisibleRegion = (open: boolean) => {
+  if (open) {
+    searchRegions('')
+  }
+}
+
+const onDropdownVisibleArea = (open: boolean) => {
+  if (open) {
+    searchAreas('', {
+      region_ids: formState.regions
+    })
+  }
+}
+
+const onDropdownVisibleCity = (open: boolean) => {
+  if (open) {
+    searchCities('', {
+      region_ids: formState.regions
+    })
+  }
+}
+
+const onDropdownVisibleDistrict = (open: boolean) => {
+  if (open) {
+    searchDistricts('', {
+      city_ids: formState.cities
+    })
+  }
 }
 
 const resetFields = () => {
