@@ -1,11 +1,13 @@
 <template>
   <div>
-    <a-form layout="vertical" :model="formState" autocomplete="off" @finish="onFinish">
-      <a-form-item
-        label="Project Group"
-        :name="['projectGroups']"
-        :rules="[{ required: true, message: 'Please select project groups' }]"
-      >
+    <a-form
+      layout="vertical"
+      ref="formRef"
+      :model="formState"
+      autocomplete="off"
+      @finish="onFinish"
+    >
+      <a-form-item label="Project Group" :name="['projectGroups']">
         <a-select
           style="width: 100%"
           :allowClear="true"
@@ -119,15 +121,17 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import {
   useProjectGroupQuery,
   useRegionQuery,
   useAreaQuery,
   useCityQuery,
-  useDistrictQuery
+  useDistrictQuery,
+  useSitepointQuery
 } from '../hooks/hooks'
 import { debounce } from 'lodash-es'
+import { useFiberMapStore } from '../stores/fibermap'
 
 interface FormState {
   projectGroups: number[]
@@ -137,6 +141,8 @@ interface FormState {
   districts: number[]
 }
 
+const fibermapStore = useFiberMapStore()
+const formRef = ref<HTMLFormElement>()
 const formState = reactive<FormState>({
   projectGroups: [],
   regions: [],
@@ -158,6 +164,7 @@ const {
   data: districtOptions,
   searchDistricts
 } = useDistrictQuery()
+const { data: sitepointData, searchSitepoints } = useSitepointQuery()
 
 const onSearchProjectGroup = debounce((value: string) => {
   searchProjectGroups(value)
@@ -237,16 +244,26 @@ const onDropdownVisibleDistrict = (open: boolean) => {
 }
 
 const resetFields = () => {
-  formState.projectGroups = []
-  formState.regions = []
-  formState.areas = []
-  formState.cities = []
-  formState.districts = []
+  formRef.value?.resetFields()
+
+  fibermapStore.setSitePointLayer([])
 }
 
-const onFinish = (values: any) => {
-  console.log(values)
+const onFinish = (values: FormState) => {
+  searchSitepoints({
+    project_group_ids: values.projectGroups,
+    region_ids: values.regions,
+    area_ids: values.areas,
+    city_ids: values.cities,
+    district_ids: values.districts
+  })
 }
+
+watch(sitepointData, (newData) => {
+  if (newData?.length) {
+    fibermapStore.setSitePointLayer(newData)
+  }
+})
 </script>
 
 <style scoped></style>
