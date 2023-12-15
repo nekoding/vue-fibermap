@@ -129,7 +129,8 @@ import {
   useCityQuery,
   useDistrictQuery,
   useSitepointQuery,
-  useAssetQuery
+  useAssetQuery,
+  useRouteQuery
 } from '../hooks/hooks'
 import { debounce } from 'lodash-es'
 import { useFiberMapStore } from '../stores/fibermap'
@@ -167,6 +168,7 @@ const {
 } = useDistrictQuery()
 const { data: sitepointData, searchSitepoints } = useSitepointQuery()
 const { data: assetData, searchAssets } = useAssetQuery()
+const { data: routeData, searchRoutes } = useRouteQuery()
 
 const onSearchProjectGroup = debounce((value: string) => {
   searchProjectGroups(value)
@@ -274,21 +276,23 @@ const onFinish = (values: FormState) => {
     district_ids: values.districts
   })
 
+  searchRoutes({
+    project_group_ids: values.projectGroups,
+    region_ids: values.regions,
+    area_ids: values.areas,
+    city_ids: values.cities,
+    district_ids: values.districts
+  })
+
   setTimeout(() => {
     fibermapStore.isDataFetching = false
   }, 1000)
 }
 
-watch([sitepointData, assetData], ([newSitepointData, newAssetData]) => {
-  resetFibermapLayer()
-
-  if (newSitepointData?.length) {
-    fibermapStore.setSitePointLayer(newSitepointData)
-  }
-
-  if (newAssetData?.length) {
-    fibermapStore.setAssetLayer(newAssetData)
-  }
+watch([sitepointData, assetData, routeData], ([newSitepointData, newAssetData, newRouteData]) => {
+  fibermapStore.setSitePointLayer(newSitepointData ?? [])
+  fibermapStore.setAssetLayer(newAssetData ?? [])
+  fibermapStore.setRouteLayer(newRouteData ?? [])
 })
 </script>
 

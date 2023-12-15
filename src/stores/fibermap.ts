@@ -148,7 +148,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
           name: route.name,
           isVisible: true,
           geojson: JSON.parse(route.geojson),
-          color: '#ff0000'
+          color: '#E36414'
         }
       })
     }

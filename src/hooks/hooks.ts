@@ -166,16 +166,30 @@ export const useAssetQuery = () => {
   }
 }
 
-export const useRouteQuery = (mapBound: Ref<L.LatLngBounds>) => {
-  let ne = mapBound.value.getNorthEast()
-  let sw = mapBound.value.getSouthWest()
+export const useRouteQuery = () => {
+  const boundaries = reactive({
+    sw_lng: 0,
+    sw_lat: 0,
+    ne_lng: 0,
+    ne_lat: 0
+  })
+  const regionIds = ref<number[]>([])
+  const cityIds = ref<number[]>([])
+  const districtIds = ref<number[]>([])
+  const areaIds = ref<number[]>([])
+  const projectGroupIds = ref<number[]>([])
 
   // fetch api
-  const { isLoading, isError, isFetching, data, error } = useQuery({
-    queryKey: ['routes', mapBound],
-    queryFn: ({ signal }) =>
-      axios.get(
-        `${API_BASE_URL}/routes/geojson?sw_lng=${sw.lng}&sw_lat=${sw.lat}&ne_lng=${ne.lng}&ne_lat=${ne.lat}`,
+  const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
+    queryKey: ['routes', boundaries, regionIds, cityIds, districtIds, areaIds, projectGroupIds],
+    queryFn: async ({ signal }) => {
+      const projectGroups = projectGroupIds.value.join(',')
+      const regions = regionIds.value.join(',')
+      const areas = areaIds.value.join(',')
+      const cities = cityIds.value.join(',')
+      const districts = districtIds.value.join(',')
+      const res = await axios.get<ApiResponse>(
+        `${API_BASE_URL}/routes/geojson?project_group_ids=${projectGroups}&region_ids=${regions}&area_ids=${areas}&city_ids=${cities}&district_ids=${districts}`,
         {
           signal,
           headers: {
@@ -183,22 +197,48 @@ export const useRouteQuery = (mapBound: Ref<L.LatLngBounds>) => {
             Accept: 'application/json'
           }
         }
-      ),
-    retry: false
+      )
+
+      return (res.data.result?.data ?? []) as Route[]
+    },
+    enabled: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
   })
 
-  // watchers
-  watch(mapBound, (newData) => {
-    ne = newData.getNorthEast()
-    sw = newData.getSouthWest()
-  })
+  const searchRoutes = (options: {
+    boundaries?: {
+      sw_lng: number
+      sw_lat: number
+      ne_lng: number
+      ne_lat: number
+    }
+    region_ids?: number[]
+    city_ids?: number[]
+    district_ids?: number[]
+    area_ids?: number[]
+    project_group_ids?: number[]
+  }) => {
+    boundaries.sw_lng = options.boundaries?.sw_lng ?? 0
+    boundaries.sw_lat = options.boundaries?.sw_lat ?? 0
+    boundaries.ne_lng = options.boundaries?.ne_lng ?? 0
+    boundaries.ne_lat = options.boundaries?.ne_lat ?? 0
+    regionIds.value = options.region_ids ?? []
+    cityIds.value = options.city_ids ?? []
+    districtIds.value = options.district_ids ?? []
+    areaIds.value = options.area_ids ?? []
+    projectGroupIds.value = options.project_group_ids ?? []
+
+    refetch()
+  }
 
   return {
     isLoading,
     isError,
     isFetching,
     data,
-    error
+    error,
+    searchRoutes
   }
 }
 
