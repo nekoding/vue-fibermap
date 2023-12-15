@@ -128,7 +128,8 @@ import {
   useAreaQuery,
   useCityQuery,
   useDistrictQuery,
-  useSitepointQuery
+  useSitepointQuery,
+  useAssetQuery
 } from '../hooks/hooks'
 import { debounce } from 'lodash-es'
 import { useFiberMapStore } from '../stores/fibermap'
@@ -165,6 +166,7 @@ const {
   searchDistricts
 } = useDistrictQuery()
 const { data: sitepointData, searchSitepoints } = useSitepointQuery()
+const { data: assetData, searchAssets } = useAssetQuery()
 
 const onSearchProjectGroup = debounce((value: string) => {
   searchProjectGroups(value)
@@ -243,13 +245,19 @@ const onDropdownVisibleDistrict = (open: boolean) => {
   }
 }
 
+const resetFibermapLayer = () => {
+  fibermapStore.setSitePointLayer([])
+  fibermapStore.setAssetLayer([])
+}
+
 const resetFields = () => {
   formRef.value?.resetFields()
-
-  fibermapStore.setSitePointLayer([])
+  resetFibermapLayer()
 }
 
 const onFinish = (values: FormState) => {
+  fibermapStore.isDataFetching = true
+
   searchSitepoints({
     project_group_ids: values.projectGroups,
     region_ids: values.regions,
@@ -257,11 +265,29 @@ const onFinish = (values: FormState) => {
     city_ids: values.cities,
     district_ids: values.districts
   })
+
+  searchAssets({
+    project_group_ids: values.projectGroups,
+    region_ids: values.regions,
+    area_ids: values.areas,
+    city_ids: values.cities,
+    district_ids: values.districts
+  })
+
+  setTimeout(() => {
+    fibermapStore.isDataFetching = false
+  }, 1000)
 }
 
-watch(sitepointData, (newData) => {
-  if (newData?.length) {
-    fibermapStore.setSitePointLayer(newData)
+watch([sitepointData, assetData], ([newSitepointData, newAssetData]) => {
+  resetFibermapLayer()
+
+  if (newSitepointData?.length) {
+    fibermapStore.setSitePointLayer(newSitepointData)
+  }
+
+  if (newAssetData?.length) {
+    fibermapStore.setAssetLayer(newAssetData)
   }
 })
 </script>

@@ -8,7 +8,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
   const sidebarCollapsedSize = ref<number>(0)
   const isSidebarCollapsed = ref<boolean>(false)
 
-  const isMapLoaded = ref<boolean>(false)
+  const isDataFetching = ref<boolean>(false)
   const mapZoomLevel = ref<number>(10)
   const mapCenter = ref<L.LatLngExpression>([-7.5487803, 111.6615726])
 
@@ -94,44 +94,44 @@ const useFiberMapStore = defineStore('fibermap', () => {
     }
   }
 
-  const setAssetGroupLayer = (assetGroups: AssetGroup[]) => {
-    const assetGroupLayer = layers.value.find((layer) => layer.id === 'assets')
+  const setAssetLayer = (assets: Asset[]) => {
+    const assetLayer = layers.value.find((layer) => layer.id === 'assets')
 
-    if (assetGroupLayer) {
+    if (assetLayer) {
       // flush the children
-      assetGroupLayer.children = []
+      assetLayer.children = []
 
       // grouping data by asset group
-      assetGroups.reduce((acc, assetGroup) => {
-        const current = acc.find((item) => item.id === assetGroup.id)
+      assets.reduce((acc, asset) => {
+        const current = acc.find((item) => item.id === asset.asset_group_id)
         if (current) {
           current.children?.push({
-            id: assetGroup.asset_id,
-            name: assetGroup.asset_name,
-            icon: assetGroup.asset_icon ?? '/icons/odp.png',
+            id: asset.id,
+            name: asset.name,
+            icon: asset.asset_icon ?? '/icons/odp.png',
             isVisible: true,
-            geojson: JSON.parse(assetGroup.geojson)
+            geojson: JSON.parse(asset.geojson)
           })
         } else {
           acc.push({
-            id: assetGroup.id,
-            name: assetGroup.name,
-            icon: assetGroup.asset_icon ?? '/icons/odp.png',
+            id: asset.asset_group_id,
+            name: asset.asset_group_name,
+            icon: asset.asset_icon ?? '/icons/odp.png',
             isVisible: true,
             children: [
               {
-                id: assetGroup.asset_id,
-                name: assetGroup.asset_name,
-                icon: assetGroup.asset_icon ?? '/icons/odp.png',
+                id: asset.id,
+                name: asset.name,
+                icon: asset.asset_icon ?? '/icons/odp.png',
                 isVisible: true,
-                geojson: JSON.parse(assetGroup.geojson)
+                geojson: JSON.parse(asset.geojson)
               }
             ]
           })
         }
 
         return acc
-      }, assetGroupLayer.children)
+      }, assetLayer.children)
     }
   }
 
@@ -258,7 +258,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
     sidebarExpandedSize,
     sidebarCollapsedSize,
     isSidebarCollapsed,
-    isMapLoaded,
+    isDataFetching,
     mapZoomLevel,
     mapCenter,
     layers,
@@ -268,7 +268,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
     toggleLayerVisibility,
     updateSitePointLayer,
     setSitePointLayer,
-    setAssetGroupLayer,
+    setAssetLayer,
     setRouteLayer
   }
 })

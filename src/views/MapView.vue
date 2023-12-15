@@ -55,24 +55,26 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-content>
-        <a-spin size="large" tip="Load Fibermap..." :spinning="!isMapLoaded">
-          <div id="overlay-map" v-show="isMapLoaded">
-            <div class="top-left">
-              <MapToolset
-                :zoom-in-action="zoomInMap"
-                :zoom-out-action="zoomOutMap"
-                :fit-map-action="fitToBoundMap"
-              />
+        <a-spin size="large" tip="Fetching data..." :spinning="fibermapStore.isDataFetching">
+          <a-spin size="large" tip="Load Map..." :spinning="!isMapLoaded">
+            <div id="overlay-map" v-show="isMapLoaded">
+              <div class="top-left">
+                <MapToolset
+                  :zoom-in-action="zoomInMap"
+                  :zoom-out-action="zoomOutMap"
+                  :fit-map-action="fitToBoundMap"
+                />
+              </div>
+              <div class="top-center">
+                <MapSearchBar />
+              </div>
+              <div class="top-right"></div>
+              <div class="right-bottom">
+                <MapLegend />
+              </div>
             </div>
-            <div class="top-center">
-              <MapSearchBar />
-            </div>
-            <div class="top-right"></div>
-            <div class="right-bottom">
-              <MapLegend />
-            </div>
-          </div>
-          <div ref="mapRef" id="map"></div>
+            <div ref="mapRef" id="map"></div>
+          </a-spin>
         </a-spin>
       </a-layout-content>
     </a-layout>

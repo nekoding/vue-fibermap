@@ -63,6 +63,18 @@ interface AssetGroup {
   geojson: string
 }
 
+interface Asset {
+  id: string | number
+  name: string
+  description?: string
+  asset_group_id: string | number
+  asset_category_id: string | number
+  asset_group_name: string
+  asset_category_name: string
+  asset_icon?: string
+  geojson: string
+}
+
 interface Route {
   id: string | number
   name: string
