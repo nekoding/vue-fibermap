@@ -5,7 +5,7 @@ import L from 'leaflet'
 
 const useFiberMapStore = defineStore('fibermap', () => {
   const sidebarExpandedSize = ref<number>(300)
-  const sidebarCollapsedSize = ref<number>(60)
+  const sidebarCollapsedSize = ref<number>(0)
   const isSidebarCollapsed = ref<boolean>(false)
 
   const isMapLoaded = ref<boolean>(false)
