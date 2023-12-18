@@ -162,16 +162,39 @@ const useFiberMapStore = defineStore('fibermap', () => {
       // flush children
       cableLayer.children = []
 
-      cableLayer.children = cables.map((cable) => {
-        return {
-          id: cable.id,
-          name: cable.name,
-          isVisible: true,
-          geojson: JSON.parse(cable.geojson),
-          icon: '/icons/cable.png',
-          color: '#3559E0'
+      // grouping data by cable group
+      cables.reduce((acc, cable) => {
+        const current = acc.find((item) => item.id === cable.cable_group_id)
+        if (current) {
+          current.children?.push({
+            id: cable.id,
+            name: cable.name,
+            isVisible: true,
+            geojson: JSON.parse(cable.geojson),
+            icon: '/icons/cable.png',
+            color: '#3559E0'
+          })
+        } else {
+          acc.push({
+            id: cable.cable_group_id,
+            name: cable.cable_group_name,
+            icon: '/icons/cable.png',
+            isVisible: true,
+            children: [
+              {
+                id: cable.id,
+                name: cable.name,
+                isVisible: true,
+                geojson: JSON.parse(cable.geojson),
+                icon: '/icons/cable.png',
+                color: '#3559E0'
+              }
+            ]
+          })
         }
-      })
+
+        return acc
+      }, cableLayer.children)
     }
   }
 
@@ -298,9 +321,14 @@ const useFiberMapStore = defineStore('fibermap', () => {
   const cablePolylines = computed<FiberMapCable[]>(() => {
     const cables: FiberMapCable[] = []
 
-    const cableLayer = layers.value.find((layer) => layer.id === 'cables')
-    if (cableLayer && cableLayer.children) {
-      for (const cable of cableLayer.children) {
+    const addCableGroup = (cable: LayerGroup) => {
+      if (cable.children) {
+        for (const child of cable.children) {
+          addCableGroup(child)
+        }
+      }
+
+      if (cable.geojson) {
         const geojson = cable.geojson
         if (geojson && geojson.geometry) {
           // mapping data to be polyline coord
@@ -321,6 +349,13 @@ const useFiberMapStore = defineStore('fibermap', () => {
             polyline
           })
         }
+      }
+    }
+
+    const cableLayer = layers.value.find((layer) => layer.id === 'cables')
+    if (cableLayer && cableLayer.children) {
+      for (const cable of cableLayer.children) {
+        addCableGroup(cable)
       }
     }
 
