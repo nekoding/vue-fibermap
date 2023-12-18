@@ -148,7 +148,48 @@ const useFiberMapStore = defineStore('fibermap', () => {
           name: route.name,
           isVisible: true,
           geojson: JSON.parse(route.geojson),
-          color: '#E36414'
+          icon: '/icons/route.png',
+          color: '#EF4040'
+        }
+      })
+    }
+  }
+
+  const setCableLayer = (cables: Cable[]) => {
+    const cableLayer = layers.value.find((layer) => layer.id === 'cables')
+
+    if (cableLayer) {
+      // flush children
+      cableLayer.children = []
+
+      cableLayer.children = cables.map((cable) => {
+        return {
+          id: cable.id,
+          name: cable.name,
+          isVisible: true,
+          geojson: JSON.parse(cable.geojson),
+          icon: '/icons/cable.png',
+          color: '#3559E0'
+        }
+      })
+    }
+  }
+
+  const setSegmentLayer = (segments: Segment[]) => {
+    const segmentLayer = layers.value.find((layer) => layer.id === 'segments')
+
+    if (segmentLayer) {
+      // flush children
+      segmentLayer.children = []
+
+      segmentLayer.children = segments.map((segment) => {
+        return {
+          id: segment.id,
+          name: segment.name,
+          isVisible: true,
+          geojson: JSON.parse(segment.geojson),
+          icon: '/icons/segment.png',
+          color: '#191919'
         }
       })
     }
@@ -233,7 +274,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
           // mapping data to be polyline coord
           const line = geojson.geometry.coordinates.map((coordinate) => {
             if (Array.isArray(coordinate)) {
-              return coordinate.reverse()
+              return [coordinate[1], coordinate[0]]
             }
           }) as [number, number][]
 
@@ -254,6 +295,70 @@ const useFiberMapStore = defineStore('fibermap', () => {
     return routes
   })
 
+  const cablePolylines = computed<FiberMapCable[]>(() => {
+    const cables: FiberMapCable[] = []
+
+    const cableLayer = layers.value.find((layer) => layer.id === 'cables')
+    if (cableLayer && cableLayer.children) {
+      for (const cable of cableLayer.children) {
+        const geojson = cable.geojson
+        if (geojson && geojson.geometry) {
+          // mapping data to be polyline coord
+          const line = geojson.geometry.coordinates.map((coordinate) => {
+            if (Array.isArray(coordinate)) {
+              return [coordinate[1], coordinate[0]]
+            }
+          }) as [number, number][]
+
+          const polyline = L.polyline(line, {
+            color: cable.color ?? '#ff0000'
+          })
+
+          polyline.bindPopup(cable.name)
+
+          cables.push({
+            layer: cable,
+            polyline
+          })
+        }
+      }
+    }
+
+    return cables
+  })
+
+  const segmentPolylines = computed<FiberMapSegment[]>(() => {
+    const segments: FiberMapSegment[] = []
+
+    const segmentLayer = layers.value.find((layer) => layer.id === 'segments')
+    if (segmentLayer && segmentLayer.children) {
+      for (const segment of segmentLayer.children) {
+        const geojson = segment.geojson
+        if (geojson && geojson.geometry) {
+          // mapping data to be polyline coord
+          const line = geojson.geometry.coordinates.map((coordinate) => {
+            if (Array.isArray(coordinate)) {
+              return [coordinate[1], coordinate[0]]
+            }
+          }) as [number, number][]
+
+          const polyline = L.polyline(line, {
+            color: segment.color ?? '#ff0000'
+          })
+
+          polyline.bindPopup(segment.name)
+
+          segments.push({
+            layer: segment,
+            polyline
+          })
+        }
+      }
+    }
+
+    return segments
+  })
+
   return {
     sidebarExpandedSize,
     sidebarCollapsedSize,
@@ -265,11 +370,15 @@ const useFiberMapStore = defineStore('fibermap', () => {
     sitePointMarkers,
     assetMarkers,
     routePolylines,
+    cablePolylines,
+    segmentPolylines,
     toggleLayerVisibility,
     updateSitePointLayer,
     setSitePointLayer,
     setAssetLayer,
-    setRouteLayer
+    setRouteLayer,
+    setCableLayer,
+    setSegmentLayer
   }
 })
 

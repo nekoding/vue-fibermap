@@ -130,7 +130,9 @@ import {
   useDistrictQuery,
   useSitepointQuery,
   useAssetQuery,
-  useRouteQuery
+  useRouteQuery,
+  useCableQuery,
+  useSegmentQuery
 } from '../hooks/hooks'
 import { debounce } from 'lodash-es'
 import { useFiberMapStore } from '../stores/fibermap'
@@ -169,6 +171,8 @@ const {
 const { data: sitepointData, searchSitepoints } = useSitepointQuery()
 const { data: assetData, searchAssets } = useAssetQuery()
 const { data: routeData, searchRoutes } = useRouteQuery()
+const { data: cableData, searchCables } = useCableQuery()
+const { data: segmentData, searchSegments } = useSegmentQuery()
 
 const onSearchProjectGroup = debounce((value: string) => {
   searchProjectGroups(value)
@@ -250,6 +254,9 @@ const onDropdownVisibleDistrict = (open: boolean) => {
 const resetFibermapLayer = () => {
   fibermapStore.setSitePointLayer([])
   fibermapStore.setAssetLayer([])
+  fibermapStore.setRouteLayer([])
+  fibermapStore.setCableLayer([])
+  fibermapStore.setSegmentLayer([])
 }
 
 const resetFields = () => {
@@ -284,16 +291,37 @@ const onFinish = (values: FormState) => {
     district_ids: values.districts
   })
 
+  searchCables({
+    project_group_ids: values.projectGroups,
+    region_ids: values.regions,
+    area_ids: values.areas,
+    city_ids: values.cities,
+    district_ids: values.districts
+  })
+
+  searchSegments({
+    project_group_ids: values.projectGroups,
+    region_ids: values.regions,
+    area_ids: values.areas,
+    city_ids: values.cities,
+    district_ids: values.districts
+  })
+
   setTimeout(() => {
     fibermapStore.isDataFetching = false
   }, 1000)
 }
 
-watch([sitepointData, assetData, routeData], ([newSitepointData, newAssetData, newRouteData]) => {
-  fibermapStore.setSitePointLayer(newSitepointData ?? [])
-  fibermapStore.setAssetLayer(newAssetData ?? [])
-  fibermapStore.setRouteLayer(newRouteData ?? [])
-})
+watch(
+  [sitepointData, assetData, routeData, cableData, segmentData],
+  ([newSitepointData, newAssetData, newRouteData, newCableData, newSegmentData]) => {
+    fibermapStore.setSitePointLayer(newSitepointData ?? [])
+    fibermapStore.setAssetLayer(newAssetData ?? [])
+    fibermapStore.setRouteLayer(newRouteData ?? [])
+    fibermapStore.setCableLayer(newCableData ?? [])
+    fibermapStore.setSegmentLayer(newSegmentData ?? [])
+  }
+)
 </script>
 
 <style scoped></style>

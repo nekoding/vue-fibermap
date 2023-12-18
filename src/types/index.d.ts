@@ -84,6 +84,21 @@ interface Route {
   geojson: string
 }
 
+interface Cable {
+  id: string | number
+  name: string
+  description?: string
+  cable_group_id: string | number
+  cable_group_name: string
+  geojson: string
+}
+
+interface Segment {
+  id: string | number
+  name: string
+  geojson: string
+}
+
 interface FiberMapSitePoint {
   layer: LayerGroup
   marker: L.Marker
@@ -95,6 +110,16 @@ interface FiberMapAssetGroup {
 }
 
 interface FiberMapRoute {
+  layer: LayerGroup
+  polyline: L.Polyline
+}
+
+interface FiberMapCable {
+  layer: LayerGroup
+  polyline: L.Polyline
+}
+
+interface FiberMapSegment {
   layer: LayerGroup
   polyline: L.Polyline
 }

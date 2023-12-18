@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/vue-query'
 import axios from 'axios'
-import { reactive, ref, watch } from 'vue'
-import type { Ref } from 'vue'
+import { reactive, ref } from 'vue'
 
 declare global {
   interface Window {
@@ -242,9 +241,157 @@ export const useRouteQuery = () => {
   }
 }
 
-export const useCableGroupQuery = () => {}
+export const useCableQuery = () => {
+  const boundaries = reactive({
+    sw_lng: 0,
+    sw_lat: 0,
+    ne_lng: 0,
+    ne_lat: 0
+  })
+  const regionIds = ref<number[]>([])
+  const cityIds = ref<number[]>([])
+  const districtIds = ref<number[]>([])
+  const areaIds = ref<number[]>([])
+  const projectGroupIds = ref<number[]>([])
 
-export const useSegmentQuery = () => {}
+  // fetch api
+  const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
+    queryKey: ['cables', boundaries, regionIds, cityIds, districtIds, areaIds, projectGroupIds],
+    queryFn: async ({ signal }) => {
+      const projectGroups = projectGroupIds.value.join(',')
+      const regions = regionIds.value.join(',')
+      const areas = areaIds.value.join(',')
+      const cities = cityIds.value.join(',')
+      const districts = districtIds.value.join(',')
+      const res = await axios.get<ApiResponse>(
+        `${API_BASE_URL}/cables/geojson?project_group_ids=${projectGroups}&region_ids=${regions}&area_ids=${areas}&city_ids=${cities}&district_ids=${districts}`,
+        {
+          signal,
+          headers: {
+            Authorization: `Bearer ${AUTH_TOKEN}`,
+            Accept: 'application/json'
+          }
+        }
+      )
+
+      return (res.data.result?.data ?? []) as Cable[]
+    },
+    enabled: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
+  })
+
+  const searchCables = (options: {
+    boundaries?: {
+      sw_lng: number
+      sw_lat: number
+      ne_lng: number
+      ne_lat: number
+    }
+    region_ids?: number[]
+    city_ids?: number[]
+    district_ids?: number[]
+    area_ids?: number[]
+    project_group_ids?: number[]
+  }) => {
+    boundaries.sw_lng = options.boundaries?.sw_lng ?? 0
+    boundaries.sw_lat = options.boundaries?.sw_lat ?? 0
+    boundaries.ne_lng = options.boundaries?.ne_lng ?? 0
+    boundaries.ne_lat = options.boundaries?.ne_lat ?? 0
+    regionIds.value = options.region_ids ?? []
+    cityIds.value = options.city_ids ?? []
+    districtIds.value = options.district_ids ?? []
+    areaIds.value = options.area_ids ?? []
+    projectGroupIds.value = options.project_group_ids ?? []
+
+    refetch()
+  }
+
+  return {
+    isLoading,
+    isError,
+    isFetching,
+    data,
+    error,
+    searchCables
+  }
+}
+
+export const useSegmentQuery = () => {
+  const boundaries = reactive({
+    sw_lng: 0,
+    sw_lat: 0,
+    ne_lng: 0,
+    ne_lat: 0
+  })
+  const regionIds = ref<number[]>([])
+  const cityIds = ref<number[]>([])
+  const districtIds = ref<number[]>([])
+  const areaIds = ref<number[]>([])
+  const projectGroupIds = ref<number[]>([])
+
+  // fetch api
+  const { isLoading, isError, isFetching, data, error, refetch } = useQuery({
+    queryKey: ['segments', boundaries, regionIds, cityIds, districtIds, areaIds, projectGroupIds],
+    queryFn: async ({ signal }) => {
+      const projectGroups = projectGroupIds.value.join(',')
+      const regions = regionIds.value.join(',')
+      const areas = areaIds.value.join(',')
+      const cities = cityIds.value.join(',')
+      const districts = districtIds.value.join(',')
+      const res = await axios.get<ApiResponse>(
+        `${API_BASE_URL}/segments/geojson?project_group_ids=${projectGroups}&region_ids=${regions}&area_ids=${areas}&city_ids=${cities}&district_ids=${districts}`,
+        {
+          signal,
+          headers: {
+            Authorization: `Bearer ${AUTH_TOKEN}`,
+            Accept: 'application/json'
+          }
+        }
+      )
+
+      return (res.data.result?.data ?? []) as Segment[]
+    },
+    enabled: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
+  })
+
+  const searchSegments = (options: {
+    boundaries?: {
+      sw_lng: number
+      sw_lat: number
+      ne_lng: number
+      ne_lat: number
+    }
+    region_ids?: number[]
+    city_ids?: number[]
+    district_ids?: number[]
+    area_ids?: number[]
+    project_group_ids?: number[]
+  }) => {
+    boundaries.sw_lng = options.boundaries?.sw_lng ?? 0
+    boundaries.sw_lat = options.boundaries?.sw_lat ?? 0
+    boundaries.ne_lng = options.boundaries?.ne_lng ?? 0
+    boundaries.ne_lat = options.boundaries?.ne_lat ?? 0
+    regionIds.value = options.region_ids ?? []
+    cityIds.value = options.city_ids ?? []
+    districtIds.value = options.district_ids ?? []
+    areaIds.value = options.area_ids ?? []
+    projectGroupIds.value = options.project_group_ids ?? []
+
+    refetch()
+  }
+
+  return {
+    isLoading,
+    isError,
+    isFetching,
+    data,
+    error,
+    searchSegments
+  }
+}
 
 export const useProjectGroupQuery = () => {
   const search = ref<string>()
