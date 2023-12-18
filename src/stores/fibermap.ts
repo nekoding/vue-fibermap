@@ -225,7 +225,9 @@ const useFiberMapStore = defineStore('fibermap', () => {
     if (sitePointLayer && sitePointLayer.children) {
       for (const sitePoint of sitePointLayer.children) {
         if (sitePoint.geojson) {
-          const coordinates = sitePoint.geojson.geometry.coordinates as [number, number]
+          const geojson = sitePoint.geojson as Feature
+          const geometry = geojson.geometry as Point
+          const coordinates = geometry.coordinates as [number, number]
           const marker = L.marker(L.latLng(coordinates[1], coordinates[0]), {
             icon: L.icon({
               iconUrl: sitePoint.icon ?? '',
@@ -250,15 +252,17 @@ const useFiberMapStore = defineStore('fibermap', () => {
   const assetMarkers = computed<FiberMapAssetGroup[]>(() => {
     const markers: FiberMapAssetGroup[] = []
 
-    const addAssetGroup = (assetGroup: LayerGroup, memo: FiberMapAssetGroup[]) => {
+    const addAssetGroup = (assetGroup: LayerGroup) => {
       if (assetGroup.children) {
         for (const child of assetGroup.children) {
-          addAssetGroup(child, memo)
+          addAssetGroup(child)
         }
       }
 
       if (assetGroup.geojson) {
-        const coordinates = assetGroup.geojson.geometry.coordinates as [number, number]
+        const geojson = assetGroup.geojson as Feature
+        const geometry = geojson.geometry as Point
+        const coordinates = geometry.coordinates
         const marker = L.marker(L.latLng(coordinates[1], coordinates[0]), {
           icon: L.icon({
             iconUrl: assetGroup.icon ?? '',
@@ -279,7 +283,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
     const assetGroupLayer = layers.value.find((layer) => layer.id === 'assets')
     if (assetGroupLayer && assetGroupLayer.children) {
       for (const assetGroup of assetGroupLayer.children) {
-        addAssetGroup(assetGroup, markers)
+        addAssetGroup(assetGroup)
       }
     }
 
@@ -292,10 +296,11 @@ const useFiberMapStore = defineStore('fibermap', () => {
     const routeLayer = layers.value.find((layer) => layer.id === 'routes')
     if (routeLayer && routeLayer.children) {
       for (const route of routeLayer.children) {
-        const geojson = route.geojson
+        const geojson = route.geojson as Feature
         if (geojson && geojson.geometry) {
           // mapping data to be polyline coord
-          const line = geojson.geometry.coordinates.map((coordinate) => {
+          const geometry = geojson.geometry as LineString
+          const line = geometry.coordinates.map((coordinate) => {
             if (Array.isArray(coordinate)) {
               return [coordinate[1], coordinate[0]]
             }
@@ -329,25 +334,28 @@ const useFiberMapStore = defineStore('fibermap', () => {
       }
 
       if (cable.geojson) {
-        const geojson = cable.geojson
-        if (geojson && geojson.geometry) {
+        const geojson = cable.geojson as FeatureCollection
+        if (geojson) {
           // mapping data to be polyline coord
-          const line = geojson.geometry.coordinates.map((coordinate) => {
-            if (Array.isArray(coordinate)) {
-              return [coordinate[1], coordinate[0]]
-            }
-          }) as [number, number][]
+          const features = geojson.features
+          for (const feature of features) {
+            const line = feature.geometry.coordinates.map((coordinate) => {
+              if (Array.isArray(coordinate)) {
+                return [coordinate[1], coordinate[0]]
+              }
+            }) as [number, number][]
 
-          const polyline = L.polyline(line, {
-            color: cable.color ?? '#ff0000'
-          })
+            const polyline = L.polyline(line, {
+              color: cable.color ?? '#ff0000'
+            })
 
-          polyline.bindPopup(cable.name)
+            polyline.bindPopup(cable.name)
 
-          cables.push({
-            layer: cable,
-            polyline
-          })
+            cables.push({
+              layer: cable,
+              polyline
+            })
+          }
         }
       }
     }
@@ -358,7 +366,6 @@ const useFiberMapStore = defineStore('fibermap', () => {
         addCableGroup(cable)
       }
     }
-
     return cables
   })
 
@@ -368,25 +375,28 @@ const useFiberMapStore = defineStore('fibermap', () => {
     const segmentLayer = layers.value.find((layer) => layer.id === 'segments')
     if (segmentLayer && segmentLayer.children) {
       for (const segment of segmentLayer.children) {
-        const geojson = segment.geojson
-        if (geojson && geojson.geometry) {
+        const geojson = segment.geojson as FeatureCollection
+        if (geojson) {
           // mapping data to be polyline coord
-          const line = geojson.geometry.coordinates.map((coordinate) => {
-            if (Array.isArray(coordinate)) {
-              return [coordinate[1], coordinate[0]]
-            }
-          }) as [number, number][]
+          const features = geojson.features
+          for (const feature of features) {
+            const line = feature.geometry.coordinates.map((coordinate) => {
+              if (Array.isArray(coordinate)) {
+                return [coordinate[1], coordinate[0]]
+              }
+            }) as [number, number][]
 
-          const polyline = L.polyline(line, {
-            color: segment.color ?? '#ff0000'
-          })
+            const polyline = L.polyline(line, {
+              color: segment.color ?? '#ff0000'
+            })
 
-          polyline.bindPopup(segment.name)
+            polyline.bindPopup(segment.name)
 
-          segments.push({
-            layer: segment,
-            polyline
-          })
+            segments.push({
+              layer: segment,
+              polyline
+            })
+          }
         }
       }
     }

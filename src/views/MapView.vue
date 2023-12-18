@@ -128,20 +128,38 @@ onMounted(() => {
     fibermapStore.$subscribe(() => {
       // update marker visible when state changed
       markers.clearLayers()
+
+      // sitepoint
       markers.addLayers(
         fibermapStore.sitePointMarkers
           .filter((marker) => marker.layer.isVisible)
           .map((marker) => marker.marker)
       )
 
+      // asset
       markers.addLayers(
         fibermapStore.assetMarkers
           .filter((marker) => marker.layer.isVisible)
           .map((marker) => marker.marker)
       )
 
+      // route
       markers.addLayers(
         fibermapStore.routePolylines
+          .filter((polyline) => polyline.layer.isVisible)
+          .map((polyline) => polyline.polyline)
+      )
+
+      // cable
+      markers.addLayers(
+        fibermapStore.cablePolylines
+          .filter((polyline) => polyline.layer.isVisible)
+          .map((polyline) => polyline.polyline)
+      )
+
+      // segment
+      markers.addLayers(
+        fibermapStore.segmentPolylines
           .filter((polyline) => polyline.layer.isVisible)
           .map((polyline) => polyline.polyline)
       )
