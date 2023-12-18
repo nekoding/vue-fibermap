@@ -79,13 +79,26 @@ export const useSitepointQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    boundaries.sw_lng = 0
+    boundaries.sw_lat = 0
+    boundaries.ne_lng = 0
+    boundaries.ne_lat = 0
+    regionIds.value = []
+    cityIds.value = []
+    districtIds.value = []
+    areaIds.value = []
+    projectGroupIds.value = []
+  }
+
   return {
     isLoading,
     isError,
     isFetching,
     data,
     error,
-    searchSitepoints
+    searchSitepoints,
+    reset
   }
 }
 
@@ -155,13 +168,26 @@ export const useAssetQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    boundaries.sw_lng = 0
+    boundaries.sw_lat = 0
+    boundaries.ne_lng = 0
+    boundaries.ne_lat = 0
+    regionIds.value = []
+    cityIds.value = []
+    districtIds.value = []
+    areaIds.value = []
+    projectGroupIds.value = []
+  }
+
   return {
     isLoading,
     isError,
     isFetching,
     data,
     error,
-    searchAssets
+    searchAssets,
+    reset
   }
 }
 
@@ -231,13 +257,26 @@ export const useRouteQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    boundaries.sw_lng = 0
+    boundaries.sw_lat = 0
+    boundaries.ne_lng = 0
+    boundaries.ne_lat = 0
+    regionIds.value = []
+    cityIds.value = []
+    districtIds.value = []
+    areaIds.value = []
+    projectGroupIds.value = []
+  }
+
   return {
     isLoading,
     isError,
     isFetching,
     data,
     error,
-    searchRoutes
+    searchRoutes,
+    reset
   }
 }
 
@@ -307,13 +346,26 @@ export const useCableQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    boundaries.sw_lng = 0
+    boundaries.sw_lat = 0
+    boundaries.ne_lng = 0
+    boundaries.ne_lat = 0
+    regionIds.value = []
+    cityIds.value = []
+    districtIds.value = []
+    areaIds.value = []
+    projectGroupIds.value = []
+  }
+
   return {
     isLoading,
     isError,
     isFetching,
     data,
     error,
-    searchCables
+    searchCables,
+    reset
   }
 }
 
@@ -383,13 +435,26 @@ export const useSegmentQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    boundaries.sw_lng = 0
+    boundaries.sw_lat = 0
+    boundaries.ne_lng = 0
+    boundaries.ne_lat = 0
+    regionIds.value = []
+    cityIds.value = []
+    districtIds.value = []
+    areaIds.value = []
+    projectGroupIds.value = []
+  }
+
   return {
     isLoading,
     isError,
     isFetching,
     data,
     error,
-    searchSegments
+    searchSegments,
+    reset
   }
 }
 
@@ -427,13 +492,18 @@ export const useProjectGroupQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    search.value = ''
+  }
+
   return {
     isLoading,
     isFetching,
     isError,
     data,
     error,
-    searchProjectGroups
+    searchProjectGroups,
+    reset
   }
 }
 
@@ -468,13 +538,18 @@ export const useRegionQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    search.value = ''
+  }
+
   return {
     isLoading,
     isFetching,
     isError,
     data,
     error,
-    searchRegions
+    searchRegions,
+    reset
   }
 }
 
@@ -521,13 +596,19 @@ export const useAreaQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    search.value = ''
+    regions.value = []
+  }
+
   return {
     isLoading,
     isFetching,
     isError,
     data,
     error,
-    searchAreas
+    searchAreas,
+    reset
   }
 }
 
@@ -574,13 +655,19 @@ export const useCityQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    search.value = ''
+    regions.value = []
+  }
+
   return {
     isLoading,
     isFetching,
     isError,
     data,
     error,
-    searchCities
+    searchCities,
+    reset
   }
 }
 
@@ -627,12 +714,18 @@ export const useDistrictQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    search.value = ''
+    cities.value = []
+  }
+
   return {
     isLoading,
     isFetching,
     isError,
     data,
     error,
-    searchDistricts
+    searchDistricts,
+    reset
   }
 }

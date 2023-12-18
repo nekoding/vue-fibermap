@@ -158,21 +158,38 @@ const formState = reactive<FormState>({
 const {
   isFetching: isFetchingProjectGroup,
   data: projectGroupOptions,
-  searchProjectGroups
+  searchProjectGroups,
+  reset: resetProjectGroup
 } = useProjectGroupQuery()
-const { isFetching: isFetchingRegion, data: regionOptions, searchRegions } = useRegionQuery()
-const { isFetching: isFetchingArea, data: areaOptions, searchAreas } = useAreaQuery()
-const { isFetching: isFetchingCity, data: cityOptions, searchCities } = useCityQuery()
+const {
+  isFetching: isFetchingRegion,
+  data: regionOptions,
+  searchRegions,
+  reset: resetRegion
+} = useRegionQuery()
+const {
+  isFetching: isFetchingArea,
+  data: areaOptions,
+  searchAreas,
+  reset: resetArea
+} = useAreaQuery()
+const {
+  isFetching: isFetchingCity,
+  data: cityOptions,
+  searchCities,
+  reset: resetCity
+} = useCityQuery()
 const {
   isFetching: isFetchingDistrict,
   data: districtOptions,
-  searchDistricts
+  searchDistricts,
+  reset: resetDistrict
 } = useDistrictQuery()
-const { data: sitepointData, searchSitepoints } = useSitepointQuery()
-const { data: assetData, searchAssets } = useAssetQuery()
-const { data: routeData, searchRoutes } = useRouteQuery()
-const { data: cableData, searchCables } = useCableQuery()
-const { data: segmentData, searchSegments } = useSegmentQuery()
+const { data: sitepointData, searchSitepoints, reset: resetSitepoint } = useSitepointQuery()
+const { data: assetData, searchAssets, reset: resetAsset } = useAssetQuery()
+const { data: routeData, searchRoutes, reset: resetRoute } = useRouteQuery()
+const { data: cableData, searchCables, reset: resetCable } = useCableQuery()
+const { data: segmentData, searchSegments, reset: resetSegment } = useSegmentQuery()
 
 const onSearchProjectGroup = debounce((value: string) => {
   searchProjectGroups(value)
@@ -257,6 +274,18 @@ const resetFibermapLayer = () => {
   fibermapStore.setRouteLayer([])
   fibermapStore.setCableLayer([])
   fibermapStore.setSegmentLayer([])
+
+  resetSitepoint()
+  resetAsset()
+  resetRoute()
+  resetCable()
+  resetSegment()
+
+  resetProjectGroup()
+  resetRegion()
+  resetArea()
+  resetCity()
+  resetDistrict()
 }
 
 const resetFields = () => {
