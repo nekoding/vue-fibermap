@@ -42,7 +42,7 @@
               :header-title="subchild.name"
               :icon-src="subchild.icon"
               :is-layer-visible="subchild.isVisible"
-              @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(child, subchild)"
+              @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(subchild, child)"
               collapsible="icon"
             />
           </layer-group>
