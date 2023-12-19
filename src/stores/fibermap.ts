@@ -88,7 +88,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
           icon: '/icons/sitepoint.png',
           name: sitePoint.name,
           isVisible: true,
-          geojson: JSON.parse(sitePoint.geojson)
+          geojson: JSON.parse(sitePoint.geojson),
+          code: sitePoint.code ?? ''
         }
       })
     }
@@ -110,7 +111,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
             name: asset.name,
             icon: asset.asset_icon ?? '/icons/odp.png',
             isVisible: true,
-            geojson: JSON.parse(asset.geojson)
+            geojson: JSON.parse(asset.geojson),
+            code: asset.code ?? ''
           })
         } else {
           acc.push({
@@ -124,7 +126,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
                 name: asset.name,
                 icon: asset.asset_icon ?? '/icons/odp.png',
                 isVisible: true,
-                geojson: JSON.parse(asset.geojson)
+                geojson: JSON.parse(asset.geojson),
+                code: asset.code ?? ''
               }
             ]
           })
@@ -172,7 +175,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
             isVisible: true,
             geojson: JSON.parse(cable.geojson),
             icon: '/icons/cable.png',
-            color: '#3559E0'
+            color: '#3559E0',
+            code: cable.code ?? ''
           })
         } else {
           acc.push({
@@ -187,7 +191,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
                 isVisible: true,
                 geojson: JSON.parse(cable.geojson),
                 icon: '/icons/cable.png',
-                color: '#3559E0'
+                color: '#3559E0',
+                code: cable.code ?? ''
               }
             ]
           })
@@ -212,7 +217,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
           isVisible: true,
           geojson: JSON.parse(segment.geojson),
           icon: '/icons/segment.png',
-          color: '#191919'
+          color: '#191919',
+          code: segment.code ?? ''
         }
       })
     }
@@ -236,7 +242,9 @@ const useFiberMapStore = defineStore('fibermap', () => {
             })
           })
 
-          marker.bindPopup(sitePoint.name)
+          const popupContent = `<p><strong>Name:</strong> ${sitePoint.name}</p><p><strong>Code:</strong> ${sitePoint.code}</p>`
+
+          marker.bindPopup(popupContent)
 
           markers.push({
             layer: sitePoint,
@@ -271,7 +279,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
           })
         })
 
-        marker.bindPopup(assetGroup.name)
+        const popupContent = `<p><strong>Name:</strong> ${assetGroup.name}</p><p><strong>Code:</strong> ${assetGroup.code}</p>`
+        marker.bindPopup(popupContent)
 
         markers.push({
           layer: assetGroup,
@@ -310,7 +319,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
             color: route.color ?? '#ff0000'
           })
 
-          polyline.bindPopup(route.name)
+          const popupContent = `<p><strong>Name:</strong> ${route.name}</p>`
+          polyline.bindPopup(popupContent)
 
           routes.push({
             layer: route,
@@ -349,7 +359,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
               color: cable.color ?? '#ff0000'
             })
 
-            polyline.bindPopup(cable.name)
+            const popupContent = `<p><strong>Name:</strong> ${cable.name}</p><p><strong>Code:</strong> ${cable.code}</p>`
+            polyline.bindPopup(popupContent)
 
             cables.push({
               layer: cable,
@@ -390,7 +401,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
               color: segment.color ?? '#ff0000'
             })
 
-            polyline.bindPopup(segment.name)
+            const popupContent = `<p><strong>Name:</strong> ${segment.name}</p><p><strong>Code:</strong> ${segment.code}</p>`
+            polyline.bindPopup(popupContent)
 
             segments.push({
               layer: segment,

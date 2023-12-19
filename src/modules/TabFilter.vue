@@ -29,7 +29,7 @@
       <a-form-item
         label="Region"
         :name="['regions']"
-        :rules="[{ required: true, message: 'Please select region' }]"
+        :rules="[{ required: false, message: 'Please select region' }]"
       >
         <a-select
           style="width: 100%"

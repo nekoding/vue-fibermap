@@ -1,82 +1,93 @@
 <template>
-  <a-layout :style="{ height: '100vh' }">
-    <a-layout-sider
-      v-model:collapsed="isSidebarCollapsed"
-      :trigger="null"
-      collapsible
-      theme="light"
-      :width="fibermapStore.sidebarExpandedSize"
-      :collapsedWidth="fibermapStore.sidebarCollapsedSize"
-      :style="{
-        overflow: 'auto',
-        height: '100vh',
-        left: 0,
-        top: 0,
-        bottom: 0,
-        zIndex: 1000
-      }"
+  <a-layout>
+    <a-page-header
+      title="FiberMap"
+      style="background-color: #fff; padding: 10px 12px"
+      @back="gotoHomepage"
     >
-      <!-- Toggle sidebar -->
-      <a-button
-        shape="circle"
-        class="toggle-sidebar"
-        :class="{
-          'toggle-sidebar-collapsed': isSidebarCollapsed,
-          'toggle-sidebar-expanded': !isSidebarCollapsed
+      <template #backIcon>
+        <a-image src="/icons/menu.svg" :preview="false" />
+      </template>
+    </a-page-header>
+    <a-layout :style="{ height: 'calc(100vh - 68px)' }">
+      <a-layout-sider
+        v-model:collapsed="isSidebarCollapsed"
+        :trigger="null"
+        collapsible
+        theme="light"
+        :width="fibermapStore.sidebarExpandedSize"
+        :collapsedWidth="fibermapStore.sidebarCollapsedSize"
+        :style="{
+          overflow: 'auto',
+          height: 'calc(100vh - 68px)',
+          left: 0,
+          top: 0,
+          bottom: 0,
+          zIndex: 1000
         }"
-        @click="isSidebarCollapsed = !isSidebarCollapsed"
       >
-        <left-outlined v-if="!isSidebarCollapsed" />
-        <right-outlined v-else />
-      </a-button>
+        <!-- Toggle sidebar -->
+        <a-button
+          shape="circle"
+          class="toggle-sidebar"
+          :class="{
+            'toggle-sidebar-collapsed': isSidebarCollapsed,
+            'toggle-sidebar-expanded': !isSidebarCollapsed
+          }"
+          @click="isSidebarCollapsed = !isSidebarCollapsed"
+        >
+          <left-outlined v-if="!isSidebarCollapsed" />
+          <right-outlined v-else />
+        </a-button>
 
-      <a-tabs v-model:activeKey="activeKey" style="padding: 0px 10px">
-        <a-tab-pane key="1">
-          <template #tab>
-            <span>
-              <database-outlined />
-              Filter Data
-            </span>
-          </template>
+        <a-tabs v-model:activeKey="activeKey" style="padding: 0px 10px">
+          <a-tab-pane key="1">
+            <template #tab>
+              <span>
+                <database-outlined />
+                Filter Data
+              </span>
+            </template>
 
-          <tab-filter />
-        </a-tab-pane>
+            <tab-filter />
+          </a-tab-pane>
 
-        <a-tab-pane key="2">
-          <template #tab>
-            <span>
-              <map-icon :height="16" :width="16" />
-              Map Layer
-            </span>
-          </template>
-          <tab-map-layer />
-        </a-tab-pane>
-      </a-tabs>
-    </a-layout-sider>
-    <a-layout>
-      <a-layout-content>
-        <a-spin size="large" tip="Fetching data..." :spinning="fibermapStore.isDataFetching">
-          <a-spin size="large" tip="Load Map..." :spinning="!isMapLoaded">
-            <div id="overlay-map" v-show="isMapLoaded">
-              <div class="top-left">
-                <MapToolset
-                  :zoom-in-action="zoomInMap"
-                  :zoom-out-action="zoomOutMap"
-                  :fit-map-action="fitToBoundMap"
-                />
+          <a-tab-pane key="2">
+            <template #tab>
+              <span>
+                <map-icon :height="16" :width="16" />
+                Map Layer
+              </span>
+            </template>
+            <tab-map-layer />
+          </a-tab-pane>
+        </a-tabs>
+      </a-layout-sider>
+      <a-layout>
+        <a-layout-content>
+          <a-spin size="large" tip="Fetching data..." :spinning="fibermapStore.isDataFetching">
+            <a-spin size="large" tip="Load Map..." :spinning="!isMapLoaded">
+              <div id="overlay-map" v-show="isMapLoaded">
+                <div class="top-left">
+                  <MapToolset
+                    :zoom-in-action="zoomInMap"
+                    :zoom-out-action="zoomOutMap"
+                    :fit-map-action="fitToBoundMap"
+                  />
+                </div>
+                <div class="top-center">
+                  <MapSearchBar />
+                </div>
+                <div class="top-right"></div>
+                <div class="right-bottom">
+                  <MapLegend />
+                </div>
               </div>
-              <div class="top-center">
-                <MapSearchBar />
-              </div>
-              <div class="top-right"></div>
-              <div class="right-bottom">
-                <MapLegend />
-              </div>
-            </div>
-            <div ref="mapRef" id="map"></div>
+              <div ref="mapRef" id="map"></div>
+            </a-spin>
           </a-spin>
-        </a-spin>
-      </a-layout-content>
+        </a-layout-content>
+      </a-layout>
     </a-layout>
   </a-layout>
 </template>
@@ -107,6 +118,10 @@ const fitToBoundMap = ref<Function>(() => {})
 const mapBound = ref<L.LatLngBounds>(
   L.latLngBounds(fibermapStore.mapCenter, fibermapStore.mapCenter)
 )
+
+const gotoHomepage = () => {
+  window.location.href = '/'
+}
 
 onMounted(() => {
   if (mapRef.value) {
@@ -206,7 +221,7 @@ onMounted(() => {
 
 <style scoped>
 #map {
-  height: 100vh;
+  height: calc(100vh - 68px);
   width: 100%;
 }
 
@@ -245,7 +260,7 @@ onMounted(() => {
   position: fixed;
   left: 285px;
   z-index: 1001;
-  top: 20px;
+  top: 88px;
   /* transition: all 0.3s; */
 }
 
