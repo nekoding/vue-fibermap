@@ -416,6 +416,36 @@ const useFiberMapStore = defineStore('fibermap', () => {
     return segments
   })
 
+  const mapLegends = computed<MapLegend[]>(() => {
+    return [
+      {
+        id: 'sitepoints',
+        name: 'Site Point',
+        icon: '/icons/sitepoint.png'
+      },
+      {
+        id: 'assets',
+        name: 'Asset',
+        icon: '/icons/odp.png'
+      },
+      {
+        id: 'routes',
+        name: 'Route',
+        icon: '/icons/route.png'
+      },
+      {
+        id: 'cables',
+        name: 'Cable',
+        icon: '/icons/cable.png'
+      },
+      {
+        id: 'segments',
+        name: 'Segment',
+        icon: '/icons/segment.png'
+      }
+    ]
+  })
+
   return {
     sidebarExpandedSize,
     sidebarCollapsedSize,
@@ -429,6 +459,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
     routePolylines,
     cablePolylines,
     segmentPolylines,
+    mapLegends,
     toggleLayerVisibility,
     updateSitePointLayer,
     setSitePointLayer,

@@ -137,3 +137,9 @@ interface FiberMapSegment {
   layer: LayerGroup
   polyline: L.Polyline
 }
+
+interface MapLegend {
+  id: string | number
+  name: string
+  icon?: string
+}
