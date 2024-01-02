@@ -207,12 +207,15 @@ const onSearchArea = debounce((value: string) => {
 
 const onSearchCity = debounce((value: string) => {
   searchCities(value, {
-    region_ids: formState.regions
+    region_ids: formState.regions,
+    area_ids: formState.areas
   })
 }, 500)
 
 const onSearchDistrict = debounce((value: string) => {
   searchDistricts(value, {
+    region_ids: formState.regions,
+    area_ids: formState.areas,
     city_ids: formState.cities
   })
 }, 500)

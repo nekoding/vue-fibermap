@@ -245,7 +245,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
           const popupContent = `<p><strong>Name:</strong> ${sitePoint.name}</p><p><strong>Code:</strong> ${sitePoint.code}</p>`
 
           marker.bindPopup(popupContent)
-
+          sitePoint.onClick = () => marker.fireEvent('flytocoordinate')
           markers.push({
             layer: sitePoint,
             marker
@@ -282,6 +282,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
         const popupContent = `<p><strong>Name:</strong> ${assetGroup.name}</p><p><strong>Code:</strong> ${assetGroup.code}</p>`
         marker.bindPopup(popupContent)
 
+        assetGroup.onClick = () => marker.fireEvent('flytocoordinate')
         markers.push({
           layer: assetGroup,
           marker
@@ -322,6 +323,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
           const popupContent = `<p><strong>Name:</strong> ${route.name}</p>`
           polyline.bindPopup(popupContent)
 
+          route.onClick = () => polyline.fireEvent('flytocoordinate')
           routes.push({
             layer: route,
             polyline
@@ -362,6 +364,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
             const popupContent = `<p><strong>Name:</strong> ${cable.name}</p><p><strong>Code:</strong> ${cable.code}</p>`
             polyline.bindPopup(popupContent)
 
+            cable.onClick = () => polyline.fireEvent('flytocoordinate')
             cables.push({
               layer: cable,
               polyline
@@ -404,6 +407,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
             const popupContent = `<p><strong>Name:</strong> ${segment.name}</p><p><strong>Code:</strong> ${segment.code}</p>`
             polyline.bindPopup(popupContent)
 
+            segment.onClick = () => polyline.fireEvent('flytocoordinate')
             segments.push({
               layer: segment,
               polyline

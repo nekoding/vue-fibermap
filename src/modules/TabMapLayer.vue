@@ -34,6 +34,7 @@
             :show-arrow="Boolean(child?.children?.length) || false"
             :is-layer-visible="child.isVisible"
             @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(child, layer)"
+            @clickLayer="child.onClick"
             collapsible="icon"
           >
             <layer-group
@@ -43,6 +44,7 @@
               :icon-src="subchild.icon"
               :is-layer-visible="subchild.isVisible"
               @toggleLayerVisibility="fibermapStore.toggleLayerVisibility(subchild, child)"
+              @clickLayer="subchild.onClick"
               collapsible="icon"
             />
           </layer-group>
@@ -53,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, type PropType } from 'vue'
 import { useFiberMapStore } from '../stores/fibermap'
 import { EyeOutlined, EyeInvisibleOutlined, SearchOutlined } from '@ant-design/icons-vue'
 import LayerGroup from '../components/LayerGroup.vue'
@@ -62,6 +64,13 @@ import { Empty } from 'ant-design-vue'
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE
 const isLoading = ref<boolean>(false)
 const fibermapStore = useFiberMapStore()
+
+defineProps({
+  map: {
+    type: Object as PropType<L.Map>,
+    required: true
+  }
+})
 </script>
 
 <style scoped></style>

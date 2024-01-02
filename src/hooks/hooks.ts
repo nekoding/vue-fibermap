@@ -614,6 +614,7 @@ export const useAreaQuery = () => {
 
 export const useCityQuery = () => {
   const search = ref<string>()
+  const areas = ref<number[]>()
   const regions = ref<number[]>()
 
   const { isLoading, isFetching, isError, data, error, refetch } = useQuery({
@@ -621,7 +622,9 @@ export const useCityQuery = () => {
     queryKey: ['cities'],
     queryFn: async ({ signal }) => {
       const res = await axios.get<ApiResponse>(
-        `${API_BASE_URL}/cities?name=${search.value}&region_ids=${regions.value?.join(',')}`,
+        `${API_BASE_URL}/cities?name=${search.value}&region_ids=${regions.value?.join(
+          ','
+        )}&area_ids=${areas.value?.join(',')}`,
         {
           signal,
           headers: {
@@ -647,10 +650,12 @@ export const useCityQuery = () => {
     value: string,
     options?: {
       region_ids?: number[]
+      area_ids?: number[]
     }
   ): void => {
     search.value = value
     regions.value = options?.region_ids ?? []
+    areas.value = options?.area_ids ?? []
 
     refetch()
   }
@@ -658,6 +663,7 @@ export const useCityQuery = () => {
   const reset = () => {
     search.value = ''
     regions.value = []
+    areas.value = []
   }
 
   return {
@@ -673,6 +679,8 @@ export const useCityQuery = () => {
 
 export const useDistrictQuery = () => {
   const search = ref<string>()
+  const areas = ref<number[]>()
+  const regions = ref<number[]>()
   const cities = ref<number[]>()
 
   const { isLoading, isFetching, isError, data, error, refetch } = useQuery({
@@ -680,7 +688,9 @@ export const useDistrictQuery = () => {
     queryKey: ['districts'],
     queryFn: async ({ signal }) => {
       const res = await axios.get<ApiResponse>(
-        `${API_BASE_URL}/districts?name=${search.value}&city_ids=${cities.value?.join(',')}`,
+        `${API_BASE_URL}/districts?name=${search.value}&city_ids=${cities.value?.join(
+          ','
+        )}&region_ids=${regions.value?.join(',')}&area_ids=${areas.value?.join(',')}`,
         {
           signal,
           headers: {
@@ -705,10 +715,14 @@ export const useDistrictQuery = () => {
   const searchDistricts = (
     value: string,
     options?: {
+      region_ids?: number[]
+      area_ids?: number[]
       city_ids?: number[]
     }
   ): void => {
     search.value = value
+    regions.value = options?.region_ids ?? []
+    areas.value = options?.area_ids ?? []
     cities.value = options?.city_ids ?? []
 
     refetch()
@@ -716,6 +730,8 @@ export const useDistrictQuery = () => {
 
   const reset = () => {
     search.value = ''
+    regions.value = []
+    areas.value = []
     cities.value = []
   }
 

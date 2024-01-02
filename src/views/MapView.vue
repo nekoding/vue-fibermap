@@ -59,7 +59,7 @@
                 Map Layer
               </span>
             </template>
-            <tab-map-layer />
+            <tab-map-layer :map="map" />
           </a-tab-pane>
         </a-tabs>
       </a-layout-sider>
@@ -106,15 +106,19 @@ import TabMapLayer from '../modules/TabMapLayer.vue'
 import { useFiberMapStore } from '../stores/fibermap'
 import { LeftOutlined, RightOutlined, DatabaseOutlined } from '@ant-design/icons-vue'
 
+// singleton map
+let map: L.Map
+
 const fibermapStore = useFiberMapStore()
 const activeKey = ref<string>('1')
 const isSidebarCollapsed = ref<boolean>(false)
 const isMapLoaded = ref<boolean>(false)
 
 const mapRef = ref<HTMLElement>()
-const zoomInMap = ref<Function>(() => {})
-const zoomOutMap = ref<Function>(() => {})
-const fitToBoundMap = ref<Function>(() => {})
+const zoomInMap = ref(() => {})
+const zoomOutMap = ref(() => {})
+const fitToBoundMap = ref(() => {})
+
 const mapBound = ref<L.LatLngBounds>(
   L.latLngBounds(fibermapStore.mapCenter, fibermapStore.mapCenter)
 )
@@ -130,7 +134,7 @@ onMounted(() => {
       chunkedLoading: true
     })
 
-    const map = L.map(mapRef.value, {
+    map = L.map(mapRef.value, {
       zoomControl: false
     }).setView(fibermapStore.mapCenter, fibermapStore.mapZoomLevel)
 
@@ -148,35 +152,90 @@ onMounted(() => {
       markers.addLayers(
         fibermapStore.sitePointMarkers
           .filter((marker) => marker.layer.isVisible)
-          .map((marker) => marker.marker)
+          .map((marker) => {
+            marker.marker.on('flytocoordinate', () => {
+              // fly to coordinate if bound is not contain the marker
+              if (!mapBound.value.contains(marker.marker.getLatLng())) {
+                map.flyTo(marker.marker.getLatLng(), 18)
+              }
+
+              marker.marker.openPopup()
+            })
+
+            return marker.marker
+          })
       )
 
       // asset
       markers.addLayers(
         fibermapStore.assetMarkers
           .filter((marker) => marker.layer.isVisible)
-          .map((marker) => marker.marker)
+          .map((marker) => {
+            marker.marker.on('flytocoordinate', () => {
+              // fly to coordinate if bound is not contain the marker
+              if (!mapBound.value.contains(marker.marker.getLatLng())) {
+                map.flyTo(marker.marker.getLatLng(), 18)
+              }
+
+              marker.marker.openPopup()
+            })
+
+            return marker.marker
+          })
       )
 
       // route
       markers.addLayers(
         fibermapStore.routePolylines
           .filter((polyline) => polyline.layer.isVisible)
-          .map((polyline) => polyline.polyline)
+          .map((polyline) => {
+            polyline.polyline.on('flytocoordinate', () => {
+              // fly to coordinate if bound is not contain the marker
+              if (!mapBound.value.contains(polyline.polyline.getBounds())) {
+                map.fitBounds(polyline.polyline.getBounds())
+              }
+
+              polyline.polyline.openPopup()
+            })
+
+            return polyline.polyline
+          })
       )
 
       // cable
       markers.addLayers(
         fibermapStore.cablePolylines
           .filter((polyline) => polyline.layer.isVisible)
-          .map((polyline) => polyline.polyline)
+          .map((polyline) => {
+            polyline.polyline.on('flytocoordinate', () => {
+              // fly to coordinate if bound is not contain the marker
+              if (!mapBound.value.contains(polyline.polyline.getBounds())) {
+                map.fitBounds(polyline.polyline.getBounds())
+              }
+
+              polyline.polyline.openPopup()
+            })
+
+            return polyline.polyline
+          })
       )
 
       // segment
       markers.addLayers(
         fibermapStore.segmentPolylines
           .filter((polyline) => polyline.layer.isVisible)
-          .map((polyline) => polyline.polyline)
+          .map((polyline) => {
+            polyline.polyline.on('flytocoordinate', () => {
+              // fly to coordinate if bound is not contain the marker
+              if (!mapBound.value.contains(polyline.polyline.getBounds())) {
+                map.fitBounds(polyline.polyline.getBounds())
+              }
+
+              polyline.polyline.openPopup()
+            })
+
+            return polyline.polyline
+          })
       )
     })
 

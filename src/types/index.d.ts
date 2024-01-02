@@ -28,6 +28,7 @@ interface LayerGroup {
   icon?: string
   color?: string
   code?: string
+  onClick?: (layer: LayerGroup) => void
 }
 
 interface ApiResponse {
@@ -142,4 +143,8 @@ interface MapLegend {
   id: string | number
   name: string
   icon?: string
+}
+
+interface CustomLeafletEvent extends L.LeafletEvent {
+  marker?: L.Marker
 }
