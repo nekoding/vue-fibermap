@@ -1,23 +1,35 @@
+interface Point {
+  type: 'Point'
+  coordinates: number[]
+}
+
+interface LineString {
+  type: 'LineString'
+  coordinates: number[][]
+}
+
+interface Feature {
+  type: string
+  geometry: Point | LineString
+  properties: object
+}
+
+interface FeatureCollection {
+  type: 'FeatureCollection'
+  features: Feature[]
+}
+
 interface LayerGroup {
   id: string | number
   name: string
+  isLayerVisible: boolean
   isVisible: boolean
-  geojson?: {
-    type: string
-    geometry:
-      | {
-          type: 'Point'
-          coordinates: number[]
-        }
-      | {
-          type: 'LineString'
-          coordinates: number[][]
-        }
-    properties: object
-  }
+  geojson?: Feature | FeatureCollection
   children?: LayerGroup[]
   icon?: string
   color?: string
+  code?: string
+  onClick?: (layer: LayerGroup) => void
 }
 
 interface ApiResponse {
@@ -46,6 +58,7 @@ interface ApiResponse {
 interface SitePoint {
   id: string | number
   name: string
+  code?: string
   village_id: string | number
   site_category_id: string | number
   geojson: string
@@ -66,6 +79,7 @@ interface AssetGroup {
 interface Asset {
   id: string | number
   name: string
+  code?: string
   description?: string
   asset_group_id: string | number
   asset_category_id: string | number
@@ -87,6 +101,7 @@ interface Route {
 interface Cable {
   id: string | number
   name: string
+  code?: string
   description?: string
   cable_group_id: string | number
   cable_group_name: string
@@ -96,6 +111,7 @@ interface Cable {
 interface Segment {
   id: string | number
   name: string
+  code?: string
   geojson: string
 }
 
@@ -122,4 +138,14 @@ interface FiberMapCable {
 interface FiberMapSegment {
   layer: LayerGroup
   polyline: L.Polyline
+}
+
+interface MapLegend {
+  id: string | number
+  name: string
+  icon?: string
+}
+
+interface CustomLeafletEvent extends L.LeafletEvent {
+  marker?: L.Marker
 }

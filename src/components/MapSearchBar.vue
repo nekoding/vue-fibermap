@@ -16,9 +16,6 @@
 <script setup lang="ts">
 import { SearchOutlined } from '@ant-design/icons-vue'
 import { ref } from 'vue'
-import { useProvinceQuery, API_BASE_URL, AUTH_TOKEN } from '../hooks/hooks'
-import type { CascaderProps } from 'ant-design-vue'
-import axios from 'axios'
 
 const administrativeArea = ref<number[]>([])
 </script>

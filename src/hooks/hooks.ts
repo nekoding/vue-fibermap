@@ -79,13 +79,26 @@ export const useSitepointQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    boundaries.sw_lng = 0
+    boundaries.sw_lat = 0
+    boundaries.ne_lng = 0
+    boundaries.ne_lat = 0
+    regionIds.value = []
+    cityIds.value = []
+    districtIds.value = []
+    areaIds.value = []
+    projectGroupIds.value = []
+  }
+
   return {
     isLoading,
     isError,
     isFetching,
     data,
     error,
-    searchSitepoints
+    searchSitepoints,
+    reset
   }
 }
 
@@ -155,13 +168,26 @@ export const useAssetQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    boundaries.sw_lng = 0
+    boundaries.sw_lat = 0
+    boundaries.ne_lng = 0
+    boundaries.ne_lat = 0
+    regionIds.value = []
+    cityIds.value = []
+    districtIds.value = []
+    areaIds.value = []
+    projectGroupIds.value = []
+  }
+
   return {
     isLoading,
     isError,
     isFetching,
     data,
     error,
-    searchAssets
+    searchAssets,
+    reset
   }
 }
 
@@ -231,13 +257,26 @@ export const useRouteQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    boundaries.sw_lng = 0
+    boundaries.sw_lat = 0
+    boundaries.ne_lng = 0
+    boundaries.ne_lat = 0
+    regionIds.value = []
+    cityIds.value = []
+    districtIds.value = []
+    areaIds.value = []
+    projectGroupIds.value = []
+  }
+
   return {
     isLoading,
     isError,
     isFetching,
     data,
     error,
-    searchRoutes
+    searchRoutes,
+    reset
   }
 }
 
@@ -307,13 +346,26 @@ export const useCableQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    boundaries.sw_lng = 0
+    boundaries.sw_lat = 0
+    boundaries.ne_lng = 0
+    boundaries.ne_lat = 0
+    regionIds.value = []
+    cityIds.value = []
+    districtIds.value = []
+    areaIds.value = []
+    projectGroupIds.value = []
+  }
+
   return {
     isLoading,
     isError,
     isFetching,
     data,
     error,
-    searchCables
+    searchCables,
+    reset
   }
 }
 
@@ -383,13 +435,26 @@ export const useSegmentQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    boundaries.sw_lng = 0
+    boundaries.sw_lat = 0
+    boundaries.ne_lng = 0
+    boundaries.ne_lat = 0
+    regionIds.value = []
+    cityIds.value = []
+    districtIds.value = []
+    areaIds.value = []
+    projectGroupIds.value = []
+  }
+
   return {
     isLoading,
     isError,
     isFetching,
     data,
     error,
-    searchSegments
+    searchSegments,
+    reset
   }
 }
 
@@ -427,13 +492,18 @@ export const useProjectGroupQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    search.value = ''
+  }
+
   return {
     isLoading,
     isFetching,
     isError,
     data,
     error,
-    searchProjectGroups
+    searchProjectGroups,
+    reset
   }
 }
 
@@ -468,13 +538,18 @@ export const useRegionQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    search.value = ''
+  }
+
   return {
     isLoading,
     isFetching,
     isError,
     data,
     error,
-    searchRegions
+    searchRegions,
+    reset
   }
 }
 
@@ -521,18 +596,25 @@ export const useAreaQuery = () => {
     refetch()
   }
 
+  const reset = () => {
+    search.value = ''
+    regions.value = []
+  }
+
   return {
     isLoading,
     isFetching,
     isError,
     data,
     error,
-    searchAreas
+    searchAreas,
+    reset
   }
 }
 
 export const useCityQuery = () => {
   const search = ref<string>()
+  const areas = ref<number[]>()
   const regions = ref<number[]>()
 
   const { isLoading, isFetching, isError, data, error, refetch } = useQuery({
@@ -540,7 +622,9 @@ export const useCityQuery = () => {
     queryKey: ['cities'],
     queryFn: async ({ signal }) => {
       const res = await axios.get<ApiResponse>(
-        `${API_BASE_URL}/cities?name=${search.value}&region_ids=${regions.value?.join(',')}`,
+        `${API_BASE_URL}/cities?name=${search.value}&region_ids=${regions.value?.join(
+          ','
+        )}&area_ids=${areas.value?.join(',')}`,
         {
           signal,
           headers: {
@@ -566,12 +650,20 @@ export const useCityQuery = () => {
     value: string,
     options?: {
       region_ids?: number[]
+      area_ids?: number[]
     }
   ): void => {
     search.value = value
     regions.value = options?.region_ids ?? []
+    areas.value = options?.area_ids ?? []
 
     refetch()
+  }
+
+  const reset = () => {
+    search.value = ''
+    regions.value = []
+    areas.value = []
   }
 
   return {
@@ -580,12 +672,15 @@ export const useCityQuery = () => {
     isError,
     data,
     error,
-    searchCities
+    searchCities,
+    reset
   }
 }
 
 export const useDistrictQuery = () => {
   const search = ref<string>()
+  const areas = ref<number[]>()
+  const regions = ref<number[]>()
   const cities = ref<number[]>()
 
   const { isLoading, isFetching, isError, data, error, refetch } = useQuery({
@@ -593,7 +688,9 @@ export const useDistrictQuery = () => {
     queryKey: ['districts'],
     queryFn: async ({ signal }) => {
       const res = await axios.get<ApiResponse>(
-        `${API_BASE_URL}/districts?name=${search.value}&city_ids=${cities.value?.join(',')}`,
+        `${API_BASE_URL}/districts?name=${search.value}&city_ids=${cities.value?.join(
+          ','
+        )}&region_ids=${regions.value?.join(',')}&area_ids=${areas.value?.join(',')}`,
         {
           signal,
           headers: {
@@ -618,13 +715,24 @@ export const useDistrictQuery = () => {
   const searchDistricts = (
     value: string,
     options?: {
+      region_ids?: number[]
+      area_ids?: number[]
       city_ids?: number[]
     }
   ): void => {
     search.value = value
+    regions.value = options?.region_ids ?? []
+    areas.value = options?.area_ids ?? []
     cities.value = options?.city_ids ?? []
 
     refetch()
+  }
+
+  const reset = () => {
+    search.value = ''
+    regions.value = []
+    areas.value = []
+    cities.value = []
   }
 
   return {
@@ -633,6 +741,7 @@ export const useDistrictQuery = () => {
     isError,
     data,
     error,
-    searchDistricts
+    searchDistricts,
+    reset
   }
 }

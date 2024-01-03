@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import L from 'leaflet'
+import type { TreeSelectProps } from 'ant-design-vue'
 
 const useFiberMapStore = defineStore('fibermap', () => {
   const sidebarExpandedSize = ref<number>(300)
@@ -10,42 +11,48 @@ const useFiberMapStore = defineStore('fibermap', () => {
 
   const isDataFetching = ref<boolean>(false)
   const mapZoomLevel = ref<number>(10)
-  const mapCenter = ref<L.LatLngExpression>([-7.5487803, 111.6615726])
+  const mapCenter = ref<L.LatLngExpression>([-6.1832151, 106.8284193])
 
+  const selectedLayers = ref([])
   const layers = ref<LayerGroup[]>([
     {
       id: 'sitepoints',
       name: 'Site Point',
+      isLayerVisible: true,
       isVisible: true,
       children: []
     },
     {
       id: 'assets',
       name: 'Asset',
+      isLayerVisible: true,
       isVisible: true,
       children: []
     },
     {
       id: 'routes',
       name: 'Route',
+      isLayerVisible: true,
       isVisible: true,
       children: []
     },
     {
       id: 'cables',
       name: 'Cable',
+      isLayerVisible: true,
       isVisible: true,
       children: []
     },
     {
       id: 'segments',
       name: 'Segment',
+      isLayerVisible: true,
       isVisible: true,
       children: []
     }
   ])
 
-  const toggleLayerVisibility = (layer: LayerGroup, parentLayer?: LayerGroup) => {
+  const toggleVisibility = (layer: LayerGroup, parentLayer?: LayerGroup) => {
     if (parentLayer) {
       if (!parentLayer.isVisible) {
         return
@@ -54,9 +61,19 @@ const useFiberMapStore = defineStore('fibermap', () => {
 
     layer.isVisible = !layer.isVisible
 
+    const toggleLayerStatus = (layer: LayerGroup, isActive: boolean) => {
+      layer.isVisible = isActive
+
+      if (layer.children) {
+        for (const child of layer.children) {
+          toggleLayerStatus(child, isActive)
+        }
+      }
+    }
+
     if (layer.children) {
       for (const child of layer.children) {
-        toggleLayerVisibility(child)
+        toggleLayerStatus(child, layer.isVisible)
       }
     }
   }
@@ -69,7 +86,8 @@ const useFiberMapStore = defineStore('fibermap', () => {
         return {
           id: sitePoint.id,
           name: sitePoint.name,
-          isVisible: true
+          isVisible: true,
+          isLayerVisible: true
         }
       })
     }
@@ -87,8 +105,10 @@ const useFiberMapStore = defineStore('fibermap', () => {
           id: sitePoint.id,
           icon: '/icons/sitepoint.png',
           name: sitePoint.name,
+          isLayerVisible: true,
           isVisible: true,
-          geojson: JSON.parse(sitePoint.geojson)
+          geojson: JSON.parse(sitePoint.geojson),
+          code: sitePoint.code ?? ''
         }
       })
     }
@@ -109,22 +129,27 @@ const useFiberMapStore = defineStore('fibermap', () => {
             id: asset.id,
             name: asset.name,
             icon: asset.asset_icon ?? '/icons/odp.png',
+            isLayerVisible: true,
             isVisible: true,
-            geojson: JSON.parse(asset.geojson)
+            geojson: JSON.parse(asset.geojson),
+            code: asset.code ?? ''
           })
         } else {
           acc.push({
             id: asset.asset_group_id,
             name: asset.asset_group_name,
             icon: asset.asset_icon ?? '/icons/odp.png',
+            isLayerVisible: true,
             isVisible: true,
             children: [
               {
                 id: asset.id,
                 name: asset.name,
                 icon: asset.asset_icon ?? '/icons/odp.png',
+                isLayerVisible: true,
                 isVisible: true,
-                geojson: JSON.parse(asset.geojson)
+                geojson: JSON.parse(asset.geojson),
+                code: asset.code ?? ''
               }
             ]
           })
@@ -146,6 +171,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
         return {
           id: route.id,
           name: route.name,
+          isLayerVisible: true,
           isVisible: true,
           geojson: JSON.parse(route.geojson),
           icon: '/icons/route.png',
@@ -162,16 +188,44 @@ const useFiberMapStore = defineStore('fibermap', () => {
       // flush children
       cableLayer.children = []
 
-      cableLayer.children = cables.map((cable) => {
-        return {
-          id: cable.id,
-          name: cable.name,
-          isVisible: true,
-          geojson: JSON.parse(cable.geojson),
-          icon: '/icons/cable.png',
-          color: '#3559E0'
+      // grouping data by cable group
+      cables.reduce((acc, cable) => {
+        const current = acc.find((item) => item.id === cable.cable_group_id)
+        if (current) {
+          current.children?.push({
+            id: cable.id,
+            name: cable.name,
+            isLayerVisible: true,
+            isVisible: true,
+            geojson: JSON.parse(cable.geojson),
+            icon: '/icons/cable.png',
+            color: '#3559E0',
+            code: cable.code ?? ''
+          })
+        } else {
+          acc.push({
+            id: cable.cable_group_id,
+            name: cable.cable_group_name,
+            icon: '/icons/cable.png',
+            isLayerVisible: true,
+            isVisible: true,
+            children: [
+              {
+                id: cable.id,
+                name: cable.name,
+                isLayerVisible: true,
+                isVisible: true,
+                geojson: JSON.parse(cable.geojson),
+                icon: '/icons/cable.png',
+                color: '#3559E0',
+                code: cable.code ?? ''
+              }
+            ]
+          })
         }
-      })
+
+        return acc
+      }, cableLayer.children)
     }
   }
 
@@ -186,10 +240,12 @@ const useFiberMapStore = defineStore('fibermap', () => {
         return {
           id: segment.id,
           name: segment.name,
+          isLayerVisible: true,
           isVisible: true,
           geojson: JSON.parse(segment.geojson),
           icon: '/icons/segment.png',
-          color: '#191919'
+          color: '#191919',
+          code: segment.code ?? ''
         }
       })
     }
@@ -202,7 +258,9 @@ const useFiberMapStore = defineStore('fibermap', () => {
     if (sitePointLayer && sitePointLayer.children) {
       for (const sitePoint of sitePointLayer.children) {
         if (sitePoint.geojson) {
-          const coordinates = sitePoint.geojson.geometry.coordinates as [number, number]
+          const geojson = sitePoint.geojson as Feature
+          const geometry = geojson.geometry as Point
+          const coordinates = geometry.coordinates as [number, number]
           const marker = L.marker(L.latLng(coordinates[1], coordinates[0]), {
             icon: L.icon({
               iconUrl: sitePoint.icon ?? '',
@@ -211,8 +269,10 @@ const useFiberMapStore = defineStore('fibermap', () => {
             })
           })
 
-          marker.bindPopup(sitePoint.name)
+          const popupContent = `<p><strong>Name:</strong> ${sitePoint.name}</p><p><strong>Code:</strong> ${sitePoint.code}</p>`
 
+          marker.bindPopup(popupContent)
+          sitePoint.onClick = () => marker.fireEvent('flytocoordinate')
           markers.push({
             layer: sitePoint,
             marker
@@ -227,15 +287,17 @@ const useFiberMapStore = defineStore('fibermap', () => {
   const assetMarkers = computed<FiberMapAssetGroup[]>(() => {
     const markers: FiberMapAssetGroup[] = []
 
-    const addAssetGroup = (assetGroup: LayerGroup, memo: FiberMapAssetGroup[]) => {
+    const addAssetGroup = (assetGroup: LayerGroup) => {
       if (assetGroup.children) {
         for (const child of assetGroup.children) {
-          addAssetGroup(child, memo)
+          addAssetGroup(child)
         }
       }
 
       if (assetGroup.geojson) {
-        const coordinates = assetGroup.geojson.geometry.coordinates as [number, number]
+        const geojson = assetGroup.geojson as Feature
+        const geometry = geojson.geometry as Point
+        const coordinates = geometry.coordinates
         const marker = L.marker(L.latLng(coordinates[1], coordinates[0]), {
           icon: L.icon({
             iconUrl: assetGroup.icon ?? '',
@@ -244,8 +306,10 @@ const useFiberMapStore = defineStore('fibermap', () => {
           })
         })
 
-        marker.bindPopup(assetGroup.name)
+        const popupContent = `<p><strong>Name:</strong> ${assetGroup.name}</p><p><strong>Code:</strong> ${assetGroup.code}</p>`
+        marker.bindPopup(popupContent)
 
+        assetGroup.onClick = () => marker.fireEvent('flytocoordinate')
         markers.push({
           layer: assetGroup,
           marker
@@ -256,7 +320,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
     const assetGroupLayer = layers.value.find((layer) => layer.id === 'assets')
     if (assetGroupLayer && assetGroupLayer.children) {
       for (const assetGroup of assetGroupLayer.children) {
-        addAssetGroup(assetGroup, markers)
+        addAssetGroup(assetGroup)
       }
     }
 
@@ -269,10 +333,11 @@ const useFiberMapStore = defineStore('fibermap', () => {
     const routeLayer = layers.value.find((layer) => layer.id === 'routes')
     if (routeLayer && routeLayer.children) {
       for (const route of routeLayer.children) {
-        const geojson = route.geojson
+        const geojson = route.geojson as Feature
         if (geojson && geojson.geometry) {
           // mapping data to be polyline coord
-          const line = geojson.geometry.coordinates.map((coordinate) => {
+          const geometry = geojson.geometry as LineString
+          const line = geometry.coordinates.map((coordinate) => {
             if (Array.isArray(coordinate)) {
               return [coordinate[1], coordinate[0]]
             }
@@ -282,8 +347,10 @@ const useFiberMapStore = defineStore('fibermap', () => {
             color: route.color ?? '#ff0000'
           })
 
-          polyline.bindPopup(route.name)
+          const popupContent = `<p><strong>Name:</strong> ${route.name}</p>`
+          polyline.bindPopup(popupContent)
 
+          route.onClick = () => polyline.fireEvent('flytocoordinate')
           routes.push({
             layer: route,
             polyline
@@ -298,32 +365,48 @@ const useFiberMapStore = defineStore('fibermap', () => {
   const cablePolylines = computed<FiberMapCable[]>(() => {
     const cables: FiberMapCable[] = []
 
-    const cableLayer = layers.value.find((layer) => layer.id === 'cables')
-    if (cableLayer && cableLayer.children) {
-      for (const cable of cableLayer.children) {
-        const geojson = cable.geojson
-        if (geojson && geojson.geometry) {
+    const addCableGroup = (cable: LayerGroup) => {
+      if (cable.children) {
+        for (const child of cable.children) {
+          addCableGroup(child)
+        }
+      }
+
+      if (cable.geojson) {
+        const geojson = cable.geojson as FeatureCollection
+        if (geojson) {
           // mapping data to be polyline coord
-          const line = geojson.geometry.coordinates.map((coordinate) => {
-            if (Array.isArray(coordinate)) {
-              return [coordinate[1], coordinate[0]]
-            }
-          }) as [number, number][]
+          const features = geojson.features
+          for (const feature of features) {
+            const line = feature.geometry.coordinates.map((coordinate) => {
+              if (Array.isArray(coordinate)) {
+                return [coordinate[1], coordinate[0]]
+              }
+            }) as [number, number][]
 
-          const polyline = L.polyline(line, {
-            color: cable.color ?? '#ff0000'
-          })
+            const polyline = L.polyline(line, {
+              color: cable.color ?? '#ff0000'
+            })
 
-          polyline.bindPopup(cable.name)
+            const popupContent = `<p><strong>Name:</strong> ${cable.name}</p><p><strong>Code:</strong> ${cable.code}</p>`
+            polyline.bindPopup(popupContent)
 
-          cables.push({
-            layer: cable,
-            polyline
-          })
+            cable.onClick = () => polyline.fireEvent('flytocoordinate')
+            cables.push({
+              layer: cable,
+              polyline
+            })
+          }
         }
       }
     }
 
+    const cableLayer = layers.value.find((layer) => layer.id === 'cables')
+    if (cableLayer && cableLayer.children) {
+      for (const cable of cableLayer.children) {
+        addCableGroup(cable)
+      }
+    }
     return cables
   })
 
@@ -333,31 +416,138 @@ const useFiberMapStore = defineStore('fibermap', () => {
     const segmentLayer = layers.value.find((layer) => layer.id === 'segments')
     if (segmentLayer && segmentLayer.children) {
       for (const segment of segmentLayer.children) {
-        const geojson = segment.geojson
-        if (geojson && geojson.geometry) {
+        const geojson = segment.geojson as FeatureCollection
+        if (geojson) {
           // mapping data to be polyline coord
-          const line = geojson.geometry.coordinates.map((coordinate) => {
-            if (Array.isArray(coordinate)) {
-              return [coordinate[1], coordinate[0]]
-            }
-          }) as [number, number][]
+          const features = geojson.features
+          for (const feature of features) {
+            const line = feature.geometry.coordinates.map((coordinate) => {
+              if (Array.isArray(coordinate)) {
+                return [coordinate[1], coordinate[0]]
+              }
+            }) as [number, number][]
 
-          const polyline = L.polyline(line, {
-            color: segment.color ?? '#ff0000'
-          })
+            const polyline = L.polyline(line, {
+              color: segment.color ?? '#ff0000'
+            })
 
-          polyline.bindPopup(segment.name)
+            const popupContent = `<p><strong>Name:</strong> ${segment.name}</p><p><strong>Code:</strong> ${segment.code}</p>`
+            polyline.bindPopup(popupContent)
 
-          segments.push({
-            layer: segment,
-            polyline
-          })
+            segment.onClick = () => polyline.fireEvent('flytocoordinate')
+            segments.push({
+              layer: segment,
+              polyline
+            })
+          }
         }
       }
     }
 
     return segments
   })
+
+  const mapLegends = computed<MapLegend[]>(() => {
+    return [
+      {
+        id: 'sitepoints',
+        name: 'Site Point',
+        icon: '/icons/sitepoint.png'
+      },
+      {
+        id: 'assets',
+        name: 'Asset',
+        icon: '/icons/odp.png'
+      },
+      {
+        id: 'routes',
+        name: 'Route',
+        icon: '/icons/route.png'
+      },
+      {
+        id: 'cables',
+        name: 'Cable',
+        icon: '/icons/cable.png'
+      },
+      {
+        id: 'segments',
+        name: 'Segment',
+        icon: '/icons/segment.png'
+      }
+    ]
+  })
+
+  const treeLayerOptions = computed<TreeSelectProps['treeData']>(() => {
+    return layers.value.map((layer) => {
+      return {
+        label: layer.name,
+        value: layer.id,
+        children: layer.children?.map((child) => {
+          return {
+            label: child.name,
+            value: `${layer.id}-${child.id}`,
+            children: child.children?.map((grandchild) => {
+              return {
+                label: grandchild.name,
+                value: `${layer.id}-${child.id}-${grandchild.id}`
+              }
+            })
+          }
+        })
+      }
+    })
+  })
+
+  const toggleLayerVisibility = (selectedLayerIds: string[]) => {
+    const toggleAllLayer = (layer: LayerGroup, isActive: boolean) => {
+      layer.isLayerVisible = isActive
+
+      if (layer.children) {
+        for (const child of layer.children) {
+          toggleAllLayer(child, isActive)
+        }
+      }
+    }
+
+    if (selectedLayerIds.length === 0) {
+      // toggle all layer to on
+      for (const layer of layers.value) {
+        toggleAllLayer(layer, true)
+      }
+      return
+    }
+
+    // toggle all layer to off
+    for (const layer of layers.value) {
+      toggleAllLayer(layer, false)
+    }
+
+    for (const selectedLayerId of selectedLayerIds) {
+      const [parentLayerId, childLayerId, grandchildLayerId] = selectedLayerId.split('-')
+      const parentLayer = layers.value.find((layer) => layer.id === parentLayerId)
+      if (parentLayer) {
+        parentLayer.isLayerVisible = true
+
+        if (childLayerId) {
+          const childLayer = parentLayer.children?.find((layer) => layer.id == childLayerId)
+
+          if (childLayer) {
+            childLayer.isLayerVisible = true
+
+            if (grandchildLayerId) {
+              const grandchildLayer = childLayer.children?.find(
+                (layer) => layer.id == grandchildLayerId
+              )
+
+              if (grandchildLayer) {
+                grandchildLayer.isLayerVisible = true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   return {
     sidebarExpandedSize,
@@ -366,19 +556,23 @@ const useFiberMapStore = defineStore('fibermap', () => {
     isDataFetching,
     mapZoomLevel,
     mapCenter,
+    selectedLayers,
     layers,
     sitePointMarkers,
     assetMarkers,
     routePolylines,
     cablePolylines,
     segmentPolylines,
-    toggleLayerVisibility,
+    mapLegends,
+    toggleVisibility,
     updateSitePointLayer,
     setSitePointLayer,
     setAssetLayer,
     setRouteLayer,
     setCableLayer,
-    setSegmentLayer
+    setSegmentLayer,
+    treeLayerOptions,
+    toggleLayerVisibility
   }
 })
 

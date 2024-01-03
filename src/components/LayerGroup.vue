@@ -7,7 +7,7 @@
     >
       <a-collapse-panel :showArrow="showArrow" style="margin-bottom: 10px" :key="headerTitle">
         <template #header>
-          <span>
+          <span @click="$emit('clickLayer')" style="cursor: pointer">
             <i v-show="iconSrc.length > 1">
               <a-image :width="24" :preview="false" :src="iconSrc" />
             </i>
@@ -66,7 +66,7 @@ defineProps({
   }
 })
 
-defineEmits(['toggleLayerVisibility'])
+defineEmits(['toggleLayerVisibility', 'clickLayer'])
 </script>
 
 <style scoped></style>
