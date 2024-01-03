@@ -147,7 +147,7 @@ onMounted(() => {
     map.addLayer(markers)
 
     // subscribe to store
-    fibermapStore.$subscribe(() => {
+    watch(fibermapStore.layers, () => {
       // update marker visible when state changed
       markers.clearLayers()
 

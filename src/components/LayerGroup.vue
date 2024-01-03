@@ -4,6 +4,7 @@
       :bordered="bordered"
       :expandIconPosition="expandIconPosition"
       :collapsible="collapsible"
+      :style="isLayerSelected && 'background: rgb(20, 118, 255, 0.1)'"
     >
       <a-collapse-panel :showArrow="showArrow" style="margin-bottom: 10px" :key="headerTitle">
         <template #header>
@@ -62,6 +63,11 @@ defineProps({
   isLayerVisible: {
     type: Boolean,
     default: true,
+    required: false
+  },
+  isLayerSelected: {
+    type: Boolean,
+    default: false,
     required: false
   }
 })
