@@ -30,6 +30,7 @@ declare module 'vue' {
     ATabPane: typeof import('ant-design-vue/es')['TabPane']
     ATabs: typeof import('ant-design-vue/es')['Tabs']
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
+    ATreeSelect: typeof import('ant-design-vue/es')['TreeSelect']
     LayerGroup: typeof import('./src/components/LayerGroup.vue')['default']
     MapFilter: typeof import('./src/components/MapFilter.vue')['default']
     MapIcon: typeof import('./src/components/MapIcon.vue')['default']

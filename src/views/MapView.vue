@@ -138,7 +138,10 @@ onMounted(() => {
       zoomControl: false
     }).setView(fibermapStore.mapCenter, fibermapStore.mapZoomLevel)
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxNativeZoom: 19,
+      maxZoom: 22
+    }).addTo(map)
 
     // add markers to map
     map.addLayer(markers)
@@ -151,7 +154,7 @@ onMounted(() => {
       // sitepoint
       markers.addLayers(
         fibermapStore.sitePointMarkers
-          .filter((marker) => marker.layer.isVisible)
+          .filter((marker) => marker.layer.isVisible && marker.layer.isLayerVisible)
           .map((marker) => {
             marker.marker.on('flytocoordinate', () => {
               // fly to coordinate if bound is not contain the marker
@@ -169,7 +172,7 @@ onMounted(() => {
       // asset
       markers.addLayers(
         fibermapStore.assetMarkers
-          .filter((marker) => marker.layer.isVisible)
+          .filter((marker) => marker.layer.isVisible && marker.layer.isLayerVisible)
           .map((marker) => {
             marker.marker.on('flytocoordinate', () => {
               // fly to coordinate if bound is not contain the marker
@@ -187,7 +190,7 @@ onMounted(() => {
       // route
       markers.addLayers(
         fibermapStore.routePolylines
-          .filter((polyline) => polyline.layer.isVisible)
+          .filter((polyline) => polyline.layer.isVisible && polyline.layer.isLayerVisible)
           .map((polyline) => {
             polyline.polyline.on('flytocoordinate', () => {
               // fly to coordinate if bound is not contain the marker
@@ -205,7 +208,7 @@ onMounted(() => {
       // cable
       markers.addLayers(
         fibermapStore.cablePolylines
-          .filter((polyline) => polyline.layer.isVisible)
+          .filter((polyline) => polyline.layer.isVisible && polyline.layer.isLayerVisible)
           .map((polyline) => {
             polyline.polyline.on('flytocoordinate', () => {
               // fly to coordinate if bound is not contain the marker
@@ -223,7 +226,7 @@ onMounted(() => {
       // segment
       markers.addLayers(
         fibermapStore.segmentPolylines
-          .filter((polyline) => polyline.layer.isVisible)
+          .filter((polyline) => polyline.layer.isVisible && polyline.layer.isLayerVisible)
           .map((polyline) => {
             polyline.polyline.on('flytocoordinate', () => {
               // fly to coordinate if bound is not contain the marker

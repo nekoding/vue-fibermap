@@ -22,6 +22,7 @@ interface FeatureCollection {
 interface LayerGroup {
   id: string | number
   name: string
+  isLayerVisible: boolean
   isVisible: boolean
   geojson?: Feature | FeatureCollection
   children?: LayerGroup[]
