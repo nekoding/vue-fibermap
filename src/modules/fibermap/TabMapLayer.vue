@@ -69,9 +69,9 @@
 
 <script setup lang="ts">
 import { ref, type PropType, watch } from 'vue'
-import { useFiberMapStore } from '../stores/fibermap'
+import { useFiberMapStore } from '@/stores'
 import { EyeOutlined, EyeInvisibleOutlined, SearchOutlined } from '@ant-design/icons-vue'
-import LayerGroup from '../components/LayerGroup.vue'
+import LayerGroup from '@/components/LayerGroup.vue'
 import { Empty } from 'ant-design-vue'
 
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE

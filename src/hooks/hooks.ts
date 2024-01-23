@@ -616,6 +616,7 @@ export const useCityQuery = () => {
   const search = ref<string>()
   const areas = ref<number[]>()
   const regions = ref<number[]>()
+  const provinces = ref<number[]>()
 
   const { isLoading, isFetching, isError, data, error, refetch } = useQuery({
     retry: false,
@@ -624,7 +625,7 @@ export const useCityQuery = () => {
       const res = await axios.get<ApiResponse>(
         `${API_BASE_URL}/cities?name=${search.value}&region_ids=${regions.value?.join(
           ','
-        )}&area_ids=${areas.value?.join(',')}`,
+        )}&area_ids=${areas.value?.join(',')}&province_ids=${provinces.value?.join(',')}`,
         {
           signal,
           headers: {
@@ -651,11 +652,13 @@ export const useCityQuery = () => {
     options?: {
       region_ids?: number[]
       area_ids?: number[]
+      province_ids?: number[]
     }
   ): void => {
     search.value = value
     regions.value = options?.region_ids ?? []
     areas.value = options?.area_ids ?? []
+    provinces.value = options?.province_ids ?? []
 
     refetch()
   }
@@ -664,6 +667,7 @@ export const useCityQuery = () => {
     search.value = ''
     regions.value = []
     areas.value = []
+    provinces.value = []
   }
 
   return {
@@ -744,4 +748,118 @@ export const useDistrictQuery = () => {
     searchDistricts,
     reset
   }
+}
+
+export const useProvinceQuery = () => {
+  const search = ref<string>()
+
+  const { isLoading, isFetching, isError, data, error, refetch } = useQuery({
+    retry: false,
+    queryKey: ['provinces'],
+    queryFn: async ({ signal }) => {
+      const res = await axios.get<ApiResponse>(`${API_BASE_URL}/provinces?name=${search.value}`, {
+        signal,
+        headers: {
+          Authorization: `Bearer ${AUTH_TOKEN}`,
+          Accept: 'application/json'
+        }
+      })
+
+      return (
+        res.data.result?.data?.map((province: any) => ({
+          value: province.id,
+          label: province.name
+        })) ?? []
+      )
+    },
+    enabled: false,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
+  })
+
+  const searchProvinces = (value: string): void => {
+    search.value = value
+
+    refetch()
+  }
+
+  const reset = () => {
+    search.value = ''
+  }
+
+  return {
+    isLoading,
+    isFetching,
+    isError,
+    data,
+    error,
+    searchProvinces,
+    reset
+  }
+}
+
+export const getCitiesFromAreaId = async (ids: number[]) => {
+  const result = await axios.get<ApiResponse>(`${API_BASE_URL}/cities?area_ids=${ids.join(',')}`, {
+    headers: {
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+      Accept: 'application/json'
+    }
+  })
+
+  if (result.data.result?.data === undefined) return []
+
+  const cityPromises = result.data.result?.data.map((city: { id: number; name: string }) =>
+    cityDetailQuery(city.id)
+  )
+
+  const cities = await Promise.all(cityPromises)
+  return cities
+}
+
+export const getCitiesFromRegionId = async (ids: number[]) => {
+  const result = await axios.get<ApiResponse>(
+    `${API_BASE_URL}/cities?region_ids=${ids.join(',')}`,
+    {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`,
+        Accept: 'application/json'
+      }
+    }
+  )
+
+  if (result.data.result?.data === undefined) return []
+
+  const cityPromises = result.data.result?.data.map((city: { id: number; name: string }) =>
+    cityDetailQuery(city.id)
+  )
+
+  const cities = await Promise.all(cityPromises)
+  return cities
+}
+
+export const cityDetailQuery = async (id: number) => {
+  return axios.get<ApiResponse>(`${API_BASE_URL}/cities/${id}`, {
+    headers: {
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+      Accept: 'application/json'
+    }
+  })
+}
+
+export const districtDetailQuery = async (id: number) => {
+  return axios.get<ApiResponse>(`${API_BASE_URL}/districts/${id}`, {
+    headers: {
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+      Accept: 'application/json'
+    }
+  })
+}
+
+export const provinceDetailQuery = async (id: number) => {
+  return axios.get<ApiResponse>(`${API_BASE_URL}/provinces/${id}`, {
+    headers: {
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+      Accept: 'application/json'
+    }
+  })
 }

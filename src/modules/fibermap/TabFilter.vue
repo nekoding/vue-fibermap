@@ -8,109 +8,64 @@
       @finish="onFinish"
     >
       <a-form-item label="Project Group" :name="['projectGroups']">
-        <a-select
-          style="width: 100%"
-          :allowClear="true"
-          :showArrow="true"
-          :filter-option="false"
-          mode="multiple"
+        <select-dropdown
           placeholder="Select project group"
-          v-model:value="formState.projectGroups"
+          v-model="formState.projectGroups"
           :options="projectGroupOptions"
-          :autoClearSearchValue="true"
+          :isLoading="isFetchingProjectGroup"
           @search="onSearchProjectGroup"
           @dropdownVisibleChange="onDropdownVisibleProjectGroup"
-        >
-          <template v-if="isFetchingProjectGroup" #notFoundContent>
-            <a-spin size="small" />
-          </template>
-        </a-select>
+        />
       </a-form-item>
       <a-form-item
         label="Region"
         :name="['regions']"
         :rules="[{ required: true, message: 'Please select region' }]"
       >
-        <a-select
-          style="width: 100%"
-          :allowClear="true"
-          :showArrow="true"
-          :filter-option="false"
-          mode="multiple"
-          placeholder="Select project group"
-          v-model:value="formState.regions"
+        <select-dropdown
+          placeholder="Select region"
+          v-model="formState.regions"
           :options="regionOptions"
-          :autoClearSearchValue="true"
+          :isLoading="isFetchingRegion"
           @search="onSearchRegion"
           @deselect="onDeselectRegion"
           @dropdownVisibleChange="onDropdownVisibleRegion"
-        >
-          <template v-if="isFetchingRegion" #notFoundContent>
-            <a-spin size="small" />
-          </template>
-        </a-select>
+        />
       </a-form-item>
       <a-form-item label="Area" :name="['areas']">
-        <a-select
-          style="width: 100%"
-          :allowClear="true"
-          :showArrow="true"
-          :filter-option="false"
-          mode="multiple"
+        <select-dropdown
           placeholder="Select area"
-          v-model:value="formState.areas"
+          v-model="formState.areas"
           :options="areaOptions"
-          :autoClearSearchValue="true"
+          :isLoading="isFetchingArea"
+          :isDisabled="formState.regions.length ? false : true"
           @search="onSearchArea"
-          :disabled="formState.regions.length ? false : true"
           @deselect="onDeselectArea"
           @dropdownVisibleChange="onDropdownVisibleArea"
-        >
-          <template v-if="isFetchingArea" #notFoundContent>
-            <a-spin size="small" />
-          </template>
-        </a-select>
+        />
       </a-form-item>
       <a-form-item label="City" :name="['cities']">
-        <a-select
-          style="width: 100%"
-          :allowClear="true"
-          :showArrow="true"
-          :filter-option="false"
-          mode="multiple"
+        <select-dropdown
           placeholder="Select city"
-          v-model:value="formState.cities"
+          v-model="formState.cities"
           :options="cityOptions"
-          :autoClearSearchValue="true"
+          :isLoading="isFetchingCity"
+          :isDisabled="formState.areas.length ? false : true"
           @search="onSearchCity"
-          :disabled="formState.areas.length ? false : true"
           @deselect="onDeselectCity"
           @dropdownVisibleChange="onDropdownVisibleCity"
-        >
-          <template v-if="isFetchingCity" #notFoundContent>
-            <a-spin size="small" />
-          </template>
-        </a-select>
+        />
       </a-form-item>
       <a-form-item label="District" :name="['districts']">
-        <a-select
-          style="width: 100%"
-          :allowClear="true"
-          :showArrow="true"
-          :filter-option="false"
-          mode="multiple"
+        <select-dropdown
           placeholder="Select district"
-          v-model:value="formState.districts"
+          v-model="formState.districts"
           :options="districtOptions"
-          :autoClearSearchValue="true"
+          :isLoading="isFetchingDistrict"
+          :isDisabled="formState.cities.length ? false : true"
           @search="onSearchDistrict"
-          :disabled="formState.cities.length ? false : true"
           @dropdownVisibleChange="onDropdownVisibleDistrict"
-        >
-          <template v-if="isFetchingDistrict" #notFoundContent>
-            <a-spin size="small" />
-          </template>
-        </a-select>
+        />
       </a-form-item>
       <a-form-item>
         <a-button style="margin-right: 15px" @click="resetFields">Reset</a-button>
@@ -133,9 +88,10 @@ import {
   useRouteQuery,
   useCableQuery,
   useSegmentQuery
-} from '../hooks/hooks'
+} from '../../hooks/hooks'
 import { debounce } from 'lodash-es'
-import { useFiberMapStore } from '../stores/fibermap'
+import { useFiberMapStore } from '../../stores/fibermap'
+import SelectDropdown from '@/components/shared/SelectDropdown.vue'
 
 interface FormState {
   projectGroups: number[]

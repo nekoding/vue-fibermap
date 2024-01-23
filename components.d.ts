@@ -38,6 +38,12 @@ declare module 'vue' {
     MapToolset: typeof import('./src/components/MapToolset.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SelectArea: typeof import('./src/components/shared/SelectArea.vue')['default']
+    SelectCity: typeof import('./src/components/shared/SelectCity.vue')['default']
+    SelectDistrict: typeof import('./src/components/shared/SelectDistrict.vue')['default']
+    SelectDropdown: typeof import('./src/components/shared/SelectDropdown.vue')['default']
+    SelectProjectGroup: typeof import('./src/components/shared/SelectProjectGroup.vue')['default']
+    SelectRegion: typeof import('./src/components/shared/SelectRegion.vue')['default']
     ToolbarButton: typeof import('./src/components/shared/ToolbarButton.vue')['default']
   }
 }
