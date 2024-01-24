@@ -798,27 +798,9 @@ export const useProvinceQuery = () => {
   }
 }
 
-export const getCitiesFromAreaId = async (ids: number[]) => {
-  const result = await axios.get<ApiResponse>(`${API_BASE_URL}/cities?area_ids=${ids.join(',')}`, {
-    headers: {
-      Authorization: `Bearer ${AUTH_TOKEN}`,
-      Accept: 'application/json'
-    }
-  })
-
-  if (result.data.result?.data === undefined) return []
-
-  const cityPromises = result.data.result?.data.map((city: { id: number; name: string }) =>
-    cityDetailQuery(city.id)
-  )
-
-  const cities = await Promise.all(cityPromises)
-  return cities
-}
-
-export const getCitiesFromRegionId = async (ids: number[]) => {
+export const getReportMapBandwidthFromAreaId = async (ids: number[]) => {
   const result = await axios.get<ApiResponse>(
-    `${API_BASE_URL}/cities?region_ids=${ids.join(',')}`,
+    `${API_BASE_URL}/reports/map-bandwidth?area_ids=${ids.join(',')}`,
     {
       headers: {
         Authorization: `Bearer ${AUTH_TOKEN}`,
@@ -829,12 +811,29 @@ export const getCitiesFromRegionId = async (ids: number[]) => {
 
   if (result.data.result?.data === undefined) return []
 
-  const cityPromises = result.data.result?.data.map((city: { id: number; name: string }) =>
-    cityDetailQuery(city.id)
+  const promises = result.data.result?.data.map(({ id }: { id: string }) =>
+    getMapBandwidthAreaDetail(id)
+  )
+  return await Promise.all(promises)
+}
+
+export const getReportMapBandwidthFromRegionId = async (ids: number[]) => {
+  const result = await axios.get<ApiResponse>(
+    `${API_BASE_URL}/reports/map-bandwidth?region_ids=${ids.join(',')}`,
+    {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`,
+        Accept: 'application/json'
+      }
+    }
   )
 
-  const cities = await Promise.all(cityPromises)
-  return cities
+  if (result.data.result?.data === undefined) return []
+
+  const promises = result.data.result?.data.map(({ id }: { id: string }) =>
+    getMapBandwidthAreaDetail(id)
+  )
+  return await Promise.all(promises)
 }
 
 export const cityDetailQuery = async (id: number) => {
@@ -857,6 +856,15 @@ export const districtDetailQuery = async (id: number) => {
 
 export const provinceDetailQuery = async (id: number) => {
   return axios.get<ApiResponse>(`${API_BASE_URL}/provinces/${id}`, {
+    headers: {
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+      Accept: 'application/json'
+    }
+  })
+}
+
+export const getMapBandwidthAreaDetail = async (id: string) => {
+  return axios.get<ApiResponse>(`${API_BASE_URL}/reports/map-bandwidth/${id}`, {
     headers: {
       Authorization: `Bearer ${AUTH_TOKEN}`,
       Accept: 'application/json'

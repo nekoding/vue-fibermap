@@ -17,12 +17,25 @@
 
         <div v-else>
           <layer-group
-            v-for="children in layer.children"
+            v-for="children in layer.children?.filter((child) => child.isLayerVisible)"
             :key="`child-${children.id}`"
             :header-title="children.name"
+            :show-arrow="Boolean(layer?.children?.length) || false"
             :is-layer-visible="children.isVisible"
             @toggleLayerVisibility="store.toggleVisibility(children, layer)"
-          />
+            collapsible="icon"
+          >
+            <layer-group
+              v-for="subchildren in children.children?.filter(
+                (subchild) => subchild.isLayerVisible
+              )"
+              :key="`subchild-${subchildren.id}`"
+              :header-title="subchildren.name"
+              :is-layer-visible="subchildren.isVisible"
+              @toggleLayerVisibility="store.toggleVisibility(subchildren, children)"
+              collapsible="icon"
+            />
+          </layer-group>
         </div>
       </a-collapse-panel>
     </a-collapse>

@@ -97,7 +97,7 @@ import TabMapLayer from '@/modules/report/TabMapLayer.vue'
 import L from 'leaflet'
 import 'leaflet.markercluster'
 import { createChoroplethFromCityGeom } from '@/helpers'
-import type { GeoJSONFeature, GeoJSONFeatureCollection } from '@/types/geom'
+import type { GeoJSONFeature } from '@/types/geom'
 
 const store = useReportMapStore()
 const { layers } = storeToRefs(store)
@@ -169,7 +169,10 @@ watch(
       ?.filter((cityLayer) => cityLayer.isLayerVisible && cityLayer.isVisible)
       .map((cityLayer) => {
         const geom = cityLayer.geoJSON as GeoJSONFeature
-        return createChoroplethFromCityGeom(geom)
+        // return createChoroplethFromCityGeom(geom)
+
+        console.log(geom)
+        return []
       })
 
     // add feature group layer
