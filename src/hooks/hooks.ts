@@ -1,3 +1,4 @@
+import type { ApiResponse, Asset, Cable, Route, Segment, SitePoint } from '@/types'
 import { useQuery } from '@tanstack/vue-query'
 import axios from 'axios'
 import { reactive, ref } from 'vue'

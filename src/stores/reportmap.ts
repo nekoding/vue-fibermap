@@ -12,33 +12,7 @@ import {
 import _ from 'lodash'
 import L from 'leaflet'
 import { toPng } from 'html-to-image'
-
-interface ILayer {
-  id: string
-  name: string
-  isLayerVisible: boolean
-  isVisible: boolean
-  geoJSON?: GeoJSON
-  children?: Array<ILayer>
-}
-
-interface IReportMapBandwidthProperties {
-  category_utilization: string
-  city: string
-  id: string
-  is_lambda: string
-  province: string
-  pulau: string
-  real_capacity: string | number
-  region: string
-  utilization_range: {
-    code: string
-    name: string
-    color: string
-    type: string
-    value: string
-  }
-}
+import type { ILayer, IReportMapBandwidthProperties, LayerGroup } from '@/types'
 
 const useReportMapStore = defineStore('useReportMapStore', () => {
   const mapRef = ref<HTMLDivElement>()

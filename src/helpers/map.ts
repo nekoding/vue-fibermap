@@ -1,4 +1,5 @@
-import type { GeoJSONFeature } from '@/types/geom'
+import type { IReportMapBandwidthProperties } from '@/types'
+import type { GeoJSONFeature, GeoJSONFeatureProperties } from '@/types/geom'
 import L from 'leaflet'
 import _ from 'lodash'
 
@@ -20,8 +21,9 @@ const getColorDensity = (density: number) => {
                 : '#FFEDA0'
 }
 
-const choroplethStyle = (feature: any) => {
-  const densityColor = getColorDensity(Math.random() * 1000)
+const choroplethStyle = (geoJsonProps?: GeoJSONFeatureProperties) => (feature: any) => {
+  const props = geoJsonProps as IReportMapBandwidthProperties
+  const densityColor = props?.utilization_range?.color || getColorDensity(Math.random() * 1000)
 
   return {
     fillColor: densityColor,
@@ -52,9 +54,9 @@ const resetHighlight = (geojson: L.GeoJSON) => (e: any) => {
 
 const createChoroplethFromCityGeom = (geom: GeoJSONFeature) => {
   const geojson = L.geoJSON(geom, {
-    style: choroplethStyle
+    style: choroplethStyle(geom.properties)
   }).bindPopup(function () {
-    return geom?.properties?.name || ''
+    return geom?.properties?.city || ''
   })
 
   // trigger event
@@ -63,12 +65,14 @@ const createChoroplethFromCityGeom = (geom: GeoJSONFeature) => {
     layer.on('mouseout', resetHighlight(geojson))
   })
 
+  console.log(geom)
+
   // add custom label
   const bounds = geojson.getBounds()
   const label = L.marker(bounds.getCenter(), {
     icon: L.divIcon({
       className: 'yellow-stroke',
-      html: '<div>' + geom?.properties?.name || '' + '</div>'
+      html: '<div>' + geom?.properties?.city || '' + '</div>'
     })
   })
 

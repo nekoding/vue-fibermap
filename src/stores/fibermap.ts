@@ -3,6 +3,24 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import L from 'leaflet'
 import type { TreeSelectProps } from 'ant-design-vue'
+import type {
+  Asset,
+  Cable,
+  Feature,
+  FeatureCollection,
+  FiberMapAssetGroup,
+  FiberMapCable,
+  FiberMapRoute,
+  FiberMapSegment,
+  FiberMapSitePoint,
+  LayerGroup,
+  LineString,
+  MapLegend,
+  Point,
+  Route,
+  Segment,
+  SitePoint
+} from '@/types'
 
 const useFiberMapStore = defineStore('fibermap', () => {
   const sidebarExpandedSize = ref<number>(300)
