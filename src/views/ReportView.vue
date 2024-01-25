@@ -138,7 +138,7 @@ onMounted(() => {
     }
 
     fitToBoundMap.value = () => {
-      map.fitBounds(geojsonLayerGroups.getBounds())
+      map.fitBounds(geojsonLayerGroups?.getBounds() || [])
     }
 
     // set map loaded
@@ -168,10 +168,12 @@ watch(
     const cityLayers = store.getCityLayers?.children
       ?.filter((cityLayer) => cityLayer.isLayerVisible && cityLayer.isVisible)
       .map((cityLayer) => {
-        const choroplethCities = cityLayer.children?.map((layer) => {
-          const geojson = layer.geoJSON as GeoJSONFeature
-          return createChoroplethFromCityGeom(geojson)
-        })
+        const choroplethCities = cityLayer.children
+          ?.filter((layer) => layer.isLayerVisible && layer.isVisible)
+          ?.map((layer) => {
+            const geojson = layer.geoJSON as GeoJSONFeature
+            return createChoroplethFromCityGeom(geojson)
+          })
 
         return choroplethCities?.flat() || []
       })

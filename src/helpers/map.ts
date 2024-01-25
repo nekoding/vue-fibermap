@@ -56,7 +56,39 @@ const createChoroplethFromCityGeom = (geom: GeoJSONFeature) => {
   const geojson = L.geoJSON(geom, {
     style: choroplethStyle(geom.properties)
   }).bindPopup(function () {
-    return geom?.properties?.city || ''
+    // return geom?.properties?.city || ''
+    return `<table class="metadata">
+    <tbody>
+      <tr>
+        <td>Pulau</td>
+        <td>${geom.properties?.pulau}</td>
+      </tr>
+      <tr>
+        <td>Province</td>
+        <td>${geom.properties?.province}</td>
+      </tr>
+      <tr>
+        <td>City</td>
+        <td>${geom.properties?.city}</td>
+      </tr>
+      <tr>
+        <td>Is Lambda</td>
+        <td>${geom.properties?.is_lambda}</td>
+      </tr>
+      <tr>
+        <td>Capacity (Mbps)</td>
+        <td>${geom.properties?.real_capacity}</td>
+      </tr>
+      <tr>
+        <td>Region</td>
+        <td>${geom.properties?.region}</td>
+      </tr>
+      <tr>
+        <td>Category Utilization</td>
+        <td>${geom.properties?.category_utilization}</td>
+      </tr>
+    </tbody>
+    </table>`
   })
 
   // trigger event
@@ -68,15 +100,15 @@ const createChoroplethFromCityGeom = (geom: GeoJSONFeature) => {
   console.log(geom)
 
   // add custom label
-  const bounds = geojson.getBounds()
-  const label = L.marker(bounds.getCenter(), {
-    icon: L.divIcon({
-      className: 'yellow-stroke',
-      html: '<div>' + geom?.properties?.city || '' + '</div>'
-    })
-  })
+  // const bounds = geojson.getBounds()
+  // const label = L.marker(bounds.getCenter(), {
+  //   icon: L.divIcon({
+  //     className: 'yellow-stroke',
+  //     html: '<div>' + geom?.properties?.city || '' + '</div>'
+  //   })
+  // })
 
-  return [geojson, label]
+  return [geojson]
 }
 
 export { choroplethStyle, highlightFeature, resetHighlight, createChoroplethFromCityGeom }
