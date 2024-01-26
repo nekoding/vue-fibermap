@@ -101,8 +101,8 @@ import MapToolset from '../components/MapToolset.vue'
 import MapLegend from '../components/MapLegend.vue'
 import MapSearchBar from '../components/MapSearchBar.vue'
 import MapIcon from '../components/MapIcon.vue'
-import TabFilter from '../modules/TabFilter.vue'
-import TabMapLayer from '../modules/TabMapLayer.vue'
+import TabFilter from '../modules/fibermap/TabFilter.vue'
+import TabMapLayer from '../modules/fibermap/TabMapLayer.vue'
 import { useFiberMapStore } from '../stores/fibermap'
 import { LeftOutlined, RightOutlined, DatabaseOutlined } from '@ant-design/icons-vue'
 
@@ -147,7 +147,7 @@ onMounted(() => {
     map.addLayer(markers)
 
     // subscribe to store
-    fibermapStore.$subscribe(() => {
+    watch(fibermapStore.layers, () => {
       // update marker visible when state changed
       markers.clearLayers()
 

@@ -44,6 +44,7 @@
             :icon-src="child.icon"
             :show-arrow="Boolean(child?.children?.length) || false"
             :is-layer-visible="child.isVisible"
+            :is-layer-selected="fibermapStore.popupedLayer == child"
             @toggleLayerVisibility="fibermapStore.toggleVisibility(child, layer)"
             @clickLayer="child.onClick"
             collapsible="icon"
@@ -54,6 +55,7 @@
               :header-title="subchild.name"
               :icon-src="subchild.icon"
               :is-layer-visible="subchild.isVisible"
+              :is-layer-selected="fibermapStore.popupedLayer == subchild"
               @toggleLayerVisibility="fibermapStore.toggleVisibility(subchild, child)"
               @clickLayer="subchild.onClick"
               collapsible="icon"
@@ -67,9 +69,9 @@
 
 <script setup lang="ts">
 import { ref, type PropType, watch } from 'vue'
-import { useFiberMapStore } from '../stores/fibermap'
+import { useFiberMapStore } from '@/stores'
 import { EyeOutlined, EyeInvisibleOutlined, SearchOutlined } from '@ant-design/icons-vue'
-import LayerGroup from '../components/LayerGroup.vue'
+import LayerGroup from '@/components/LayerGroup.vue'
 import { Empty } from 'ant-design-vue'
 
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE

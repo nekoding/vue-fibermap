@@ -7,6 +7,11 @@ const router = createRouter({
       path: '/:pathMatch(.*)*',
       name: 'Map',
       component: () => import('../views/MapView.vue')
+    },
+    {
+      path: '/report',
+      name: 'Report Map',
+      component: () => import('../views/ReportView.vue')
     }
   ]
 })

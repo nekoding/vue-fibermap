@@ -3,6 +3,24 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import L from 'leaflet'
 import type { TreeSelectProps } from 'ant-design-vue'
+import type {
+  Asset,
+  Cable,
+  Feature,
+  FeatureCollection,
+  FiberMapAssetGroup,
+  FiberMapCable,
+  FiberMapRoute,
+  FiberMapSegment,
+  FiberMapSitePoint,
+  LayerGroup,
+  LineString,
+  MapLegend,
+  Point,
+  Route,
+  Segment,
+  SitePoint
+} from '@/types'
 
 const useFiberMapStore = defineStore('fibermap', () => {
   const sidebarExpandedSize = ref<number>(300)
@@ -13,6 +31,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
   const mapZoomLevel = ref<number>(10)
   const mapCenter = ref<L.LatLngExpression>([-6.1832151, 106.8284193])
 
+  const popupedLayer = ref<LayerGroup | null>(null)
   const selectedLayers = ref([])
   const layers = ref<LayerGroup[]>([
     {
@@ -272,7 +291,19 @@ const useFiberMapStore = defineStore('fibermap', () => {
           const popupContent = `<p><strong>Name:</strong> ${sitePoint.name}</p><p><strong>Code:</strong> ${sitePoint.code}</p>`
 
           marker.bindPopup(popupContent)
-          sitePoint.onClick = () => marker.fireEvent('flytocoordinate')
+
+          sitePoint.onClick = () => {
+            marker.fireEvent('flytocoordinate')
+          }
+
+          marker.addEventListener('popupopen', function () {
+            popupedLayer.value = sitePoint
+          })
+
+          marker.addEventListener('popupclose', function () {
+            popupedLayer.value = null
+          })
+
           markers.push({
             layer: sitePoint,
             marker
@@ -310,6 +341,15 @@ const useFiberMapStore = defineStore('fibermap', () => {
         marker.bindPopup(popupContent)
 
         assetGroup.onClick = () => marker.fireEvent('flytocoordinate')
+
+        marker.addEventListener('popupopen', function () {
+          popupedLayer.value = assetGroup
+        })
+
+        marker.addEventListener('popupclose', function () {
+          popupedLayer.value = null
+        })
+
         markers.push({
           layer: assetGroup,
           marker
@@ -351,6 +391,15 @@ const useFiberMapStore = defineStore('fibermap', () => {
           polyline.bindPopup(popupContent)
 
           route.onClick = () => polyline.fireEvent('flytocoordinate')
+
+          polyline.addEventListener('popupopen', function () {
+            popupedLayer.value = route
+          })
+
+          polyline.addEventListener('popupclose', function () {
+            popupedLayer.value = null
+          })
+
           routes.push({
             layer: route,
             polyline
@@ -392,6 +441,15 @@ const useFiberMapStore = defineStore('fibermap', () => {
             polyline.bindPopup(popupContent)
 
             cable.onClick = () => polyline.fireEvent('flytocoordinate')
+
+            polyline.addEventListener('popupopen', function () {
+              popupedLayer.value = cable
+            })
+
+            polyline.addEventListener('popupclose', function () {
+              popupedLayer.value = null
+            })
+
             cables.push({
               layer: cable,
               polyline
@@ -435,6 +493,15 @@ const useFiberMapStore = defineStore('fibermap', () => {
             polyline.bindPopup(popupContent)
 
             segment.onClick = () => polyline.fireEvent('flytocoordinate')
+
+            polyline.addEventListener('popupopen', function () {
+              popupedLayer.value = segment
+            })
+
+            polyline.addEventListener('popupclose', function () {
+              popupedLayer.value = null
+            })
+
             segments.push({
               layer: segment,
               polyline
@@ -556,6 +623,7 @@ const useFiberMapStore = defineStore('fibermap', () => {
     isDataFetching,
     mapZoomLevel,
     mapCenter,
+    popupedLayer,
     selectedLayers,
     layers,
     sitePointMarkers,

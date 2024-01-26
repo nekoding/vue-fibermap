@@ -1,25 +1,25 @@
-interface Point {
+export interface Point {
   type: 'Point'
   coordinates: number[]
 }
 
-interface LineString {
+export interface LineString {
   type: 'LineString'
   coordinates: number[][]
 }
 
-interface Feature {
+export interface Feature {
   type: string
   geometry: Point | LineString
   properties: object
 }
 
-interface FeatureCollection {
+export interface FeatureCollection {
   type: 'FeatureCollection'
   features: Feature[]
 }
 
-interface LayerGroup {
+export interface LayerGroup {
   id: string | number
   name: string
   isLayerVisible: boolean
@@ -32,7 +32,7 @@ interface LayerGroup {
   onClick?: (layer: LayerGroup) => void
 }
 
-interface ApiResponse {
+export interface ApiResponse {
   message: string
   result?: {
     data?: []
@@ -55,7 +55,7 @@ interface ApiResponse {
   errors?: any
 }
 
-interface SitePoint {
+export interface SitePoint {
   id: string | number
   name: string
   code?: string
@@ -64,7 +64,7 @@ interface SitePoint {
   geojson: string
 }
 
-interface AssetGroup {
+export interface AssetGroup {
   id: string | number
   name: string
   asset_id: string | number
@@ -76,7 +76,7 @@ interface AssetGroup {
   geojson: string
 }
 
-interface Asset {
+export interface Asset {
   id: string | number
   name: string
   code?: string
@@ -89,7 +89,7 @@ interface Asset {
   geojson: string
 }
 
-interface Route {
+export interface Route {
   id: string | number
   name: string
   length?: number
@@ -98,7 +98,7 @@ interface Route {
   geojson: string
 }
 
-interface Cable {
+export interface Cable {
   id: string | number
   name: string
   code?: string
@@ -108,44 +108,44 @@ interface Cable {
   geojson: string
 }
 
-interface Segment {
+export interface Segment {
   id: string | number
   name: string
   code?: string
   geojson: string
 }
 
-interface FiberMapSitePoint {
+export interface FiberMapSitePoint {
   layer: LayerGroup
   marker: L.Marker
 }
 
-interface FiberMapAssetGroup {
+export interface FiberMapAssetGroup {
   layer: LayerGroup
   marker: L.Marker
 }
 
-interface FiberMapRoute {
+export interface FiberMapRoute {
   layer: LayerGroup
   polyline: L.Polyline
 }
 
-interface FiberMapCable {
+export interface FiberMapCable {
   layer: LayerGroup
   polyline: L.Polyline
 }
 
-interface FiberMapSegment {
+export interface FiberMapSegment {
   layer: LayerGroup
   polyline: L.Polyline
 }
 
-interface MapLegend {
+export interface MapLegend {
   id: string | number
   name: string
   icon?: string
 }
 
-interface CustomLeafletEvent extends L.LeafletEvent {
+export interface CustomLeafletEvent extends L.LeafletEvent {
   marker?: L.Marker
 }
