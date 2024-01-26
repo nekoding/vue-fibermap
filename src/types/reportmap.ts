@@ -25,4 +25,6 @@ export interface ILayer {
   isVisible: boolean
   geoJSON?: GeoJSON
   children?: Array<ILayer>
+  onClick?: (e: any) => void
+  leafletId?: number
 }

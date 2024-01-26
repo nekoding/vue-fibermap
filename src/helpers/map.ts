@@ -95,20 +95,36 @@ const createChoroplethFromCityGeom = (geom: GeoJSONFeature) => {
   _.each(geojson.getLayers(), (layer) => {
     layer.on('mouseover', highlightFeature)
     layer.on('mouseout', resetHighlight(geojson))
+
+    // when popup opened
+    layer.on('popupopen', () => {
+      window.dispatchEvent(
+        new CustomEvent('popupopen', {
+          detail: {
+            id: geom?.properties?.id
+          }
+        })
+      )
+    })
+
+    // whem popup closed
+    layer.on('popupclose', () => {
+      window.dispatchEvent(
+        new CustomEvent('popupclose', {
+          detail: {
+            id: geom?.properties?.id
+          }
+        })
+      )
+    })
   })
 
-  console.log(geom)
+  // add listener popupopen:id fired
+  geojson.addEventListener(`popupopen:${geom?.properties?.id}`, () => {
+    geojson.openPopup()
+  })
 
-  // add custom label
-  // const bounds = geojson.getBounds()
-  // const label = L.marker(bounds.getCenter(), {
-  //   icon: L.divIcon({
-  //     className: 'yellow-stroke',
-  //     html: '<div>' + geom?.properties?.city || '' + '</div>'
-  //   })
-  // })
-
-  return [geojson]
+  return geojson
 }
 
 export { choroplethStyle, highlightFeature, resetHighlight, createChoroplethFromCityGeom }

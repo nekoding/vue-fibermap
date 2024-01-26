@@ -31,6 +31,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
   const isSidebarCollapsed = ref<boolean>(false)
   const mapZoomLevel = ref<number>(10)
   const mapCenter = ref<L.LatLngExpression>([-6.1832151, 106.8284193])
+  const popupedLayer = ref<ILayer | null>(null)
 
   const getLayerById = (id: string) => layers.value.find((layer) => layer.id === id)
 
@@ -51,6 +52,12 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
       isLayerVisible: true,
       isVisible: true,
       geoJSON: data
+    }
+
+    // onclick layer
+    layer.onClick = () => {
+      // set popuped layer
+      popupedLayer.value = layer
     }
 
     if (provinceLayer) {
@@ -241,6 +248,27 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
 
   const getCityLayers = computed(() => getLayerById('cities'))
 
+  const setPopupedLayer = (id: string) => {
+    const children = getCityLayers.value?.children
+    if (children?.length) {
+      let currentIndex = 0
+      while (currentIndex < children.length) {
+        const provinceLayer = children[currentIndex]
+        const cityLayer = provinceLayer.children?.find((layer) => layer.id === id)
+        if (cityLayer) {
+          popupedLayer.value = cityLayer
+          break
+        }
+
+        currentIndex++
+      }
+    }
+  }
+
+  const resetPopupedLayer = () => {
+    popupedLayer.value = null
+  }
+
   return {
     mapRef,
     sidebarExpandedSize,
@@ -259,7 +287,10 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     generateFiberMapReport,
     toggleLayerVisibility,
     toggleVisibility,
-    getCityLayers
+    getCityLayers,
+    popupedLayer,
+    setPopupedLayer,
+    resetPopupedLayer
   }
 })
 

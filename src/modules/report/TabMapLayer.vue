@@ -22,7 +22,9 @@
             :header-title="children.name"
             :show-arrow="Boolean(layer?.children?.length) || false"
             :is-layer-visible="children.isVisible"
+            :is-layer-selected="store.popupedLayer == children"
             @toggleLayerVisibility="store.toggleVisibility(children, layer)"
+            @clickLayer="children.onClick"
             collapsible="icon"
           >
             <layer-group
@@ -32,7 +34,9 @@
               :key="`subchild-${subchildren.id}`"
               :header-title="subchildren.name"
               :is-layer-visible="subchildren.isVisible"
+              :is-layer-selected="store.popupedLayer == subchildren"
               @toggleLayerVisibility="store.toggleVisibility(subchildren, children)"
+              @clickLayer="subchildren.onClick"
               collapsible="icon"
             />
           </layer-group>

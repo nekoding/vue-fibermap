@@ -100,7 +100,7 @@ import { createChoroplethFromCityGeom } from '@/helpers'
 import type { GeoJSONFeature } from '@/types'
 
 const store = useReportMapStore()
-const { layers } = storeToRefs(store)
+const { layers, popupedLayer } = storeToRefs(store)
 const activeKey = ref<string>('1')
 const isSidebarCollapsed = ref<boolean>(false)
 const isMapLoaded = ref<boolean>(false)
@@ -128,18 +128,14 @@ onMounted(() => {
       maxZoom: 22
     }).addTo(map)
 
+    // add geojson layer group
+    geojsonLayerGroups = L.featureGroup()
+    geojsonLayerGroups.addTo(map)
+
     // set map action
-    zoomInMap.value = () => {
-      map.zoomIn()
-    }
-
-    zoomOutMap.value = () => {
-      map.zoomOut()
-    }
-
-    fitToBoundMap.value = () => {
-      map.fitBounds(geojsonLayerGroups?.getBounds() || [])
-    }
+    zoomInMap.value = () => map.zoomIn()
+    zoomOutMap.value = () => map.zoomOut()
+    fitToBoundMap.value = () => map.fitBounds(geojsonLayerGroups?.getBounds() || [])
 
     // set map loaded
     setTimeout(() => {
@@ -155,6 +151,18 @@ onMounted(() => {
 
     store.mapRef = mapRef.value
   }
+
+  // popupopen event listener
+  window.addEventListener('popupopen', (e) => {
+    const event = e as CustomEvent<{ id: string }>
+    const { id } = event.detail
+    store.setPopupedLayer(id)
+  })
+
+  // popupclose event listener
+  window.addEventListener('popupclose', () => {
+    store.resetPopupedLayer()
+  })
 })
 
 // watch active tab
@@ -165,27 +173,34 @@ watch(
     geojsonLayerGroups?.clearLayers()
     geojsonLayerGroups?.removeFrom(map)
 
-    const cityLayers = store.getCityLayers?.children
+    store.getCityLayers?.children
       ?.filter((cityLayer) => cityLayer.isLayerVisible && cityLayer.isVisible)
-      .map((cityLayer) => {
-        const choroplethCities = cityLayer.children
+      .forEach((cityLayer) => {
+        cityLayer.children
           ?.filter((layer) => layer.isLayerVisible && layer.isVisible)
           ?.map((layer) => {
             const geojson = layer.geoJSON as GeoJSONFeature
             return createChoroplethFromCityGeom(geojson)
           })
+          ?.forEach((layer) => geojsonLayerGroups.addLayer(layer))
 
-        return choroplethCities?.flat() || []
+        // refresh layer group
+        geojsonLayerGroups.addTo(map)
       })
-
-    // add feature group layer
-    geojsonLayerGroups = L.featureGroup(cityLayers?.flat())
-    geojsonLayerGroups.addTo(map)
   },
   {
     deep: true
   }
 )
+
+// flytocoordinate
+watch(popupedLayer, (value) => {
+  if (map && value) {
+    geojsonLayerGroups.getLayers().forEach((layer) => {
+      layer.fireEvent(`popupopen:${value.id}`)
+    })
+  }
+})
 </script>
 
 <style scoped>
