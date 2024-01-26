@@ -19,3 +19,10 @@ npm run dev
 ```sh
 npm run build
 ```
+
+## Run in docker
+
+```sh
+npm run build
+docker compose up -d
+```
