@@ -1,4 +1,4 @@
-import type { IReportMapBandwidthProperties } from '@/types'
+import type { IReportMapBandwidthAreaProperties } from '@/types'
 import type { GeoJSONFeature, GeoJSONFeatureProperties } from '@/types/geom'
 import L from 'leaflet'
 import _ from 'lodash'
@@ -22,7 +22,7 @@ const getColorDensity = (density: number) => {
 }
 
 const choroplethStyle = (geoJsonProps?: GeoJSONFeatureProperties) => (feature: any) => {
-  const props = geoJsonProps as IReportMapBandwidthProperties
+  const props = geoJsonProps as IReportMapBandwidthAreaProperties
   const densityColor = props?.utilization_range?.color || getColorDensity(Math.random() * 1000)
 
   return {
@@ -31,7 +31,7 @@ const choroplethStyle = (geoJsonProps?: GeoJSONFeatureProperties) => (feature: a
     opacity: 1,
     color: densityColor,
     dashArray: '',
-    fillOpacity: 0.7
+    fillOpacity: 0.5
   }
 }
 
@@ -42,7 +42,7 @@ const highlightFeature = (e: any) => {
     weight: 5,
     color: layer.options.fillColor,
     dashArray: '',
-    fillOpacity: 0.7
+    fillOpacity: 0.5
   })
 
   layer.bringToFront()
@@ -127,4 +127,124 @@ const createChoroplethFromCityGeom = (geom: GeoJSONFeature) => {
   return geojson
 }
 
-export { choroplethStyle, highlightFeature, resetHighlight, createChoroplethFromCityGeom }
+const createLineFromGeom = (geom: GeoJSONFeature) => {
+  const geojson = L.geoJSON(geom, {
+    style: {
+      color: geom.properties?.utilization_range?.color,
+      weight: 2,
+      opacity: 0.8
+    }
+  }).bindPopup(function () {
+    return `
+    <div style="max-height: 300px; overflow: auto;">
+    <table class="metadata">
+    <tbody>
+      <tr>
+        <td>Name</td>
+        <td>${geom.properties?.name}</td>
+      </tr>
+      <tr>
+        <td>Pulau</td>
+        <td>${geom.properties?.pulau}</td>
+      </tr>
+      <tr>
+        <td>Province</td>
+        <td>${geom.properties?.province}</td>
+      </tr>
+      <tr>
+        <td>City</td>
+        <td>${geom.properties?.city}</td>
+      </tr>
+      <tr>
+        <td>Region</td>
+        <td>${geom.properties?.region}</td>
+      </tr>
+      <tr>
+        <td>Segment</td>
+        <td>${geom.properties?.segment}</td>
+      </tr>
+      <tr>
+        <td>Segment Type</td>
+        <td>${geom.properties?.segment_type}</td>
+      </tr>
+      <tr>
+        <td>Cable Category</td>
+        <td>${geom.properties?.cable_category}</td>
+      </tr>
+      <tr>
+        <td>Length Cable Estimation</td>
+        <td>${geom.properties?.length_cable_estimation}</td>
+      </tr>
+      <tr>
+        <td>Line Bandwidth Ossera Y Category Utilization</td>
+        <td>${geom.properties?.line_bandwidth_ossera_y_category_utilization}</td>
+      </tr>
+      <tr>
+        <td>Line Bandwidth Ossera Real Capacity</td>
+        <td>${geom.properties?.line_bandwidth_ossera_real_capacity}</td>
+      </tr>
+      <tr>
+        <td>Bandwidth</td>
+        <td>${geom.properties?.bandwidth}</td>
+      </tr>
+      <tr>
+        <td>Occupancy</td>
+        <td>${geom.properties?.occupancy}</td>
+      </tr>
+      <tr>
+        <td>Utilization</td>
+        <td>${geom.properties?.utilization}</td>
+      </tr>
+      <tr>
+        <td>Real Capacity</td>
+        <td>${geom.properties?.real_capacity}</td>
+      </tr>
+    </tbody>
+    </table>
+    </div>
+    `
+  })
+
+  // trigger event
+  _.each(geojson.getLayers(), (layer) => {
+    layer.on('mouseover', highlightFeature)
+    layer.on('mouseout', resetHighlight(geojson))
+
+    // when popup opened
+    layer.on('popupopen', () => {
+      window.dispatchEvent(
+        new CustomEvent('popupopen', {
+          detail: {
+            id: geom?.properties?.id
+          }
+        })
+      )
+    })
+
+    // whem popup closed
+    layer.on('popupclose', () => {
+      window.dispatchEvent(
+        new CustomEvent('popupclose', {
+          detail: {
+            id: geom?.properties?.id
+          }
+        })
+      )
+    })
+  })
+
+  // add listener popupopen:id fired
+  geojson.addEventListener(`popupopen:${geom?.properties?.id}`, () => {
+    geojson.openPopup()
+  })
+
+  return geojson
+}
+
+export {
+  choroplethStyle,
+  highlightFeature,
+  resetHighlight,
+  createChoroplethFromCityGeom,
+  createLineFromGeom
+}
