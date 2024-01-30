@@ -96,7 +96,7 @@ import TabFilter from '@/modules/report/TabFilter.vue'
 import TabMapLayer from '@/modules/report/TabMapLayer.vue'
 import L from 'leaflet'
 import 'leaflet.markercluster'
-import { createChoroplethFromCityGeom } from '@/helpers'
+import { createChoroplethFromCityGeom, createLineFromGeom } from '@/helpers'
 import type { GeoJSONFeature } from '@/types'
 
 const store = useReportMapStore()
@@ -173,6 +173,7 @@ watch(
     geojsonLayerGroups?.clearLayers()
     geojsonLayerGroups?.removeFrom(map)
 
+    // city choropleth
     store.getCityLayers?.children
       ?.filter((cityLayer) => cityLayer.isLayerVisible && cityLayer.isVisible)
       .forEach((cityLayer) => {
@@ -183,6 +184,27 @@ watch(
             return createChoroplethFromCityGeom(geojson)
           })
           ?.forEach((layer) => geojsonLayerGroups.addLayer(layer))
+
+        // refresh layer group
+        geojsonLayerGroups.addTo(map)
+      })
+
+    // link linestring
+    store.getLinkLayers?.children
+      ?.filter((provinceLayer) => provinceLayer.isLayerVisible && provinceLayer.isVisible)
+      .forEach((provinceLayer) => {
+        provinceLayer.children
+          ?.filter((cityLayer) => cityLayer.isLayerVisible && cityLayer.isVisible)
+          ?.forEach((cityLayer) => {
+            cityLayer.children
+              ?.filter((layer) => layer.isLayerVisible && layer.isVisible)
+              ?.forEach((layer) => {
+                const geojson = layer.geoJSON as GeoJSONFeature
+                const linkLayer = createLineFromGeom(geojson)
+
+                geojsonLayerGroups.addLayer(linkLayer)
+              })
+          })
 
         // refresh layer group
         geojsonLayerGroups.addTo(map)

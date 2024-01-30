@@ -801,7 +801,7 @@ export const useProvinceQuery = () => {
 
 export const getReportMapBandwidthFromAreaId = async (ids: number[]) => {
   const result = await axios.get<ApiResponse>(
-    `${API_BASE_URL}/reports/map-bandwidth?area_ids=${ids.join(',')}`,
+    `${API_BASE_URL}/reports/map-bandwidth/area?area_ids=${ids.join(',')}`,
     {
       headers: {
         Authorization: `Bearer ${AUTH_TOKEN}`,
@@ -818,9 +818,9 @@ export const getReportMapBandwidthFromAreaId = async (ids: number[]) => {
   return await Promise.all(promises)
 }
 
-export const getReportMapBandwidthFromRegionId = async (ids: number[]) => {
+export const getReportMapBandwidthAreaFromRegionId = async (ids: number[]) => {
   const result = await axios.get<ApiResponse>(
-    `${API_BASE_URL}/reports/map-bandwidth?region_ids=${ids.join(',')}`,
+    `${API_BASE_URL}/reports/map-bandwidth/area?region_ids=${ids.join(',')}`,
     {
       headers: {
         Authorization: `Bearer ${AUTH_TOKEN}`,
@@ -829,12 +829,7 @@ export const getReportMapBandwidthFromRegionId = async (ids: number[]) => {
     }
   )
 
-  if (result.data.result?.data === undefined) return []
-
-  const promises = result.data.result?.data.map(({ id }: { id: string }) =>
-    getMapBandwidthAreaDetail(id)
-  )
-  return await Promise.all(promises)
+  return result.data
 }
 
 export const cityDetailQuery = async (id: number) => {
@@ -865,7 +860,30 @@ export const provinceDetailQuery = async (id: number) => {
 }
 
 export const getMapBandwidthAreaDetail = async (id: string) => {
-  return axios.get<ApiResponse>(`${API_BASE_URL}/reports/map-bandwidth/${id}`, {
+  return axios.get<ApiResponse>(`${API_BASE_URL}/reports/map-bandwidth/area/${id}`, {
+    headers: {
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+      Accept: 'application/json'
+    }
+  })
+}
+
+export const getReportMapBandwidthLinkFromRegionId = async (ids: number[]) => {
+  const result = await axios.get<ApiResponse>(
+    `${API_BASE_URL}/reports/map-bandwidth/link?region_ids=${ids.join(',')}`,
+    {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`,
+        Accept: 'application/json'
+      }
+    }
+  )
+
+  return result.data
+}
+
+export const getMapBandwidthLinkDetail = async (id: string) => {
+  return axios.get<ApiResponse>(`${API_BASE_URL}/reports/map-bandwidth/link/${id}`, {
     headers: {
       Authorization: `Bearer ${AUTH_TOKEN}`,
       Accept: 'application/json'

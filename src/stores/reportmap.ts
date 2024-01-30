@@ -7,12 +7,18 @@ import {
   cityDetailQuery,
   districtDetailQuery,
   getReportMapBandwidthFromAreaId,
-  getReportMapBandwidthFromRegionId
+  getReportMapBandwidthAreaFromRegionId,
+  getReportMapBandwidthLinkFromRegionId
 } from '@/hooks'
 import _ from 'lodash'
 import L from 'leaflet'
 import { toPng } from 'html-to-image'
-import type { ILayer, IReportMapBandwidthProperties, LayerGroup } from '@/types'
+import type {
+  ILayer,
+  IReportMapBandwidthAreaProperties,
+  IReportMapBandwidthLinkProperties,
+  LayerGroup
+} from '@/types'
 
 const useReportMapStore = defineStore('useReportMapStore', () => {
   const mapRef = ref<HTMLDivElement>()
@@ -22,6 +28,20 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     {
       id: 'cities',
       name: 'Cities',
+      isLayerVisible: true,
+      isVisible: true,
+      children: []
+    },
+    {
+      id: 'links',
+      name: 'Links',
+      isLayerVisible: true,
+      isVisible: true,
+      children: []
+    },
+    {
+      id: 'segments',
+      name: 'Segments',
       isLayerVisible: true,
       isVisible: true,
       children: []
@@ -38,7 +58,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
   const addCityGeoJsonLayer = (data: GeoJSON) => {
     const multipolygonGeojson = data as GeoJSONFeature
     const multipolygonGeojsonProps =
-      multipolygonGeojson?.properties as IReportMapBandwidthProperties
+      multipolygonGeojson?.properties as IReportMapBandwidthAreaProperties
 
     // check if layer province is already exist
     const cityLayer = getLayerById('cities')
@@ -75,16 +95,76 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     }
   }
 
-  const resetLayers = () => {
-    layers.value = [
-      {
-        id: 'cities',
-        name: 'Cities',
+  const addLinkGeoJsonLayer = (data: GeoJSON) => {
+    const lineStringGeojson = data as GeoJSONFeature
+    const lineStringGeojsonProps =
+      lineStringGeojson?.properties as IReportMapBandwidthLinkProperties
+
+    const linkLayer = getLayerById('links')
+
+    // province - city - link
+    const provinceLayer = linkLayer?.children?.find(
+      (child) => child.id === lineStringGeojsonProps.province
+    )
+    const cityLayer = provinceLayer?.children?.find(
+      (child) => child.id === lineStringGeojsonProps.city
+    )
+
+    // link layer config
+    const layer: ILayer = {
+      id: lineStringGeojsonProps.id || '',
+      name: lineStringGeojsonProps.name || '',
+      isLayerVisible: true,
+      isVisible: true,
+      geoJSON: data
+    }
+
+    // onclick layer
+    layer.onClick = () => (popupedLayer.value = layer)
+
+    if (cityLayer) {
+      cityLayer.children?.push(layer)
+      return
+    }
+
+    if (provinceLayer) {
+      const newCityLayer: ILayer = {
+        id: lineStringGeojsonProps.city || lineStringGeojsonProps.id,
+        name: lineStringGeojsonProps.city,
         isLayerVisible: true,
         isVisible: true,
-        children: []
+        children: [layer]
       }
-    ]
+
+      provinceLayer.children?.push(newCityLayer)
+      return
+    }
+
+    const newCityLayer: ILayer = {
+      id: lineStringGeojsonProps.city || lineStringGeojsonProps.id,
+      name: lineStringGeojsonProps.city,
+      isLayerVisible: true,
+      isVisible: true,
+      children: [layer]
+    }
+
+    const newProvinceLayer: ILayer = {
+      id: lineStringGeojsonProps.province || lineStringGeojsonProps.id,
+      name: lineStringGeojsonProps.province,
+      isLayerVisible: true,
+      isVisible: true,
+      children: [newCityLayer]
+    }
+
+    linkLayer?.children?.push(newProvinceLayer)
+  }
+
+  const resetLayers = () => {
+    layers.value.forEach((layer) => {
+      layer.isLayerVisible = true
+      layer.isVisible = true
+      layer.children = []
+    })
   }
 
   const getGeoJSONDistricts = async (ids: Array<number>) => {
@@ -146,8 +226,14 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
   const getGeoJSONRegions = async (ids: Array<number>) => {
     isDataFetching.value = true
 
-    _.map(await getReportMapBandwidthFromRegionId(ids), (reportBandwidth) => {
-      const result: any = reportBandwidth.data.result?.data
+    const [bandwidthAreas, bandwidthLinks] = await Promise.all([
+      getReportMapBandwidthAreaFromRegionId(ids),
+      getReportMapBandwidthLinkFromRegionId(ids)
+    ])
+
+    // parsing bandwidth city area
+    _.map(bandwidthAreas.result?.data, (reportBandwidth) => {
+      const result: any = reportBandwidth
       if (result?.geojson === null) return
       return JSON.parse(result?.geojson) as GeoJSON
     })
@@ -155,6 +241,19 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
       .forEach((geojson) => {
         if (geojson !== undefined) addCityGeoJsonLayer(geojson)
       })
+
+    // parsing bandwidth link
+    _.map(bandwidthLinks.result?.data, (reportBandwidth) => {
+      const result: any = reportBandwidth
+      if (result?.geojson === null) return
+      return JSON.parse(result?.geojson) as GeoJSON
+    })
+      .filter((geojson) => geojson !== undefined)
+      .forEach((geojson) => {
+        if (geojson !== undefined) addLinkGeoJsonLayer(geojson)
+      })
+
+    // parsing bandwidth segment
 
     setTimeout(() => {
       isDataFetching.value = false
@@ -248,6 +347,8 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
 
   const getCityLayers = computed(() => getLayerById('cities'))
 
+  const getLinkLayers = computed(() => getLayerById('links'))
+
   const setPopupedLayer = (id: string) => {
     const children = getCityLayers.value?.children
     if (children?.length) {
@@ -290,7 +391,8 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     getCityLayers,
     popupedLayer,
     setPopupedLayer,
-    resetPopupedLayer
+    resetPopupedLayer,
+    getLinkLayers
   }
 })
 

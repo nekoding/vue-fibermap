@@ -16,7 +16,10 @@
         <a-skeleton v-if="store.isDataFetching" :loading="store.isDataFetching" active block />
 
         <div v-else>
+          <a-empty v-if="(layer.children?.length || 0) < 1" :image="simpleImage" />
+
           <layer-group
+            v-else
             v-for="children in layer.children?.filter((child) => child.isLayerVisible)"
             :key="`child-${children.id}`"
             :header-title="children.name"
@@ -33,12 +36,27 @@
               )"
               :key="`subchild-${subchildren.id}`"
               :header-title="subchildren.name"
+              :show-arrow="Boolean(subchildren?.children?.length) || false"
               :is-layer-visible="subchildren.isVisible"
               :is-layer-selected="store.popupedLayer == subchildren"
               @toggleLayerVisibility="store.toggleVisibility(subchildren, children)"
               @clickLayer="subchildren.onClick"
               collapsible="icon"
-            />
+            >
+              <layer-group
+                v-for="grandchildren in subchildren.children?.filter(
+                  (grandchild) => grandchild.isLayerVisible
+                )"
+                :key="`grandchild-${grandchildren.id}`"
+                :header-title="grandchildren.name"
+                :show-arrow="Boolean(grandchildren?.children?.length) || false"
+                :is-layer-visible="grandchildren.isVisible"
+                :is-layer-selected="store.popupedLayer == grandchildren"
+                @toggleLayerVisibility="store.toggleVisibility(grandchildren, subchildren)"
+                @clickLayer="grandchildren.onClick"
+                collapsible="icon"
+              />
+            </layer-group>
           </layer-group>
         </div>
       </a-collapse-panel>
@@ -52,6 +70,9 @@
 import { useReportMapStore } from '@/stores'
 import LayerGroup from '@/components/LayerGroup.vue'
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons-vue'
+import { Empty } from 'ant-design-vue'
+
+const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE
 
 const store = useReportMapStore()
 </script>
