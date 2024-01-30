@@ -799,7 +799,21 @@ export const useProvinceQuery = () => {
   }
 }
 
-export const getReportMapBandwidthFromAreaId = async (ids: number[]) => {
+export const getReportMapBandwidthAreaFromCityId = async (ids: number[]) => {
+  const result = await axios.get<ApiResponse>(
+    `${API_BASE_URL}/reports/map-bandwidth/area?city_ids=${ids.join(',')}`,
+    {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`,
+        Accept: 'application/json'
+      }
+    }
+  )
+
+  return result.data
+}
+
+export const getReportMapBandwidthAreaFromAreaId = async (ids: number[]) => {
   const result = await axios.get<ApiResponse>(
     `${API_BASE_URL}/reports/map-bandwidth/area?area_ids=${ids.join(',')}`,
     {
@@ -810,12 +824,7 @@ export const getReportMapBandwidthFromAreaId = async (ids: number[]) => {
     }
   )
 
-  if (result.data.result?.data === undefined) return []
-
-  const promises = result.data.result?.data.map(({ id }: { id: string }) =>
-    getMapBandwidthAreaDetail(id)
-  )
-  return await Promise.all(promises)
+  return result.data
 }
 
 export const getReportMapBandwidthAreaFromRegionId = async (ids: number[]) => {
@@ -866,6 +875,34 @@ export const getMapBandwidthAreaDetail = async (id: string) => {
       Accept: 'application/json'
     }
   })
+}
+
+export const getReportMapBandwidthLinkFromCityId = async (ids: number[]) => {
+  const result = await axios.get<ApiResponse>(
+    `${API_BASE_URL}/reports/map-bandwidth/link?city_ids=${ids.join(',')}`,
+    {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`,
+        Accept: 'application/json'
+      }
+    }
+  )
+
+  return result.data
+}
+
+export const getReportMapBandwidthLinkFromAreaId = async (ids: number[]) => {
+  const result = await axios.get<ApiResponse>(
+    `${API_BASE_URL}/reports/map-bandwidth/link?area_ids=${ids.join(',')}`,
+    {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`,
+        Accept: 'application/json'
+      }
+    }
+  )
+
+  return result.data
 }
 
 export const getReportMapBandwidthLinkFromRegionId = async (ids: number[]) => {

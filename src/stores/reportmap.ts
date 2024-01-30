@@ -4,11 +4,13 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { GeoJSON, GeoJSONFeature } from '@/types/geom'
 import {
-  cityDetailQuery,
   districtDetailQuery,
-  getReportMapBandwidthFromAreaId,
   getReportMapBandwidthAreaFromRegionId,
-  getReportMapBandwidthLinkFromRegionId
+  getReportMapBandwidthLinkFromRegionId,
+  getReportMapBandwidthLinkFromAreaId,
+  getReportMapBandwidthAreaFromAreaId,
+  getReportMapBandwidthAreaFromCityId,
+  getReportMapBandwidthLinkFromCityId
 } from '@/hooks'
 import _ from 'lodash'
 import L from 'leaflet'
@@ -159,6 +161,30 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     linkLayer?.children?.push(newProvinceLayer)
   }
 
+  const parseReportMapBandwidthCity = (data: []) => {
+    _.map(data, (reportBandwidth) => {
+      const result: any = reportBandwidth
+      if (result?.geojson === null) return
+      return JSON.parse(result?.geojson) as GeoJSON
+    })
+      .filter((geojson) => geojson !== undefined)
+      .forEach((geojson) => {
+        if (geojson !== undefined) addCityGeoJsonLayer(geojson)
+      })
+  }
+
+  const parseReportMapBandwidthLink = (data: []) => {
+    _.map(data, (reportBandwidth) => {
+      const result: any = reportBandwidth
+      if (result?.geojson === null) return
+      return JSON.parse(result?.geojson) as GeoJSON
+    })
+      .filter((geojson) => geojson !== undefined)
+      .forEach((geojson) => {
+        if (geojson !== undefined) addLinkGeoJsonLayer(geojson)
+      })
+  }
+
   const resetLayers = () => {
     layers.value.forEach((layer) => {
       layer.isLayerVisible = true
@@ -189,16 +215,16 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
   const getGeoJSONCities = async (ids: Array<number>) => {
     isDataFetching.value = true
 
-    const cityAxios = ids.map((id) => cityDetailQuery(id))
-    _.map(await Promise.all(cityAxios), (city) => {
-      const result: any = city.data.result?.data
-      if (result?.geojson === null) return
-      return JSON.parse(result?.geojson) as GeoJSON
-    })
-      .filter((geojson) => geojson !== undefined)
-      .forEach((geojson) => {
-        if (geojson !== undefined) addCityGeoJsonLayer(geojson)
-      })
+    const [bandwidthAreas, bandwidthLinks] = await Promise.all([
+      getReportMapBandwidthAreaFromCityId(ids),
+      getReportMapBandwidthLinkFromCityId(ids)
+    ])
+
+    // parsing bandwidth city area
+    parseReportMapBandwidthCity(bandwidthAreas.result?.data || [])
+
+    // parsing bandwidth link
+    parseReportMapBandwidthLink(bandwidthLinks.result?.data || [])
 
     setTimeout(() => {
       isDataFetching.value = false
@@ -208,15 +234,16 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
   const getGeoJSONAreas = async (ids: Array<number>) => {
     isDataFetching.value = true
 
-    _.map(await getReportMapBandwidthFromAreaId(ids), (reportBandwidth) => {
-      const result: any = reportBandwidth.data.result?.data
-      if (result?.geojson === null) return
-      return JSON.parse(result?.geojson) as GeoJSON
-    })
-      .filter((geojson) => geojson !== undefined)
-      .forEach((geojson) => {
-        if (geojson !== undefined) addCityGeoJsonLayer(geojson)
-      })
+    const [bandwidthAreas, bandwidthLinks] = await Promise.all([
+      getReportMapBandwidthAreaFromAreaId(ids),
+      getReportMapBandwidthLinkFromAreaId(ids)
+    ])
+
+    // parsing bandwidth city area
+    parseReportMapBandwidthCity(bandwidthAreas.result?.data || [])
+
+    // parsing bandwidth link
+    parseReportMapBandwidthLink(bandwidthLinks.result?.data || [])
 
     setTimeout(() => {
       isDataFetching.value = false
@@ -232,26 +259,10 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     ])
 
     // parsing bandwidth city area
-    _.map(bandwidthAreas.result?.data, (reportBandwidth) => {
-      const result: any = reportBandwidth
-      if (result?.geojson === null) return
-      return JSON.parse(result?.geojson) as GeoJSON
-    })
-      .filter((geojson) => geojson !== undefined)
-      .forEach((geojson) => {
-        if (geojson !== undefined) addCityGeoJsonLayer(geojson)
-      })
+    parseReportMapBandwidthCity(bandwidthAreas.result?.data || [])
 
     // parsing bandwidth link
-    _.map(bandwidthLinks.result?.data, (reportBandwidth) => {
-      const result: any = reportBandwidth
-      if (result?.geojson === null) return
-      return JSON.parse(result?.geojson) as GeoJSON
-    })
-      .filter((geojson) => geojson !== undefined)
-      .forEach((geojson) => {
-        if (geojson !== undefined) addLinkGeoJsonLayer(geojson)
-      })
+    parseReportMapBandwidthLink(bandwidthLinks.result?.data || [])
 
     // parsing bandwidth segment
 
