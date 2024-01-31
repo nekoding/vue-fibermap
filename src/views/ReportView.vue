@@ -96,7 +96,7 @@ import TabFilter from '@/modules/report/TabFilter.vue'
 import TabMapLayer from '@/modules/report/TabMapLayer.vue'
 import L from 'leaflet'
 import 'leaflet.markercluster'
-import { createChoroplethFromCityGeom, createLineFromGeom } from '@/helpers'
+import { createChoroplethFromCityGeom, createLinkFromGeom, createSegmentFromGeom } from '@/helpers'
 import type { GeoJSONFeature } from '@/types'
 
 const store = useReportMapStore()
@@ -123,9 +123,10 @@ onMounted(() => {
       zoomControl: false
     }).setView(store.mapCenter, store.mapZoomLevel)
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
       maxNativeZoom: 19,
-      maxZoom: 22
+      maxZoom: 22,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     }).addTo(map)
 
     // add geojson layer group
@@ -135,7 +136,7 @@ onMounted(() => {
     // set map action
     zoomInMap.value = () => map.zoomIn()
     zoomOutMap.value = () => map.zoomOut()
-    fitToBoundMap.value = () => map.fitBounds(geojsonLayerGroups?.getBounds() || [])
+    fitToBoundMap.value = () => map.fitBounds(geojsonLayerGroups?.getBounds() || map.getBounds())
 
     // set map loaded
     setTimeout(() => {
@@ -200,7 +201,28 @@ watch(
               ?.filter((layer) => layer.isLayerVisible && layer.isVisible)
               ?.forEach((layer) => {
                 const geojson = layer.geoJSON as GeoJSONFeature
-                const linkLayer = createLineFromGeom(geojson)
+                const linkLayer = createLinkFromGeom(geojson)
+
+                geojsonLayerGroups.addLayer(linkLayer)
+              })
+          })
+
+        // refresh layer group
+        geojsonLayerGroups.addTo(map)
+      })
+
+    // segment multilinestring
+    store.getSegmentLayers?.children
+      ?.filter((provinceLayer) => provinceLayer.isLayerVisible && provinceLayer.isVisible)
+      .forEach((provinceLayer) => {
+        provinceLayer.children
+          ?.filter((cityLayer) => cityLayer.isLayerVisible && cityLayer.isVisible)
+          ?.forEach((cityLayer) => {
+            cityLayer.children
+              ?.filter((layer) => layer.isLayerVisible && layer.isVisible)
+              ?.forEach((layer) => {
+                const geojson = layer.geoJSON as GeoJSONFeature
+                const linkLayer = createSegmentFromGeom(geojson)
 
                 geojsonLayerGroups.addLayer(linkLayer)
               })

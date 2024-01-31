@@ -5,12 +5,9 @@ import { computed, ref } from 'vue'
 import type { GeoJSON, GeoJSONFeature } from '@/types/geom'
 import {
   districtDetailQuery,
-  getReportMapBandwidthAreaFromRegionId,
-  getReportMapBandwidthLinkFromRegionId,
-  getReportMapBandwidthLinkFromAreaId,
-  getReportMapBandwidthAreaFromAreaId,
-  getReportMapBandwidthAreaFromCityId,
-  getReportMapBandwidthLinkFromCityId
+  getReportMapBandwidthAreas,
+  getReportMapBandwidthLinks,
+  getReportMapBandwidthSegments
 } from '@/hooks'
 import _ from 'lodash'
 import L from 'leaflet'
@@ -51,8 +48,8 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
   ])
   const sidebarCollapsedSize = ref<number>(0)
   const isSidebarCollapsed = ref<boolean>(false)
-  const mapZoomLevel = ref<number>(10)
-  const mapCenter = ref<L.LatLngExpression>([-6.1832151, 106.8284193])
+  const mapZoomLevel = ref<number>(5.38)
+  const mapCenter = ref<L.LatLngExpression>([-1.725324, 114.1358624])
   const popupedLayer = ref<ILayer | null>(null)
 
   const getLayerById = (id: string) => layers.value.find((layer) => layer.id === id)
@@ -161,6 +158,70 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     linkLayer?.children?.push(newProvinceLayer)
   }
 
+  const addSegmentGeoJsonLayer = (data: GeoJSON) => {
+    const lineStringGeojson = data as GeoJSONFeature
+    const lineStringGeojsonProps =
+      lineStringGeojson?.properties as IReportMapBandwidthLinkProperties
+
+    const segmentLayer = getLayerById('segments')
+
+    // province - city - link
+    const provinceLayer = segmentLayer?.children?.find(
+      (child) => child.id === lineStringGeojsonProps.province
+    )
+    const cityLayer = provinceLayer?.children?.find(
+      (child) => child.id === lineStringGeojsonProps.city
+    )
+
+    // link layer config
+    const layer: ILayer = {
+      id: lineStringGeojsonProps.id || '',
+      name: lineStringGeojsonProps.name || '',
+      isLayerVisible: true,
+      isVisible: true,
+      geoJSON: data
+    }
+
+    // onclick layer
+    layer.onClick = () => (popupedLayer.value = layer)
+
+    if (cityLayer) {
+      cityLayer.children?.push(layer)
+      return
+    }
+
+    if (provinceLayer) {
+      const newCityLayer: ILayer = {
+        id: lineStringGeojsonProps.city || lineStringGeojsonProps.id,
+        name: lineStringGeojsonProps.city,
+        isLayerVisible: true,
+        isVisible: true,
+        children: [layer]
+      }
+
+      provinceLayer.children?.push(newCityLayer)
+      return
+    }
+
+    const newCityLayer: ILayer = {
+      id: lineStringGeojsonProps.city || lineStringGeojsonProps.id,
+      name: lineStringGeojsonProps.city,
+      isLayerVisible: true,
+      isVisible: true,
+      children: [layer]
+    }
+
+    const newProvinceLayer: ILayer = {
+      id: lineStringGeojsonProps.province || lineStringGeojsonProps.id,
+      name: lineStringGeojsonProps.province,
+      isLayerVisible: true,
+      isVisible: true,
+      children: [newCityLayer]
+    }
+
+    segmentLayer?.children?.push(newProvinceLayer)
+  }
+
   const parseReportMapBandwidthCity = (data: []) => {
     _.map(data, (reportBandwidth) => {
       const result: any = reportBandwidth
@@ -182,6 +243,18 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
       .filter((geojson) => geojson !== undefined)
       .forEach((geojson) => {
         if (geojson !== undefined) addLinkGeoJsonLayer(geojson)
+      })
+  }
+
+  const parseReportMapBandwidthSegment = (data: []) => {
+    _.map(data, (reportBandwidth) => {
+      const result: any = reportBandwidth
+      if (result?.geojson === null) return
+      return JSON.parse(result?.geojson) as GeoJSON
+    })
+      .filter((geojson) => geojson !== undefined)
+      .forEach((geojson) => {
+        if (geojson !== undefined) addSegmentGeoJsonLayer(geojson)
       })
   }
 
@@ -215,9 +288,10 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
   const getGeoJSONCities = async (ids: Array<number>) => {
     isDataFetching.value = true
 
-    const [bandwidthAreas, bandwidthLinks] = await Promise.all([
-      getReportMapBandwidthAreaFromCityId(ids),
-      getReportMapBandwidthLinkFromCityId(ids)
+    const [bandwidthAreas, bandwidthLinks, bandwidthSegments] = await Promise.all([
+      getReportMapBandwidthAreas({ cityIds: ids }),
+      getReportMapBandwidthLinks({ cityIds: ids }),
+      getReportMapBandwidthSegments({ cityIds: ids })
     ])
 
     // parsing bandwidth city area
@@ -225,6 +299,9 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
 
     // parsing bandwidth link
     parseReportMapBandwidthLink(bandwidthLinks.result?.data || [])
+
+    // parsing bandwidth segments
+    parseReportMapBandwidthSegment(bandwidthSegments.result?.data || [])
 
     setTimeout(() => {
       isDataFetching.value = false
@@ -234,9 +311,10 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
   const getGeoJSONAreas = async (ids: Array<number>) => {
     isDataFetching.value = true
 
-    const [bandwidthAreas, bandwidthLinks] = await Promise.all([
-      getReportMapBandwidthAreaFromAreaId(ids),
-      getReportMapBandwidthLinkFromAreaId(ids)
+    const [bandwidthAreas, bandwidthLinks, bandwidthSegments] = await Promise.all([
+      getReportMapBandwidthAreas({ areaIds: ids }),
+      getReportMapBandwidthLinks({ areaIds: ids }),
+      getReportMapBandwidthSegments({ areaIds: ids })
     ])
 
     // parsing bandwidth city area
@@ -244,6 +322,9 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
 
     // parsing bandwidth link
     parseReportMapBandwidthLink(bandwidthLinks.result?.data || [])
+
+    // parsing bandwidth segments
+    parseReportMapBandwidthSegment(bandwidthSegments.result?.data || [])
 
     setTimeout(() => {
       isDataFetching.value = false
@@ -253,9 +334,12 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
   const getGeoJSONRegions = async (ids: Array<number>) => {
     isDataFetching.value = true
 
-    const [bandwidthAreas, bandwidthLinks] = await Promise.all([
-      getReportMapBandwidthAreaFromRegionId(ids),
-      getReportMapBandwidthLinkFromRegionId(ids)
+    console.log(ids)
+
+    const [bandwidthAreas, bandwidthLinks, bandwidthSegments] = await Promise.all([
+      getReportMapBandwidthAreas({ regionIds: ids }),
+      getReportMapBandwidthLinks({ regionIds: ids }),
+      getReportMapBandwidthSegments({ regionIds: ids })
     ])
 
     // parsing bandwidth city area
@@ -264,7 +348,8 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     // parsing bandwidth link
     parseReportMapBandwidthLink(bandwidthLinks.result?.data || [])
 
-    // parsing bandwidth segment
+    // parsing bandwidth segments
+    parseReportMapBandwidthSegment(bandwidthSegments.result?.data || [])
 
     setTimeout(() => {
       isDataFetching.value = false
@@ -360,6 +445,8 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
 
   const getLinkLayers = computed(() => getLayerById('links'))
 
+  const getSegmentLayers = computed(() => getLayerById('segments'))
+
   const setPopupedLayer = (id: string) => {
     const children = getCityLayers.value?.children
     if (children?.length) {
@@ -403,7 +490,8 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     popupedLayer,
     setPopupedLayer,
     resetPopupedLayer,
-    getLinkLayers
+    getLinkLayers,
+    getSegmentLayers
   }
 })
 

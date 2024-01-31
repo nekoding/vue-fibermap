@@ -138,9 +138,10 @@ onMounted(() => {
       zoomControl: false
     }).setView(fibermapStore.mapCenter, fibermapStore.mapZoomLevel)
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
       maxNativeZoom: 19,
-      maxZoom: 22
+      maxZoom: 22,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     }).addTo(map)
 
     // add markers to map
