@@ -1,4 +1,4 @@
-import type { ApiResponse, Asset, Cable, Route, Segment, SitePoint } from '@/types'
+import type { ApiResponse, Asset, Cable, IReportMap, Route, Segment, SitePoint } from '@/types'
 import { useQuery } from '@tanstack/vue-query'
 import axios from 'axios'
 import { reactive, ref } from 'vue'
@@ -799,48 +799,6 @@ export const useProvinceQuery = () => {
   }
 }
 
-export const getReportMapBandwidthAreaFromCityId = async (ids: number[]) => {
-  const result = await axios.get<ApiResponse>(
-    `${API_BASE_URL}/reports/map-bandwidth/area?city_ids=${ids.join(',')}`,
-    {
-      headers: {
-        Authorization: `Bearer ${AUTH_TOKEN}`,
-        Accept: 'application/json'
-      }
-    }
-  )
-
-  return result.data
-}
-
-export const getReportMapBandwidthAreaFromAreaId = async (ids: number[]) => {
-  const result = await axios.get<ApiResponse>(
-    `${API_BASE_URL}/reports/map-bandwidth/area?area_ids=${ids.join(',')}`,
-    {
-      headers: {
-        Authorization: `Bearer ${AUTH_TOKEN}`,
-        Accept: 'application/json'
-      }
-    }
-  )
-
-  return result.data
-}
-
-export const getReportMapBandwidthAreaFromRegionId = async (ids: number[]) => {
-  const result = await axios.get<ApiResponse>(
-    `${API_BASE_URL}/reports/map-bandwidth/area?region_ids=${ids.join(',')}`,
-    {
-      headers: {
-        Authorization: `Bearer ${AUTH_TOKEN}`,
-        Accept: 'application/json'
-      }
-    }
-  )
-
-  return result.data
-}
-
 export const cityDetailQuery = async (id: number) => {
   return axios.get<ApiResponse>(`${API_BASE_URL}/cities/${id}`, {
     headers: {
@@ -868,18 +826,13 @@ export const provinceDetailQuery = async (id: number) => {
   })
 }
 
-export const getMapBandwidthAreaDetail = async (id: string) => {
-  return axios.get<ApiResponse>(`${API_BASE_URL}/reports/map-bandwidth/area/${id}`, {
-    headers: {
-      Authorization: `Bearer ${AUTH_TOKEN}`,
-      Accept: 'application/json'
-    }
-  })
-}
+export const getReportMapBandwidthAreas = async ({ cityIds, regionIds, areaIds }: IReportMap) => {
+  const regions = regionIds ? regionIds?.join(',') : ''
+  const cities = cityIds ? cityIds?.join(',') : ''
+  const areas = areaIds ? areaIds?.join(',') : ''
 
-export const getReportMapBandwidthLinkFromCityId = async (ids: number[]) => {
   const result = await axios.get<ApiResponse>(
-    `${API_BASE_URL}/reports/map-bandwidth/link?city_ids=${ids.join(',')}`,
+    `${API_BASE_URL}/reports/map-bandwidth/area?region_ids=${regions}&city_ids=${cities}&area_ids=${areas}`,
     {
       headers: {
         Authorization: `Bearer ${AUTH_TOKEN}`,
@@ -891,9 +844,13 @@ export const getReportMapBandwidthLinkFromCityId = async (ids: number[]) => {
   return result.data
 }
 
-export const getReportMapBandwidthLinkFromAreaId = async (ids: number[]) => {
+export const getReportMapBandwidthLinks = async ({ cityIds, regionIds, areaIds }: IReportMap) => {
+  const regions = regionIds ? regionIds?.join(',') : ''
+  const cities = cityIds ? cityIds?.join(',') : ''
+  const areas = areaIds ? areaIds?.join(',') : ''
+
   const result = await axios.get<ApiResponse>(
-    `${API_BASE_URL}/reports/map-bandwidth/link?area_ids=${ids.join(',')}`,
+    `${API_BASE_URL}/reports/map-bandwidth/link?region_ids=${regions}&city_ids=${cities}&area_ids=${areas}`,
     {
       headers: {
         Authorization: `Bearer ${AUTH_TOKEN}`,
@@ -905,9 +862,17 @@ export const getReportMapBandwidthLinkFromAreaId = async (ids: number[]) => {
   return result.data
 }
 
-export const getReportMapBandwidthLinkFromRegionId = async (ids: number[]) => {
+export const getReportMapBandwidthSegments = async ({
+  cityIds,
+  regionIds,
+  areaIds
+}: IReportMap) => {
+  const regions = regionIds ? regionIds?.join(',') : ''
+  const cities = cityIds ? cityIds?.join(',') : ''
+  const areas = areaIds ? areaIds?.join(',') : ''
+
   const result = await axios.get<ApiResponse>(
-    `${API_BASE_URL}/reports/map-bandwidth/link?region_ids=${ids.join(',')}`,
+    `${API_BASE_URL}/reports/map-bandwidth/segment?region_ids=${regions}&city_ids=${cities}&area_ids=${areas}`,
     {
       headers: {
         Authorization: `Bearer ${AUTH_TOKEN}`,
@@ -921,6 +886,24 @@ export const getReportMapBandwidthLinkFromRegionId = async (ids: number[]) => {
 
 export const getMapBandwidthLinkDetail = async (id: string) => {
   return axios.get<ApiResponse>(`${API_BASE_URL}/reports/map-bandwidth/link/${id}`, {
+    headers: {
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+      Accept: 'application/json'
+    }
+  })
+}
+
+export const getMapBandwidthAreaDetail = async (id: string) => {
+  return axios.get<ApiResponse>(`${API_BASE_URL}/reports/map-bandwidth/area/${id}`, {
+    headers: {
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+      Accept: 'application/json'
+    }
+  })
+}
+
+export const getMapBandwidthSegmentDetail = async (id: string) => {
+  return axios.get<ApiResponse>(`${API_BASE_URL}/reports/map-bandwidth/segment/${id}`, {
     headers: {
       Authorization: `Bearer ${AUTH_TOKEN}`,
       Accept: 'application/json'

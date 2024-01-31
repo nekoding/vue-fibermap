@@ -21,7 +21,7 @@
           <layer-group
             v-else
             v-for="children in layer.children?.filter((child) => child.isLayerVisible)"
-            :key="`child-${children.id}`"
+            :key="children.id"
             :header-title="children.name"
             :show-arrow="Boolean(layer?.children?.length) || false"
             :is-layer-visible="children.isVisible"
@@ -34,7 +34,7 @@
               v-for="subchildren in children.children?.filter(
                 (subchild) => subchild.isLayerVisible
               )"
-              :key="`subchild-${subchildren.id}`"
+              :key="subchildren.id"
               :header-title="subchildren.name"
               :show-arrow="Boolean(subchildren?.children?.length) || false"
               :is-layer-visible="subchildren.isVisible"
@@ -47,7 +47,7 @@
                 v-for="grandchildren in subchildren.children?.filter(
                   (grandchild) => grandchild.isLayerVisible
                 )"
-                :key="`grandchild-${grandchildren.id}`"
+                :key="grandchildren.id"
                 :header-title="grandchildren.name"
                 :show-arrow="Boolean(grandchildren?.children?.length) || false"
                 :is-layer-visible="grandchildren.isVisible"
