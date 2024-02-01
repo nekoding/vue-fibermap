@@ -23,7 +23,7 @@ const getColorDensity = (density: number) => {
 
 const choroplethStyle = (geoJsonProps?: GeoJSONFeatureProperties) => (feature: any) => {
   const props = geoJsonProps as IReportMapBandwidthAreaProperties
-  const densityColor = props?.utilization_range?.color || getColorDensity(Math.random() * 1000)
+  const densityColor = props?.utilization_range?.color || '#FFFFFF'
 
   return {
     fillColor: densityColor,
@@ -130,7 +130,7 @@ const createChoroplethFromCityGeom = (geom: GeoJSONFeature) => {
 const createLinkFromGeom = (geom: GeoJSONFeature) => {
   const geojson = L.geoJSON(geom, {
     style: {
-      color: geom.properties?.utilization_range?.color,
+      color: geom.properties?.utilization_range?.color || '#000000',
       weight: 5,
       opacity: 0.8
     }
@@ -241,7 +241,7 @@ const createLinkFromGeom = (geom: GeoJSONFeature) => {
 const createSegmentFromGeom = (geom: GeoJSONFeature) => {
   const geojson = L.geoJSON(geom, {
     style: {
-      color: geom.properties?.utilization_range?.color,
+      color: geom.properties?.utilization_range?.color || '#000000',
       weight: 5,
       opacity: 0.8
     }
