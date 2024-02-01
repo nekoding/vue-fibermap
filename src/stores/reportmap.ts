@@ -333,9 +333,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
 
   const getGeoJSONRegions = async (ids: Array<number>) => {
     isDataFetching.value = true
-
-    console.log(ids)
-
+    
     const [bandwidthAreas, bandwidthLinks, bandwidthSegments] = await Promise.all([
       getReportMapBandwidthAreas({ regionIds: ids }),
       getReportMapBandwidthLinks({ regionIds: ids }),
