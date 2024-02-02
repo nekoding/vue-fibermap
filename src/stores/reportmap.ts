@@ -4,7 +4,6 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { GeoJSON, GeoJSONFeature } from '@/types/geom'
 import {
-  districtDetailQuery,
   getReportMapBandwidthAreas,
   getReportMapBandwidthLinks,
   getReportMapBandwidthSegments
@@ -266,78 +265,21 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     })
   }
 
-  const getGeoJSONDistricts = async (ids: Array<number>) => {
-    isDataFetching.value = true
-
-    const districtAxios = ids.map((id) => districtDetailQuery(id))
-    _.map(await Promise.all(districtAxios), (district) => {
-      const result: any = district.data.result?.data
-      if (result?.geojson === null) return
-      return JSON.parse(result?.geojson) as GeoJSON
-    })
-      .filter((geojson) => geojson !== undefined)
-      .forEach((geojson) => {
-        if (geojson !== undefined) addCityGeoJsonLayer(geojson)
-      })
-
-    setTimeout(() => {
-      isDataFetching.value = false
-    }, 1000)
-  }
-
-  const getGeoJSONCities = async (ids: Array<number>) => {
+  const getGeoJSONReport = async ({
+    regionIds,
+    areaIds,
+    cityIds
+  }: {
+    regionIds: Array<number>
+    areaIds: Array<number>
+    cityIds: Array<number>
+  }) => {
     isDataFetching.value = true
 
     const [bandwidthAreas, bandwidthLinks, bandwidthSegments] = await Promise.all([
-      getReportMapBandwidthAreas({ cityIds: ids }),
-      getReportMapBandwidthLinks({ cityIds: ids }),
-      getReportMapBandwidthSegments({ cityIds: ids })
-    ])
-
-    // parsing bandwidth city area
-    parseReportMapBandwidthCity(bandwidthAreas.result?.data || [])
-
-    // parsing bandwidth link
-    parseReportMapBandwidthLink(bandwidthLinks.result?.data || [])
-
-    // parsing bandwidth segments
-    parseReportMapBandwidthSegment(bandwidthSegments.result?.data || [])
-
-    setTimeout(() => {
-      isDataFetching.value = false
-    }, 1000)
-  }
-
-  const getGeoJSONAreas = async (ids: Array<number>) => {
-    isDataFetching.value = true
-
-    const [bandwidthAreas, bandwidthLinks, bandwidthSegments] = await Promise.all([
-      getReportMapBandwidthAreas({ areaIds: ids }),
-      getReportMapBandwidthLinks({ areaIds: ids }),
-      getReportMapBandwidthSegments({ areaIds: ids })
-    ])
-
-    // parsing bandwidth city area
-    parseReportMapBandwidthCity(bandwidthAreas.result?.data || [])
-
-    // parsing bandwidth link
-    parseReportMapBandwidthLink(bandwidthLinks.result?.data || [])
-
-    // parsing bandwidth segments
-    parseReportMapBandwidthSegment(bandwidthSegments.result?.data || [])
-
-    setTimeout(() => {
-      isDataFetching.value = false
-    }, 1000)
-  }
-
-  const getGeoJSONRegions = async (ids: Array<number>) => {
-    isDataFetching.value = true
-    
-    const [bandwidthAreas, bandwidthLinks, bandwidthSegments] = await Promise.all([
-      getReportMapBandwidthAreas({ regionIds: ids }),
-      getReportMapBandwidthLinks({ regionIds: ids }),
-      getReportMapBandwidthSegments({ regionIds: ids })
+      getReportMapBandwidthAreas({ regionIds, areaIds, cityIds }),
+      getReportMapBandwidthLinks({ regionIds, areaIds, cityIds }),
+      getReportMapBandwidthSegments({ regionIds, areaIds, cityIds })
     ])
 
     // parsing bandwidth city area
@@ -477,10 +419,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     mapCenter,
     addCityGeoJsonLayer,
     resetLayers,
-    getGeoJSONDistricts,
-    getGeoJSONCities,
-    getGeoJSONAreas,
-    getGeoJSONRegions,
+    getGeoJSONReport,
     generateFiberMapReport,
     toggleLayerVisibility,
     toggleVisibility,
