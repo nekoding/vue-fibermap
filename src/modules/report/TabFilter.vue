@@ -159,17 +159,11 @@ const resetFields = () => {
 const onFinish = async (values: FormState) => {
   store.resetLayers()
 
-  if (values.cities.length) {
-    await store.getGeoJSONCities(values.cities)
-    return
-  }
-
-  if (values.areas.length) {
-    await store.getGeoJSONAreas(values.areas)
-    return
-  }
-
-  await store.getGeoJSONRegions(values.regions)
+  await store.getGeoJSONReport({
+    regionIds: values.regions,
+    areaIds: values.areas,
+    cityIds: values.cities
+  })
 }
 </script>
 

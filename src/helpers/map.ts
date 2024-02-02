@@ -72,16 +72,20 @@ const createChoroplethFromCityGeom = (geom: GeoJSONFeature) => {
         <td>${geom.properties?.city}</td>
       </tr>
       <tr>
+        <td>Region</td>
+        <td>${geom.properties?.region}</td>
+      </tr>
+      <tr>
+        <td>Area</td>
+        <td>${geom.properties?.area}</td>
+      </tr>
+      <tr>
         <td>Is Lambda</td>
         <td>${geom.properties?.is_lambda}</td>
       </tr>
       <tr>
         <td>Capacity (Mbps)</td>
         <td>${geom.properties?.real_capacity}</td>
-      </tr>
-      <tr>
-        <td>Region</td>
-        <td>${geom.properties?.region}</td>
       </tr>
       <tr>
         <td>Category Utilization</td>
@@ -158,6 +162,10 @@ const createLinkFromGeom = (geom: GeoJSONFeature) => {
       <tr>
         <td>Region</td>
         <td>${geom.properties?.region}</td>
+      </tr>
+      <tr>
+        <td>Area</td>
+        <td>${geom.properties?.area}</td>
       </tr>
       <tr>
         <td>Segment</td>
@@ -269,6 +277,10 @@ const createSegmentFromGeom = (geom: GeoJSONFeature) => {
       <tr>
         <td>Region</td>
         <td>${geom.properties?.region}</td>
+      </tr>
+      <tr>
+        <td>Area</td>
+        <td>${geom.properties?.area}</td>
       </tr>
       <tr>
         <td>Segment</td>
