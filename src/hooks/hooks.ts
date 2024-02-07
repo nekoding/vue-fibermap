@@ -910,3 +910,26 @@ export const getMapBandwidthSegmentDetail = async (id: string) => {
     }
   })
 }
+
+export const getReportMapBandwidthSegmentNonLambdas = async ({
+  cityIds,
+  regionIds,
+  areaIds
+}: IReportMap) => {
+  const regions = regionIds ? regionIds?.join(',') : ''
+  const cities = cityIds ? cityIds?.join(',') : ''
+  const areas = areaIds ? areaIds?.join(',') : ''
+
+  const result = await axios.get<ApiResponse>(
+    `${API_BASE_URL}/reports/map-bandwidth/segment-non-lambda?region_ids=${regions}&city_ids=${cities}&area_ids=${areas}`,
+    {
+      headers: {
+        Authorization: `Bearer ${AUTH_TOKEN}`,
+        Accept: 'application/json'
+      }
+    }
+  )
+
+  return result.data
+}
+
