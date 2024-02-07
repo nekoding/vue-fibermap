@@ -96,7 +96,7 @@ import TabFilter from '@/modules/report/TabFilter.vue'
 import TabMapLayer from '@/modules/report/TabMapLayer.vue'
 import L from 'leaflet'
 import 'leaflet.markercluster'
-import { createChoroplethFromCityGeom, createLinkFromGeom, createSegmentFromGeom } from '@/helpers'
+import { createChoroplethFromAreaGeom, createLinkFromGeom, createSegmentFromGeom, createSegmentNonLambdaFromGeom } from '@/helpers'
 import type { GeoJSONFeature } from '@/types'
 
 const store = useReportMapStore()
@@ -182,7 +182,7 @@ watch(
           ?.filter((layer) => layer.isLayerVisible && layer.isVisible)
           ?.map((layer) => {
             const geojson = layer.geoJSON as GeoJSONFeature
-            return createChoroplethFromCityGeom(geojson)
+            return createChoroplethFromAreaGeom(geojson)
           })
           ?.forEach((layer) => geojsonLayerGroups.addLayer(layer))
 
@@ -211,7 +211,7 @@ watch(
         geojsonLayerGroups.addTo(map)
       })
 
-    // segment multilinestring
+    // segment linestring
     store.getSegmentLayers?.children
       ?.filter((provinceLayer) => provinceLayer.isLayerVisible && provinceLayer.isVisible)
       .forEach((provinceLayer) => {
@@ -223,6 +223,27 @@ watch(
               ?.forEach((layer) => {
                 const geojson = layer.geoJSON as GeoJSONFeature
                 const linkLayer = createSegmentFromGeom(geojson)
+
+                geojsonLayerGroups.addLayer(linkLayer)
+              })
+          })
+
+        // refresh layer group
+        geojsonLayerGroups.addTo(map)
+      })
+
+    // segment non lambda linestring
+    store.getSegmentNonLambdaLayers?.children
+      ?.filter((provinceLayer) => provinceLayer.isLayerVisible && provinceLayer.isVisible)
+      .forEach((provinceLayer) => {
+        provinceLayer.children
+          ?.filter((cityLayer) => cityLayer.isLayerVisible && cityLayer.isVisible)
+          ?.forEach((cityLayer) => {
+            cityLayer.children
+              ?.filter((layer) => layer.isLayerVisible && layer.isVisible)
+              ?.forEach((layer) => {
+                const geojson = layer.geoJSON as GeoJSONFeature
+                const linkLayer = createSegmentNonLambdaFromGeom(geojson)
 
                 geojsonLayerGroups.addLayer(linkLayer)
               })

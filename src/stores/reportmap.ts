@@ -6,6 +6,7 @@ import type { GeoJSON, GeoJSONFeature } from '@/types/geom'
 import {
   getReportMapBandwidthAreas,
   getReportMapBandwidthLinks,
+  getReportMapBandwidthSegmentNonLambdas,
   getReportMapBandwidthSegments
 } from '@/hooks'
 import _ from 'lodash'
@@ -15,6 +16,8 @@ import type {
   ILayer,
   IReportMapBandwidthAreaProperties,
   IReportMapBandwidthLinkProperties,
+  IReportMapBandwidthSegmentNonLambdaProperties,
+  IReportMapBandwidthSegmentProperties,
   LayerGroup
 } from '@/types'
 
@@ -43,7 +46,14 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
       isLayerVisible: true,
       isVisible: true,
       children: []
-    }
+    },
+    {
+      id: 'segment-non-lambdas',
+      name: 'Segment Non Lambda',
+      isLayerVisible: true,
+      isVisible: true,
+      children: []
+    },
   ])
   const sidebarCollapsedSize = ref<number>(0)
   const isSidebarCollapsed = ref<boolean>(false)
@@ -53,7 +63,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
 
   const getLayerById = (id: string) => layers.value.find((layer) => layer.id === id)
 
-  const addCityGeoJsonLayer = (data: GeoJSON) => {
+  const addAreaGeoJsonLayer = (data: GeoJSON) => {
     const multipolygonGeojson = data as GeoJSONFeature
     const multipolygonGeojsonProps =
       multipolygonGeojson?.properties as IReportMapBandwidthAreaProperties
@@ -83,7 +93,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     } else {
       const newProvinceLayer: ILayer = {
         id: multipolygonGeojsonProps.province || multipolygonGeojsonProps.id,
-        name: multipolygonGeojsonProps.province,
+        name: multipolygonGeojsonProps.province || `province-area-${multipolygonGeojsonProps.id}`,
         isLayerVisible: true,
         isVisible: true,
         children: [layer]
@@ -111,7 +121,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     // link layer config
     const layer: ILayer = {
       id: lineStringGeojsonProps.id || '',
-      name: lineStringGeojsonProps.name || '',
+      name: lineStringGeojsonProps.unique_link || '',
       isLayerVisible: true,
       isVisible: true,
       geoJSON: data
@@ -128,7 +138,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     if (provinceLayer) {
       const newCityLayer: ILayer = {
         id: lineStringGeojsonProps.city || lineStringGeojsonProps.id,
-        name: lineStringGeojsonProps.city,
+        name: lineStringGeojsonProps.city || `city-link-${lineStringGeojsonProps.id}`,
         isLayerVisible: true,
         isVisible: true,
         children: [layer]
@@ -140,7 +150,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
 
     const newCityLayer: ILayer = {
       id: lineStringGeojsonProps.city || lineStringGeojsonProps.id,
-      name: lineStringGeojsonProps.city,
+      name: lineStringGeojsonProps.city || `city-link-${lineStringGeojsonProps.id}`,
       isLayerVisible: true,
       isVisible: true,
       children: [layer]
@@ -148,7 +158,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
 
     const newProvinceLayer: ILayer = {
       id: lineStringGeojsonProps.province || lineStringGeojsonProps.id,
-      name: lineStringGeojsonProps.province,
+      name: lineStringGeojsonProps.province || `province-link-${lineStringGeojsonProps.id}`,
       isLayerVisible: true,
       isVisible: true,
       children: [newCityLayer]
@@ -160,7 +170,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
   const addSegmentGeoJsonLayer = (data: GeoJSON) => {
     const lineStringGeojson = data as GeoJSONFeature
     const lineStringGeojsonProps =
-      lineStringGeojson?.properties as IReportMapBandwidthLinkProperties
+      lineStringGeojson?.properties as IReportMapBandwidthSegmentProperties
 
     const segmentLayer = getLayerById('segments')
 
@@ -174,8 +184,8 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
 
     // link layer config
     const layer: ILayer = {
-      id: lineStringGeojsonProps.id || '',
-      name: lineStringGeojsonProps.name || '',
+      id: lineStringGeojsonProps.id,
+      name: lineStringGeojsonProps.cable_name || '',
       isLayerVisible: true,
       isVisible: true,
       geoJSON: data
@@ -191,8 +201,8 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
 
     if (provinceLayer) {
       const newCityLayer: ILayer = {
-        id: lineStringGeojsonProps.city || lineStringGeojsonProps.id,
-        name: lineStringGeojsonProps.city,
+        id: lineStringGeojsonProps.city || `city-segment-lambda-${lineStringGeojsonProps.id}`,
+        name: lineStringGeojsonProps.city || '',
         isLayerVisible: true,
         isVisible: true,
         children: [layer]
@@ -203,16 +213,16 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     }
 
     const newCityLayer: ILayer = {
-      id: lineStringGeojsonProps.city || lineStringGeojsonProps.id,
-      name: lineStringGeojsonProps.city,
+      id: lineStringGeojsonProps.city || `city-segment-lambda-${lineStringGeojsonProps.id}`,
+      name: lineStringGeojsonProps.city || '',
       isLayerVisible: true,
       isVisible: true,
       children: [layer]
     }
 
     const newProvinceLayer: ILayer = {
-      id: lineStringGeojsonProps.province || lineStringGeojsonProps.id,
-      name: lineStringGeojsonProps.province,
+      id: lineStringGeojsonProps.province || `province-segment-lambda-${lineStringGeojsonProps.id}`,
+      name: lineStringGeojsonProps.province || '',
       isLayerVisible: true,
       isVisible: true,
       children: [newCityLayer]
@@ -221,7 +231,71 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     segmentLayer?.children?.push(newProvinceLayer)
   }
 
-  const parseReportMapBandwidthCity = (data: []) => {
+  const addSegmentNonLambdaGeoJsonLayer = (data: GeoJSON) => {
+    const lineStringGeojson = data as GeoJSONFeature
+    const lineStringGeojsonProps =
+      lineStringGeojson?.properties as IReportMapBandwidthSegmentNonLambdaProperties
+
+    const segmentLayer = getLayerById('segment-non-lambdas')
+
+    // province - city - link
+    const provinceLayer = segmentLayer?.children?.find(
+      (child) => child.id === lineStringGeojsonProps.province
+    )
+    const cityLayer = provinceLayer?.children?.find(
+      (child) => child.id === lineStringGeojsonProps.city
+    )
+
+    // link layer config
+    const layer: ILayer = {
+      id: lineStringGeojsonProps.id,
+      name: lineStringGeojsonProps.cable_name || '',
+      isLayerVisible: true,
+      isVisible: true,
+      geoJSON: data
+    }
+
+    // onclick layer
+    layer.onClick = () => (popupedLayer.value = layer)
+
+    if (cityLayer) {
+      cityLayer.children?.push(layer)
+      return
+    }
+
+    if (provinceLayer) {
+      const newCityLayer: ILayer = {
+        id: lineStringGeojsonProps.city || `city-segment-non-lambda-${lineStringGeojsonProps.id}`,
+        name: lineStringGeojsonProps.city || '',
+        isLayerVisible: true,
+        isVisible: true,
+        children: [layer]
+      }
+
+      provinceLayer.children?.push(newCityLayer)
+      return
+    }
+
+    const newCityLayer: ILayer = {
+      id: lineStringGeojsonProps.city || `city-segment-non-lambda-${lineStringGeojsonProps.id}`,
+      name: lineStringGeojsonProps.city || '',
+      isLayerVisible: true,
+      isVisible: true,
+      children: [layer]
+    }
+
+    const newProvinceLayer: ILayer = {
+      id: lineStringGeojsonProps.province || `province-segment-non-lambda-${lineStringGeojsonProps.id}`,
+      name: lineStringGeojsonProps.province || '',
+      isLayerVisible: true,
+      isVisible: true,
+      children: [newCityLayer]
+    }
+
+    segmentLayer?.children?.push(newProvinceLayer)
+  }
+
+  const parseReportMapBandwidthArea= (data: []) => {
     _.map(data, (reportBandwidth) => {
       const result: any = reportBandwidth
       if (result?.geojson === null) return
@@ -229,7 +303,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     })
       .filter((geojson) => geojson !== undefined)
       .forEach((geojson) => {
-        if (geojson !== undefined) addCityGeoJsonLayer(geojson)
+        if (geojson !== undefined) addAreaGeoJsonLayer(geojson)
       })
   }
 
@@ -245,7 +319,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
       })
   }
 
-  const parseReportMapBandwidthSegment = (data: []) => {
+  const parseReportMapBandwidthSegment = (data: [], callback: (g: GeoJSON) => void) => {
     _.map(data, (reportBandwidth) => {
       const result: any = reportBandwidth
       if (result?.geojson === null) return
@@ -253,7 +327,7 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     })
       .filter((geojson) => geojson !== undefined)
       .forEach((geojson) => {
-        if (geojson !== undefined) addSegmentGeoJsonLayer(geojson)
+        if (geojson !== undefined) callback(geojson)
       })
   }
 
@@ -276,20 +350,24 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
   }) => {
     isDataFetching.value = true
 
-    const [bandwidthAreas, bandwidthLinks, bandwidthSegments] = await Promise.all([
+    const [bandwidthAreas, bandwidthLinks, bandwidthSegments, bandwidthSegmentNonLambdas] = await Promise.all([
       getReportMapBandwidthAreas({ regionIds, areaIds, cityIds }),
       getReportMapBandwidthLinks({ regionIds, areaIds, cityIds }),
-      getReportMapBandwidthSegments({ regionIds, areaIds, cityIds })
+      getReportMapBandwidthSegments({ regionIds, areaIds, cityIds }),
+      getReportMapBandwidthSegmentNonLambdas({ regionIds, areaIds, cityIds })
     ])
 
     // parsing bandwidth city area
-    parseReportMapBandwidthCity(bandwidthAreas.result?.data || [])
+    parseReportMapBandwidthArea(bandwidthAreas.result?.data || [])
 
     // parsing bandwidth link
     parseReportMapBandwidthLink(bandwidthLinks.result?.data || [])
 
     // parsing bandwidth segments
-    parseReportMapBandwidthSegment(bandwidthSegments.result?.data || [])
+    parseReportMapBandwidthSegment(bandwidthSegments.result?.data || [], addSegmentGeoJsonLayer)
+
+    // parsing bandwidth segment non lambdas
+    parseReportMapBandwidthSegment(bandwidthSegmentNonLambdas.result?.data || [], addSegmentNonLambdaGeoJsonLayer)
 
     setTimeout(() => {
       isDataFetching.value = false
@@ -408,6 +486,8 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     popupedLayer.value = null
   }
 
+  const getSegmentNonLambdaLayers = computed(() => getLayerById('segment-non-lambdas'))
+
   return {
     mapRef,
     sidebarExpandedSize,
@@ -417,7 +497,6 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     isSidebarCollapsed,
     mapZoomLevel,
     mapCenter,
-    addCityGeoJsonLayer,
     resetLayers,
     getGeoJSONReport,
     generateFiberMapReport,
@@ -428,7 +507,8 @@ const useReportMapStore = defineStore('useReportMapStore', () => {
     setPopupedLayer,
     resetPopupedLayer,
     getLinkLayers,
-    getSegmentLayers
+    getSegmentLayers,
+    getSegmentNonLambdaLayers
   }
 })
 
