@@ -10,7 +10,6 @@
       <a-form-item
         label="Region"
         :name="['regions']"
-        :rules="[{ required: true, message: 'Please select region' }]"
       >
         <select-dropdown
           placeholder="Select region"
