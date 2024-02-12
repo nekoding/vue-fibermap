@@ -11,7 +11,7 @@ const choroplethStyle = (geoJsonProps?: GeoJSONFeatureProperties) => (feature: a
     fillColor: densityColor,
     weight: 2,
     opacity: 1,
-    color: densityColor,
+    color: '#EEE',
     dashArray: '',
     fillOpacity: 0.5
   }
@@ -22,7 +22,7 @@ const highlightFeature = (e: any) => {
 
   layer.setStyle({
     weight: 5,
-    color: layer.options.fillColor,
+    // color: layer.options.fillColor,
     dashArray: '',
     fillOpacity: 0.5
   })
