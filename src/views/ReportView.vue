@@ -164,6 +164,13 @@ onMounted(() => {
   window.addEventListener('popupclose', () => {
     store.resetPopupedLayer()
   })
+
+  // flytocoordinate event listener
+  window.addEventListener('flytocoordinate', (e) => {
+    const event = e as CustomEvent<{ bounds: L.LatLngBounds }>
+    const { bounds } = event.detail
+    map.flyToBounds(bounds)
+  })
 })
 
 // watch active tab
@@ -261,9 +268,10 @@ watch(
 // flytocoordinate
 watch(popupedLayer, (value) => {
   if (map && value) {
-    geojsonLayerGroups.getLayers().forEach((layer) => {
+    for (const layer of geojsonLayerGroups.getLayers()) {
       layer.fireEvent(`popupopen:${value.id}`)
-    })
+      layer.fireEvent(`flytocoordinate:${value.id}`)
+    }
   }
 })
 </script>

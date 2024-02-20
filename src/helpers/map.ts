@@ -34,6 +34,23 @@ const resetHighlight = (geojson: L.GeoJSON) => (e: any) => {
   geojson.resetStyle(e.target)
 }
 
+const customEventLayer = (geojson: L.GeoJSON, id?: string) => {
+  geojson.addEventListener(`popupopen:${id}`, () => {
+    geojson.openPopup()
+  })
+
+  geojson.addEventListener(`flytocoordinate:${id}`, () => {
+    const bounds = geojson.getBounds()
+    window.dispatchEvent(
+      new CustomEvent('flytocoordinate', {
+        detail: {
+          bounds
+        }
+      })
+    )
+  })
+}
+
 const createChoroplethFromAreaGeom = (geom: GeoJSONFeature) => {
   const geojson = L.geoJSON(geom, {
     style: choroplethStyle(geom.properties)
@@ -127,11 +144,7 @@ const createChoroplethFromAreaGeom = (geom: GeoJSONFeature) => {
     })
   })
 
-  // add listener popupopen:id fired
-  geojson.addEventListener(`popupopen:${geom?.properties?.id}`, () => {
-    geojson.openPopup()
-  })
-
+  customEventLayer(geojson, geom?.properties?.id)
   return geojson
 }
 
@@ -239,11 +252,7 @@ const createLinkFromGeom = (geom: GeoJSONFeature) => {
     })
   })
 
-  // add listener popupopen:id fired
-  geojson.addEventListener(`popupopen:${geom?.properties?.id}`, () => {
-    geojson.openPopup()
-  })
-
+  customEventLayer(geojson, geom?.properties?.id)
   return geojson
 }
 
@@ -351,11 +360,7 @@ const createSegmentFromGeom = (geom: GeoJSONFeature) => {
     })
   })
 
-  // add listener popupopen:id fired
-  geojson.addEventListener(`popupopen:${geom?.properties?.id}`, () => {
-    geojson.openPopup()
-  })
-
+  customEventLayer(geojson, geom?.properties?.id)
   return geojson
 }
 
@@ -463,11 +468,7 @@ const createSegmentNonLambdaFromGeom = (geom: GeoJSONFeature) => {
     })
   })
 
-  // add listener popupopen:id fired
-  geojson.addEventListener(`popupopen:${geom?.properties?.id}`, () => {
-    geojson.openPopup()
-  })
-
+  customEventLayer(geojson, geom?.properties?.id)
   return geojson
 }
 
