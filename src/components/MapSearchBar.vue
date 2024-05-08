@@ -1,15 +1,23 @@
 <template>
   <div class="search-bar">
-    <a-input placeholder="Search administrative area">
-      <template #suffix>
+    <a-cascader
+      style="width: 100%"
+      placeholder="Search administrative area"
+      v-model:value="administrativeArea"
+      :options="administrativeArea"
+    >
+      <template #suffixIcon>
         <search-outlined :rotate="90" />
       </template>
-    </a-input>
+    </a-cascader>
   </div>
 </template>
 
 <script setup lang="ts">
 import { SearchOutlined } from '@ant-design/icons-vue'
+import { ref } from 'vue'
+
+const administrativeArea = ref<number[]>([])
 </script>
 
 <style scoped>

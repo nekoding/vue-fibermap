@@ -4,10 +4,11 @@
       :bordered="bordered"
       :expandIconPosition="expandIconPosition"
       :collapsible="collapsible"
+      :style="isLayerSelected && 'background: rgb(20, 118, 255, 0.1)'"
     >
       <a-collapse-panel :showArrow="showArrow" style="margin-bottom: 10px" :key="headerTitle">
         <template #header>
-          <span>
+          <span @click="$emit('clickLayer')" style="cursor: pointer">
             <i v-show="iconSrc.length > 1">
               <a-image :width="24" :preview="false" :src="iconSrc" />
             </i>
@@ -63,10 +64,15 @@ defineProps({
     type: Boolean,
     default: true,
     required: false
+  },
+  isLayerSelected: {
+    type: Boolean,
+    default: false,
+    required: false
   }
 })
 
-defineEmits(['toggleLayerVisibility'])
+defineEmits(['toggleLayerVisibility', 'clickLayer'])
 </script>
 
 <style scoped></style>

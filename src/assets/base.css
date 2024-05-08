@@ -16,3 +16,31 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.yellow-stroke {
+  color: #000;
+  font-weight: bold;
+  text-shadow: 0 0px 5px #ffff00;
+}
+
+table.metadata {
+  width: 100%;
+  display: table;
+  border-collapse: collapse;
+  font-size: 11px;
+  overflow: auto;
+  border-bottom: 1px solid #ccc;
+  max-height: 189px;
+}
+
+.metadata td {
+  padding: 5px;
+}
+
+.metadata td {
+  border: 1px solid #ccc;
+}
+
+.metadata tr:nth-child(even) { 
+  background-color: #f7f7f7;
+}

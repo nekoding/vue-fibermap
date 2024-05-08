@@ -6,17 +6,21 @@
           <strong>Legends</strong>
           <div>CAFEINS | Version 0.0.1</div>
         </template>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis aperiam eligendi ipsum vel
-          et. Eius culpa blanditiis eaque eveniet, autem quaerat ipsum facilis suscipit numquam
-          nostrum, dolores distinctio eligendi deleniti.
-        </p>
+        <a-row :gutter="[16, 16]">
+          <a-col v-for="mapLegend in fibermapStore.mapLegends" :key="mapLegend.id" :span="12">
+            <a-image :src="mapLegend.icon" :alt="mapLegend.name" width="30px" :preview="false" />
+            <span style="padding-left: 10px">{{ mapLegend.name }}</span>
+          </a-col>
+        </a-row>
       </a-collapse-panel>
     </a-collapse>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useFiberMapStore } from '../stores/fibermap'
+const fibermapStore = useFiberMapStore()
+</script>
 
 <style scoped>
 .legend-panel {
